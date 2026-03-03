@@ -20,7 +20,7 @@ export const createMatch = async (req, res) => {
   }
 };
 
-export default getMatches = async (req, res) => {
+export const getMatches = async (req, res) => {
   try {
     const matches = await Match.find();
     res.status(201).json({
