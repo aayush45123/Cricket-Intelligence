@@ -2,7 +2,7 @@
 
 ## 📅 Date: 27 February 2026  
 ## 🗓️ Day: Friday  
-## 🕒 Session: (Add your working time)
+## 🕒 Session: 11:00 am to 1:00 pm
 
 ---
 
@@ -35,3 +35,5 @@ Backend setup complete and first working API implemented successfully.
 
 ## 🔜 Next Step
 Implement `GET /api/matches` and begin analytics logic.
+
+

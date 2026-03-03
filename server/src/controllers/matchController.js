@@ -19,3 +19,20 @@ export const createMatch = async (req, res) => {
     });
   }
 };
+
+export default getMatches = async (req, res) => {
+  try {
+    const matches = await Match.find();
+    res.status(201).json({
+      status: "Success",
+      mess: " match added ",
+      data: savedMatch,
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching matches",
+      error: error.message,
+    });
+  }
+};
