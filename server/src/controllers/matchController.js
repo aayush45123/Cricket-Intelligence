@@ -23,10 +23,27 @@ export const createMatch = async (req, res) => {
 export const getMatches = async (req, res) => {
   try {
     const matches = await Match.find();
-    res.status(201).json({
+    const runRateForMatches = matches.map((match) => {
+      const teamARunRate =
+        match.innings.statsByTeamA.overs > 0
+          ? match.innings.statsByTeamA.runs / match.innings.statsByTeamA.overs
+          : 0;
+      const teamBRunRate =
+        match.innings.statsByTeamB.overs > 0
+          ? match.innings.statsByTeamB.runs / match.innings.statsByTeamB.overs
+          : 0;
+      return {
+        ...match.toObject(),
+        analysis: {
+          runRateForTeamA: teamARunRate,
+          runRateForTeamB: teamBRunRate,
+        },
+      };
+    });
+    res.status(200).json({
       status: "Success",
       mess: " matches fetched ",
-      data: matches,
+      data: runRateForMatches,
     });
   } catch (error) {
     res.status(500).json({
