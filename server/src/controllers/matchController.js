@@ -32,11 +32,27 @@ export const getMatches = async (req, res) => {
         match.innings.statsByTeamB.overs > 0
           ? match.innings.statsByTeamB.runs / match.innings.statsByTeamB.overs
           : 0;
+
+      const runDifference = Math.abs(
+        match.innings.statsByTeamA.runs - match.innings.statsByTeamB.runs,
+      );
+      let matchIntensity;
+
+      if (runDifference < 5) {
+        matchIntensity = "Very Close";
+      } else if (runDifference <= 20) {
+        matchIntensity = "Competitive";
+      } else {
+        matchIntensity = "One Sided";
+      }
+
       return {
         ...match.toObject(),
         analysis: {
           runRateForTeamA: teamARunRate,
           runRateForTeamB: teamBRunRate,
+          rundifference: runDifference,
+          matchIntensity: matchIntensity,
         },
       };
     });
