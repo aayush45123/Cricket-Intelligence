@@ -25,8 +25,8 @@ export const getMatches = async (req, res) => {
     const matches = await Match.find();
     res.status(201).json({
       status: "Success",
-      mess: " match added ",
-      data: savedMatch,
+      mess: " matches fetched ",
+      data: matches,
     });
   } catch (error) {
     res.status(500).json({
