@@ -63,17 +63,9 @@ export const getMatches = async (req, res) => {
       if (winner === match.teams.teamA.name) {
         winnerRunRate = teamARunRate;
         loserRunRate = teamBRunRate;
-        runsScored = match.innings.statsByTeamA.runs;
-        oversFaced = match.innings.statsByTeamA.overs;
-        runsConceded = match.innings.statsByTeamB.runs;
-        oversBowled = match.innings.statsByTeamB.overs;
       } else {
         winnerRunRate = teamBRunRate;
         loserRunRate = teamARunRate;
-        runsScored = match.innings.statsByTeamB.runs;
-        oversFaced = match.innings.statsByTeamB.overs;
-        runsConceded = match.innings.statsByTeamA.runs;
-        oversBowled = match.innings.statsByTeamA.overs;
       }
       const winnerStrength = runDifference + (winnerRunRate - loserRunRate) * 5;
       let winQiuality;
@@ -84,7 +76,8 @@ export const getMatches = async (req, res) => {
       } else {
         winQiuality = "Dominant Win";
       }
-      const netRunRate = runsScored / oversFaced - runsConceded / oversBowled;
+      const netRunRateForTeamA = teamARunRate - teamBRunRate;
+      const netRunRateForTeamB = teamBRunRate - teamARunRate;
 
       return {
         ...match.toObject(),
@@ -97,7 +90,8 @@ export const getMatches = async (req, res) => {
           pressureIndexForTeamB: PIForTeamB,
           winnerStrength: winnerStrength,
           winQuality: winQiuality,
-          netRunRate: netRunRate,
+          netRunRateForTeamA: netRunRateForTeamA,
+          netRunRateForTeamB: netRunRateForTeamB,
         },
       };
     });
