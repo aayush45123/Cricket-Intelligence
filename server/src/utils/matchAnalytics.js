@@ -1,6 +1,4 @@
-
-export const generateMatchAnalytics =  (match) => {
-
+export const generateMatchAnalytics = (match) => {
   const teamARunRate =
     match.innings.statsByTeamA.overs > 0
       ? match.innings.statsByTeamA.runs / match.innings.statsByTeamA.overs

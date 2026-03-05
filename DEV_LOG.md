@@ -33,14 +33,7 @@ POST /api/matches
 ## 🚀 Current Status
 Backend setup complete and first working API implemented successfully.
 
-## 🔜 Next Step
-Implement `GET /api/matches` and begin analytics logic.
 
-
-
-
-
-# 🏏 Development Log — Cricket Match Intelligence System
 
 ## 📅 Date: 3rd Marcg 2026  
 ## 🗓️ Day: Saturday  
@@ -77,6 +70,56 @@ Backend now supports:
 
 Project has transitioned from CRUD system to analytics-enabled backend.
 
-## 🔜 Next Step
-- Implement match intensity classification
-- Begin advanced cricket intelligence metrics
+
+
+## 📅 Date: 5 March 2026  
+## 🗓️ Day: Thursday  
+## 🕒 Session: 9:45 to 10:45
+
+---
+
+## ✅ Work Done Today
+
+- Implemented **Match Intensity classification logic**
+  - Very Close
+  - Competitive
+  - One Sided
+- Added **Pressure Index calculation** for both teams
+- Implemented **Net Run Rate (NRR)** calculation
+- Calculated **Winner Strength** based on run difference and run rate advantage
+- Implemented **Win Quality classification**
+  - Narrow / Close Win
+  - Decisive Win
+  - Dominant Win
+- Built **dynamic match insight generator** based on analytics values
+- Refactored analytics logic from controller into utility module:
+
+
+src/utils/matchAnalytics.js
+
+
+- Created `generateMatchAnalytics()` function
+- Updated controller to call analytics utility instead of computing inside controller
+- Cleaned controller logic for better architecture separation
+- Successfully tested updated analytics system in **Postman**
+
+---
+
+## 🚀 Current Status
+
+Backend now supports:
+
+- Match creation API
+- Match retrieval API
+- Run rate calculation
+- Net run rate calculation
+- Pressure index analysis
+- Match intensity detection
+- Winner strength & win quality analysis
+- Dynamic match insight generation
+- Clean **MVC + Utility based architecture**
+
+Project backend now functions as a **basic cricket analytics engine**.
+
+---
+
