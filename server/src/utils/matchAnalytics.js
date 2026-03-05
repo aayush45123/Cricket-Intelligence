@@ -1,7 +1,6 @@
 import Match from "../models/Match.js";
 
 export const generateMatchAnalytics = async (match) => {
-  const matches = await Match.find();
 
   const teamARunRate =
     match.innings.statsByTeamA.overs > 0
