@@ -79,6 +79,22 @@ export const getMatches = async (req, res) => {
       const netRunRateForTeamA = teamARunRate - teamBRunRate;
       const netRunRateForTeamB = teamBRunRate - teamARunRate;
 
+      let insights;
+
+      if (matchIntensity === "Very Close") {
+        insights = `${winner} secured a thrilling last-moment victory in a very close contest. Both teams maintained similar scoring rates, keeping the match unpredictable until the final moments.`;
+      } else if (matchIntensity === "Competitive") {
+        insights = `${winner} won a competitive match where both teams displayed strong batting and bowling performances. The contest remained balanced, but the winning side managed to gain a slight advantage at key moments.`;
+      } else {
+        insights = `${winner} dominated the match with clear superiority. The winning team controlled the game through better scoring momentum and consistent performance, leaving little opportunity for the opposition to recover.`;
+      }
+
+      if (netRunRateForTeamA > 0 && winner === match.teams.teamA.name) {
+        insights += ` Team A maintained a superior net run rate, indicating stronger overall scoring efficiency compared to their opponent.`;
+      } else if (netRunRateForTeamB > 0 && winner === match.teams.teamB.name) {
+        insights += ` Team B achieved a better net run rate, reflecting their ability to outscore the opposition across the innings.`;
+      }
+
       return {
         ...match.toObject(),
         analysis: {
@@ -92,6 +108,7 @@ export const getMatches = async (req, res) => {
           winQuality: winQiuality,
           netRunRateForTeamA: netRunRateForTeamA,
           netRunRateForTeamB: netRunRateForTeamB,
+          insights: insights,
         },
       };
     });
