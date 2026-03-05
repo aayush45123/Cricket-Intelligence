@@ -1,5 +1,5 @@
 
-export const generateMatchAnalytics = async (match) => {
+export const generateMatchAnalytics =  (match) => {
 
   const teamARunRate =
     match.innings.statsByTeamA.overs > 0
