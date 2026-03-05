@@ -1,4 +1,3 @@
-import Match from "../models/Match.js";
 
 export const generateMatchAnalytics = async (match) => {
 
