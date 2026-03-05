@@ -32,6 +32,9 @@ export const getMatches = async (req, res) => {
         match.innings.statsByTeamB.overs > 0
           ? match.innings.statsByTeamB.runs / match.innings.statsByTeamB.overs
           : 0;
+      // PI is known as Pressure Index 
+      const PIForTeamA = match.innings.statsByTeamA.overs > 0 ? match.innings.statsByTeamA.wickets / match.innings.statsByTeamA.overs : 0;
+      const PIForTeamB = match.innings.statsByTeamB.overs > 0 ? match.innings.statsByTeamB.wickets / match.innings.statsByTeamB.overs : 0;
 
       const runDifference = Math.abs(
         match.innings.statsByTeamA.runs - match.innings.statsByTeamB.runs,
@@ -53,6 +56,8 @@ export const getMatches = async (req, res) => {
           runRateForTeamB: teamBRunRate,
           rundifference: runDifference,
           matchIntensity: matchIntensity,
+          pressureIndexForTeamA: PIForTeamA,
+          pressureIndexForTeamB: PIForTeamB,
         },
       };
     });
