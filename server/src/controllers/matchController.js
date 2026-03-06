@@ -107,7 +107,7 @@ export const getTeamAnalytics = async (req, res) => {
       const teamB = match.teams.teamB.name;
 
       if (!stats[teamA]) {
-        teamStats[teamA] = {
+        stats[teamA] = {
           matchesPlayed: 0,
           wins: 0,
           losses: 0,
@@ -123,30 +123,29 @@ export const getTeamAnalytics = async (req, res) => {
         };
       }
 
-      teamStats[teamA].matchesPlayed++;
-      teamStats[teamB].matchesPlayed++;
+      stats[teamA].matchesPlayed++;
+      stats[teamB].matchesPlayed++;
 
       const winner = match.result.winner;
 
       if (winner === teamA) {
-        teamStats[teamA].wins++;
-        teamStats[teamB].losses++;
+        stats[teamA].wins++;
+        stats[teamB].losses++;
       } else {
-        teamStats[teamB].wins++;
-        teamStats[teamA].losses++;
+        stats[teamB].wins++;
+        stats[teamA].losses++;
       }
 
       const analytics = generateMatchAnalytics(match);
-      teamStats[teamA].totalRunRate += analytics.runRateForTeamA;
-      teamStats[teamB].totalRunRate += analytics.runRateForTeamB;
+      stats[teamA].totalRunRate += analytics.runRateForTeamA;
+      stats[teamB].totalRunRate += analytics.runRateForTeamB;
     });
-    const teams = Object.keys(teamStats).map((team) => ({
+    const teams = Object.keys(stats).map((team) => ({
       team,
-      matchesPlayed: teamStats[team].matchesPlayed,
-      wins: teamStats[team].wins,
-      losses: teamStats[team].losses,
-      averageRunRate:
-        teamStats[team].totalRunRate / teamStats[team].matchesPlayed,
+      matchesPlayed: stats[team].matchesPlayed,
+      wins: stats[team].wins,
+      losses: stats[team].losses,
+      averageRunRate: stats[team].totalRunRate / stats[team].matchesPlayed,
     }));
     res.status(200).json({
       success: true,
