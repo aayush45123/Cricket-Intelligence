@@ -122,6 +122,35 @@ export const getTeamAnalytics = async (req, res) => {
           totalRunRate: 0,
         };
       }
+
+      teamStats[teamA].matchesPlayed++;
+      teamStats[teamB].matchesPlayed++;
+
+      const winner = match.result.winner;
+
+      if (winner === teamA) {
+        teamStats[teamA].wins++;
+        teamStats[teamB].losses++;
+      } else {
+        teamStats[teamB].wins++;
+        teamStats[teamA].losses++;
+      }
+
+      const analytics = generateMatchAnalytics(match);
+      teamStats[teamA].totalRunRate += analytics.runRateForTeamA;
+      teamStats[teamB].totalRunRate += analytics.runRateForTeamB;
+    });
+    const teams = Object.keys(teamStats).map((team) => ({
+      team,
+      matchesPlayed: teamStats[team].matchesPlayed,
+      wins: teamStats[team].wins,
+      losses: teamStats[team].losses,
+      averageRunRate:
+        teamStats[team].totalRunRate / teamStats[team].matchesPlayed,
+    }));
+    res.status(200).json({
+      success: true,
+      teams,
     });
   } catch (error) {
     res.status(500).json({
