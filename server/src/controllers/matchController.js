@@ -100,6 +100,29 @@ export const getAnalyticsSummary = async (req, res) => {
 
 export const getTeamAnalytics = async (req, res) => {
   try {
+    const matches = await Match.find();
+    const stats = {};
+    matches.forEach((match) => {
+      const teamA = match.teams.teamA.name;
+      const teamB = match.teams.teamB.name;
+
+      if (!stats[teamA]) {
+        teamStats[teamA] = {
+          matchesPlayed: 0,
+          wins: 0,
+          losses: 0,
+          totalRunRate: 0,
+        };
+      }
+      if (!stats[teamB]) {
+        stats[teamB] = {
+          matchesPlayed: 0,
+          wins: 0,
+          losses: 0,
+          totalRunRate: 0,
+        };
+      }
+    });
   } catch (error) {
     res.status(500).json({
       success: false,
