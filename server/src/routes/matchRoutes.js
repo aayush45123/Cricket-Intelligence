@@ -8,9 +8,9 @@ import {
 
 const router = express.Router();
 
-router.post("/", createMatch);
-router.get("/", getMatches);
 router.get("/analytics", getAnalyticsSummary);
 router.get("/teams/analytics", getTeamAnalytics);
+router.post("/", createMatch);
+router.get("/", getMatches);
 
 export default router;
