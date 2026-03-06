@@ -46,7 +46,21 @@ export const getMatches = async (req, res) => {
   }
 };
 
-
-export const getAnalyticsSummary = async (req , res) =>{
+export const getAnalyticsSummary = async (req, res) => {
   const matches = await Match.find();
-}
+  const totalMatches = matches.length;
+  const analysis = matches.map((match) => {
+    const fullAnalytics = generateMatchAnalytics(match);
+
+    const totalRunRateTeamA = analysis.reduce(
+      (sum, match) => sum + match.runRateForTeamA,
+      0,
+    );
+    const totalRunRateTeamB = analysis.reduce(
+      (sum, match) => sum + match.runRateForTeamB,
+      0,
+    );
+    const averageRunRateTeamA = totalRunRateTeamA / totalMatches;
+    const averageRunRateTeamB = totalRunRateTeamB / totalMatches;
+  });
+};
