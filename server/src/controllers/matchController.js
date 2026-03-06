@@ -46,44 +46,50 @@ export const getMatches = async (req, res) => {
   }
 };
 
+
+
 export const getAnalyticsSummary = async (req, res) => {
   try {
     const matches = await Match.find();
     const totalMatches = matches.length;
-    const analysis = matches.map((match) => {
-      const fullAnalytics = generateMatchAnalytics(match);
 
-      const totalRunRateTeamA = analysis.reduce(
-        (sum, match) => sum + match.runRateForTeamA,
-        0,
-      );
-      const totalRunRateTeamB = analysis.reduce(
-        (sum, match) => sum + match.runRateForTeamB,
-        0,
-      );
-      const averageRunRateTeamA = totalRunRateTeamA / totalMatches;
-      const averageRunRateTeamB = totalRunRateTeamB / totalMatches;
+    const analytics = matches.map((match) => generateMatchAnalytics(match));
 
-      const totalPI = analysis.reduce(
-        (sum, match) => sum + match.PIForTeamA + match.PIForTeamB,
-        0,
-      );
-      const averagePI = totalPI / (totalMatches * 2);
+    const totalRunRateTeamA = analytics.reduce(
+      (sum, match) => sum + match.runRateForTeamA,
+      0,
+    );
 
-      const dominantMatch = analysis.reduce((max, match) => {
-        return match.winnerStrength > max.winnerStrength ? match : max;
-      });
-      return {
-        averageRunRateTeamA: averageRunRateTeamA,
-        averageRunRateTeamB: averageRunRateTeamB,
-        averagePI: averagePI,
-        mostDominantMatch: dominantMatch,
-      };
+    const totalRunRateTeamB = analytics.reduce(
+      (sum, match) => sum + match.runRateForTeamB,
+      0,
+    );
+
+    const averageRunRateTeamA = totalRunRateTeamA / totalMatches;
+    const averageRunRateTeamB = totalRunRateTeamB / totalMatches;
+
+    const totalPI = analytics.reduce(
+      (sum, match) =>
+        sum + match.pressureIndexForTeamA + match.pressureIndexForTeamB,
+      0,
+    );
+
+    const averagePI = totalPI / (totalMatches * 2);
+
+    const dominantMatch = analytics.reduce((max, match) => {
+      return match.winnerStrength > max.winnerStrength ? match : max;
     });
+
     res.status(200).json({
       status: "Success",
-      mess: " analytics summary fetched ",
-      data: analysis,
+      message: "Analytics summary fetched",
+      data: {
+        totalMatches,
+        averageRunRateTeamA,
+        averageRunRateTeamB,
+        averagePressureIndex: averagePI,
+        mostDominantMatch: dominantMatch,
+      },
     });
   } catch (error) {
     res.status(500).json({
