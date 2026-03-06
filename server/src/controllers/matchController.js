@@ -46,8 +46,6 @@ export const getMatches = async (req, res) => {
   }
 };
 
-
-
 export const getAnalyticsSummary = async (req, res) => {
   try {
     const matches = await Match.find();
@@ -95,6 +93,17 @@ export const getAnalyticsSummary = async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Error fetching analytics summary",
+      error: error.message,
+    });
+  }
+};
+
+export const getTeamAnalytics = async (req, res) => {
+  try {
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching team analytics",
       error: error.message,
     });
   }
