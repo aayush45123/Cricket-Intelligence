@@ -45,3 +45,8 @@ export const getMatches = async (req, res) => {
     });
   }
 };
+
+
+export const getAnalyticsSummary = async (req , res) =>{
+  const matches = await Match.find();
+}

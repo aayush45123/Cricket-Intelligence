@@ -7,6 +7,8 @@ export const generateMatchAnalytics = (match) => {
     match.innings.statsByTeamB.overs > 0
       ? match.innings.statsByTeamB.runs / match.innings.statsByTeamB.overs
       : 0;
+
+
   // PI is known as Pressure Index
   const PIForTeamA =
     match.innings.statsByTeamA.overs > 0
