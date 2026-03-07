@@ -169,3 +169,49 @@ Backend now supports advanced analytics including:
 - Aggregated team statistics across matches
 
 The backend is now evolving from a **match analytics system to a team performance analytics engine**.
+
+
+
+## 📅 Date: 7 March 2026  
+## 🗓️ Day: Saturday  
+## 🕒 Session: 10:30 am to 11:45 am
+
+---
+
+## ✅ Work Done Today
+
+- Designed and implemented **Team Leaderboard API**
+- Created `getTeamLeaderboard` controller to rank teams based on performance
+- Implemented logic to calculate for each team:
+  - Matches Played
+  - Wins
+  - Losses
+  - Win Rate
+- Built leaderboard ranking system using **sorting by win rate**
+- Converted team statistics object into array format for leaderboard response
+- Added new route:
+
+GET /api/matches/teams/leaderboard
+
+- Integrated leaderboard route into `matchRoutes`
+- Successfully tested leaderboard API using **Postman**
+- Verified correct team ranking based on match results
+
+- Implemented **Specific Match Insight API**
+- Created `getSpecificMatchInsights` controller to analyze a single match
+- Used route parameters (`req.params.id`) to fetch match by ID
+- Queried MongoDB using `Match.findById()`
+- Reused `generateMatchAnalytics()` utility to generate detailed analytics
+- Returned structured response containing:
+  - Match ID
+  - Teams
+  - Venue
+  - Full analytics insights
+
+- Added new route:
+
+GET /api/matches/:id/insight
+
+- Successfully tested match insight endpoint using **Postman**
+- Verified analytics and insight generation for individual matches
+
