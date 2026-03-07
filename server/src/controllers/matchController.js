@@ -194,8 +194,6 @@ export const getTeamLeaderboard = async (req, res) => {
         stats[teamB].wins++;
         stats[teamA].losses++;
       }
-
-      const analytics = generateMatchAnalytics(match);
     });
     const teams = Object.keys(stats).map((team) => ({
       team,
@@ -213,6 +211,29 @@ export const getTeamLeaderboard = async (req, res) => {
       success: false,
       message: "Error fetching team analytics",
       error: error.message,
+    });
+  }
+};
+
+export const getSpecificMatchInsights = async (req, res) => {
+  const id = req.params.id;
+  const match = await Match.findById(id);
+  if (!match) {
+    res.status(404).json({
+      success: false,
+      message: "Match not found",
+    });
+  } else {
+    const insights = generateMatchAnalytics(match);
+    res.status(200).json({
+      success: true,
+      match_id: id,
+      teams: {
+        teamA: match.teams.teamA.name,
+        teamB: match.teams.teamB.name,
+      },
+      venue: match.venue,
+      data: insights,
     });
   }
 };
