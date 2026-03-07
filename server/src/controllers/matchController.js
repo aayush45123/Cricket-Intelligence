@@ -206,7 +206,7 @@ export const getTeamLeaderboard = async (req, res) => {
     }));
     res.status(200).json({
       success: true,
-      teams: teams.sort(),
+      teams: teams.sort((a, b) => b.winRate - a.winRate),
     });
   } catch (error) {
     res.status(500).json({
