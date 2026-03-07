@@ -159,3 +159,60 @@ export const getTeamAnalytics = async (req, res) => {
     });
   }
 };
+
+export const getTeamLeaderboard = async (req, res) => {
+  try {
+    const matches = await Match.find();
+    const stats = {};
+    matches.forEach((match) => {
+      const teamA = match.teams.teamA.name;
+      const teamB = match.teams.teamB.name;
+
+      if (!stats[teamA]) {
+        stats[teamA] = {
+          matchesPlayed: 0,
+          wins: 0,
+          losses: 0,
+        };
+      }
+      if (!stats[teamB]) {
+        stats[teamB] = {
+          matchesPlayed: 0,
+          wins: 0,
+          losses: 0,
+        };
+      }
+      stats[teamA].matchesPlayed++;
+      stats[teamB].matchesPlayed++;
+
+      const winner = match.result.winner;
+
+      if (winner === teamA) {
+        stats[teamA].wins++;
+        stats[teamB].losses++;
+      } else {
+        stats[teamB].wins++;
+        stats[teamA].losses++;
+      }
+
+      const analytics = generateMatchAnalytics(match);
+    });
+    const teams = Object.keys(stats).map((team) => ({
+      team,
+      matchesPlayed: stats[team].matchesPlayed,
+      wins: stats[team].wins,
+      losses: stats[team].losses,
+      winRate: (stats[team].wins / stats[team].matchesPlayed) * 100,
+    }));
+    res.status(200).json({
+      success: true,
+      teams: teams.sort(),
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error fetching team analytics",
+      error: error.message,
+    });
+  }
+};
