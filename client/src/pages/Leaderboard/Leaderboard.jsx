@@ -16,7 +16,7 @@ const Leaderboard = () => {
 
   return (
     <div className={styles.leaderboard}>
-      <h2>🏏 Team Leaderboard</h2>
+      <h2>Team Leaderboard</h2>
 
       <div className={`${styles.grid} ${styles.header}`}>
         <span>Rank</span>
