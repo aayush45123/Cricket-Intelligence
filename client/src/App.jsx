@@ -1,9 +1,12 @@
-import React from 'react'
+import React from "react";
+import Leaderboard from "./pages/Leaderboard/Leaderboard";
 
 const App = () => {
   return (
-    <div>App</div>
-  )
-}
+    <>
+      <Leaderboard></Leaderboard>
+    </>
+  );
+};
 
-export default App
+export default App;
