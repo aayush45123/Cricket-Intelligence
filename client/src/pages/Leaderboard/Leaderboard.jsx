@@ -8,9 +8,9 @@ const Leaderboard = () => {
     // Simulate an API call to fetch leaderboard data
     const fetchLeaderboardData = async () => {
       // Replace this with your actual API call
-      const response = await fetch("/api/matches/leaderboard");
+      const response = await fetch("/api/matches/teams/leaderboard");
       const data = await response.json();
-      setTeams(data);
+      setTeams(data.teams);
     };
 
     fetchLeaderboardData();
