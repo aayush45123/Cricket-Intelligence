@@ -19,13 +19,11 @@ const Leaderboard = () => {
   return (
     <div>
       <h2>Leaderboard</h2>
-      <ul>
-        {teams.map((team) => (
-          <li key={team.id}>
-            {team.name}: {team.score}
-          </li>
-        ))}
-      </ul>
+      <span>Teams</span>
+      <span>Matches Played</span>
+      <span>Wins</span>
+      <span>Losses</span>
+      <span>NRR</span>
     </div>
   );
 };
