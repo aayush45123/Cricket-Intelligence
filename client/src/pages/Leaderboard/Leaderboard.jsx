@@ -19,13 +19,15 @@ const Leaderboard = () => {
   return (
     <div>
       <h2>Leaderboard</h2>
+      <span>Rank</span>
       <span>Teams</span>
       <span>Matches Played</span>
       <span>Wins</span>
       <span>Losses</span>
-      <span>NRR</span>
+      <span>Win Rate</span>
       {teams.map((team) => (
         <div key={team.team}>
+          <span>{teams.indexOf(team) + 1}</span>
           <span>{team.team}</span>
           <span>{team.matchesPlayed}</span>
           <span>{team.wins}</span>
