@@ -24,6 +24,15 @@ const Leaderboard = () => {
       <span>Wins</span>
       <span>Losses</span>
       <span>NRR</span>
+      {teams.map((team) => (
+        <div key={team.team}>
+          <span>{team.team}</span>
+          <span>{team.matchesPlayed}</span>
+          <span>{team.wins}</span>
+          <span>{team.losses}</span>
+          <span>{team.winRate}</span>
+        </div>
+      ))}
     </div>
   );
 };
