@@ -234,6 +234,7 @@ export const getSpecificMatchInsights = async (req, res) => {
           teamB: match.teams.teamB.name,
         },
         venue: match.venue,
+        innings: match.innings,
         analysis: insights,
       });
     }
