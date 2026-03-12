@@ -22,7 +22,7 @@ const MatchInsight = () => {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>
-        {insight.teams.teamA.name} vs {insight.teams.teamB.name}
+        {insight.teams.teamA} vs {insight.teams.teamB}
       </h2>
 
       <p className={styles.venue}>Venue: {insight.venue}</p>
@@ -32,7 +32,7 @@ const MatchInsight = () => {
         <h3>Scorecard</h3>
 
         <div className={styles.teamScore}>
-          <span className={styles.team}>{insight.teams.teamA.name}</span>
+          <span className={styles.team}>{insight.teams.teamA}</span>
           <span>
             {insight.innings.statsByTeamA.runs}/
             {insight.innings.statsByTeamA.wickets} (
@@ -41,7 +41,7 @@ const MatchInsight = () => {
         </div>
 
         <div className={styles.teamScore}>
-          <span className={styles.team}>{insight.teams.teamB.name}</span>
+          <span className={styles.team}>{insight.teams.teamB}</span>
           <span>
             {insight.innings.statsByTeamB.runs}/
             {insight.innings.statsByTeamB.wickets} (
