@@ -215,3 +215,76 @@ GET /api/matches/:id/insight
 - Successfully tested match insight endpoint using **Postman**
 - Verified analytics and insight generation for individual matches
 
+
+
+
+## 📅 Date: 12 March 2026  
+## 🗓️ Day: Thursday  
+## 🕒 Session: ~10:30 am to 11:45 am
+
+
+## ✅ Work Done Today
+
+- Started building the **React frontend pages** for the Cricket Intelligence dashboard
+- Implemented **React Router DOM navigation** for application routing
+- Configured routes in `App.jsx`:
+  - `/leaderboard`
+  - `/matches`
+  - `/matches/:id`
+
+- Built **Matches Page**
+  - Created `Matches.jsx` component
+  - Fetched match list from backend using `GET /api/matches`
+  - Displayed matches with:
+    - Team names
+    - Venue
+    - Match format
+    - Match date
+  - Implemented navigation to **Match Insight page** using `useNavigate`
+
+- Built **Match Insight Page**
+  - Created `MatchInsight.jsx` component
+  - Used `useParams()` to read **match ID from URL**
+  - Fetched match-specific analytics using:
+
+  GET /api/matches/:id/insights
+
+  - Displayed detailed match information including:
+    - Teams
+    - Venue
+    - Scorecard (runs, wickets, overs for both teams)
+
+- Implemented **Match Scorecard UI**
+  - Displayed runs, wickets, and overs for both teams
+  - Structured layout for match statistics
+
+- Integrated **Match Analytics display**
+  - Run Rate for both teams
+  - Match Intensity
+  - Winner Strength
+  - Win Quality
+  - Generated match insight explanation
+
+- Implemented **CSS Modules styling**
+  - Created `Matches.module.css`
+  - Created `MatchInsight.module.css`
+  - Styled cards, scorecards, and analytics sections
+
+- Fixed **API integration issues**
+  - Corrected endpoint paths
+  - Ensured Vite proxy configuration correctly forwards `/api` requests to backend
+  - Resolved frontend data structure mismatch with backend response
+
+---
+
+## 🚀 Current Status
+
+The project now includes a **working full-stack analytics flow**:
+
+Leaderboard Page  
+→ Matches List Page  
+→ Individual Match Insight Page
+
+Frontend is successfully connected with backend APIs and displaying **dynamic match analytics data**.
+
+The project now functions as a **basic cricket analytics dashboard with a React UI**.
