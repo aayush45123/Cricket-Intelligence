@@ -8,7 +8,7 @@ const MatchInsight = () => {
 
   useEffect(() => {
     const fetchInsights = async () => {
-      const res = await fetch(`http://localhost:5000/api/matches/${id}/insight`);
+      const res = await fetch(`api/matches/${id}/insight`);
       const data = await res.json();
       setInsight(data);
     };
@@ -16,7 +16,8 @@ const MatchInsight = () => {
     fetchInsights();
   }, [id]);
 
-  if (!insight) return <h2 className={styles.loading}>Loading match insights...</h2>;
+  if (!insight)
+    return <h2 className={styles.loading}>Loading match insights...</h2>;
 
   return (
     <div className={styles.container}>
