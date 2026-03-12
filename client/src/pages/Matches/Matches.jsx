@@ -35,7 +35,7 @@ const Matches = () => {
 
           <button
             className={styles.button}
-            onClick={() => navigate(`/match/${match._id}`)}
+            onClick={() => navigate(`/matches/${match._id}`)}
           >
             View Insight
           </button>
