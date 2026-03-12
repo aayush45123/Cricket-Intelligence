@@ -1,10 +1,10 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Matches = () => {
   const [matches, setMatches] = useState([]);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchMatches = async () => {
       const res = await fetch("/api/matches");
@@ -19,14 +19,16 @@ const Matches = () => {
       <h3>List of Matches</h3>
       {matches.map((match, index) => {
         return (
-          <div key={index}>
+          <div key={match._id}>
             <h4>
-              {match.teamA} vs {match.teamB}
+              {match.teams.teamA.name} vs {match.teams.teamB.name}
             </h4>
             <h4>{match.venue}</h4>
             <h4>{match.format}</h4>
             <p>{match.date}</p>
-            <button onClick={() => navigate(`/matches/${match.id}`)}>View Details</button>
+            <button onClick={() => navigate(`/matches/${match._id}`)}>
+              View Details
+            </button>
           </div>
         );
       })}
