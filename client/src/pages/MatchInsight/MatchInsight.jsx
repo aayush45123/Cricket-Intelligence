@@ -8,7 +8,7 @@ const MatchInsight = () => {
 
   useEffect(() => {
     const fetchInsights = async () => {
-      const res = await fetch(`api/matches/${id}/insight`);
+      const res = await fetch(`/api/matches/${id}/insights`);
       const data = await res.json();
       setInsight(data);
     };
@@ -22,7 +22,7 @@ const MatchInsight = () => {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>
-        {insight.teams.teamA} vs {insight.teams.teamB}
+        {insight.teams.teamA.name} vs {insight.teams.teamB.name}
       </h2>
 
       <p className={styles.venue}>Venue: {insight.venue}</p>
@@ -34,18 +34,18 @@ const MatchInsight = () => {
         <div className={styles.teamScore}>
           <span className={styles.team}>{insight.teams.teamA}</span>
           <span>
-            {insight.analysis.statsByTeamA.runs}/
-            {insight.analysis.statsByTeamA.wickets} (
-            {insight.analysis.statsByTeamA.overs} overs)
+            {insight.innings.statsByTeamA.runs}/
+            {insight.innings.statsByTeamA.wickets} (
+            {insight.innings.statsByTeamA.overs} overs)
           </span>
         </div>
 
         <div className={styles.teamScore}>
           <span className={styles.team}>{insight.teams.teamB}</span>
           <span>
-            {insight.analysis.statsByTeamB.runs}/
-            {insight.analysis.statsByTeamB.wickets} (
-            {insight.analysis.statsByTeamB.overs} overs)
+            {insight.innings.statsByTeamB.runs}/
+            {insight.innings.statsByTeamB.wickets} (
+            {insight.innings.statsByTeamB.overs} overs)
           </span>
         </div>
       </div>
@@ -62,7 +62,6 @@ const MatchInsight = () => {
         <p>Win Quality: {insight.analysis.winQuality}</p>
       </div>
 
-      {/* INSIGHT TEXT */}
       <div className={styles.insightBox}>
         <h3>Insight</h3>
         <p>{insight.analysis.insights}</p>
