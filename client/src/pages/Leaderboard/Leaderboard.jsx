@@ -15,28 +15,61 @@ const Leaderboard = () => {
   }, []);
 
   return (
-    <div className={styles.leaderboard}>
-      <h2>Team Leaderboard</h2>
+    <div className={styles.page}>
+      <main className={styles.main}>
+        <section className={styles.hero}>
+          <h1 className={styles.heroTitle}>Team Leaderboard</h1>
+          <p className={styles.heroSubtitle}>
+            Live standings ranked by win rate across all matches.
+          </p>
+        </section>
 
-      <div className={`${styles.grid} ${styles.header}`}>
-        <span>Rank</span>
-        <span>Team</span>
-        <span>Played</span>
-        <span>Wins</span>
-        <span>Losses</span>
-        <span>Win Rate</span>
-      </div>
+        <section className={styles.tableSection}>
+          <div className={styles.tableWrapper}>
+            <div className={`${styles.tableRow} ${styles.tableHeader}`}>
+              <span className={styles.colRank}>Rank</span>
+              <span className={styles.colTeam}>Team</span>
+              <span className={styles.colStat}>Played</span>
+              <span className={styles.colStat}>Wins</span>
+              <span className={styles.colStat}>Losses</span>
+              <span className={styles.colStat}>Win Rate</span>
+            </div>
 
-      {teams.map((team, index) => (
-        <div className={`${styles.grid} ${styles.row}`} key={team.team}>
-          <span>{index + 1}</span>
-          <span>{team.team}</span>
-          <span>{team.matchesPlayed}</span>
-          <span>{team.wins}</span>
-          <span>{team.losses}</span>
-          <span>{team.winRate}%</span>
-        </div>
-      ))}
+            {teams.map((team, index) => (
+              <div
+                className={`${styles.tableRow} ${styles.tableBody} ${
+                  index === 0 ? styles.topRow : ""
+                }`}
+                key={team.team}
+              >
+                <span className={styles.colRank}>
+                  <span
+                    className={`${styles.rankBadge} ${index === 0 ? styles.rankFirst : index === 1 ? styles.rankSecond : index === 2 ? styles.rankThird : styles.rankDefault}`}
+                  >
+                    {index + 1}
+                  </span>
+                </span>
+                <span className={styles.colTeam}>
+                  <span className={styles.teamInitials}>
+                    {team.team?.slice(0, 2).toUpperCase()}
+                  </span>
+                  <span className={styles.teamName}>{team.team}</span>
+                </span>
+                <span className={styles.colStat}>{team.matchesPlayed}</span>
+                <span className={`${styles.colStat} ${styles.winsValue}`}>
+                  {team.wins}
+                </span>
+                <span className={`${styles.colStat} ${styles.lossesValue}`}>
+                  {team.losses}
+                </span>
+                <span className={styles.colStat}>
+                  <span className={styles.winRateBadge}>{team.winRate}%</span>
+                </span>
+              </div>
+            ))}
+          </div>
+        </section>
+      </main>
     </div>
   );
 };
