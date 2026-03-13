@@ -63,7 +63,7 @@ const Leaderboard = () => {
                   {team.losses}
                 </span>
                 <span className={styles.colStat}>
-                  <span className={styles.winRateBadge}>{team.winRate}%</span>
+                  <span className={styles.winRateBadge}>{team.winRate.toFixed(2)}%</span>
                 </span>
               </div>
             ))}

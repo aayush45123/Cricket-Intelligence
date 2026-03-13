@@ -14,9 +14,6 @@ const Navbar = () => {
   return (
     <nav className={styles.navbar}>
       <div className={styles.brand}>
-        <div className={styles.brandIcon}>
-          <div className={styles.brandIconDot} />
-        </div>
         <h2 className={styles.brandName}>
           Cricket <span className={styles.brandHighlight}>Intelligence</span>
         </h2>
