@@ -16,56 +16,100 @@ const MatchInsight = () => {
     fetchInsights();
   }, [id]);
 
-  if (!insight)
-    return <h2 className={styles.loading}>Loading match insights...</h2>;
+  if (!insight) {
+    return (
+      <div className={styles.loadingWrapper}>
+        <p className={styles.loadingText}>Loading match insights...</p>
+      </div>
+    );
+  }
 
   return (
-    <div className={styles.container}>
-      <h2 className={styles.title}>
-        {insight.teams.teamA} vs {insight.teams.teamB}
-      </h2>
+    <div className={styles.page}>
+      <main className={styles.main}>
+        <section className={styles.hero}>
+          <h1 className={styles.heroTitle}>
+            {insight.teams.teamA} vs {insight.teams.teamB}
+          </h1>
+          <p className={styles.heroSubtitle}>{insight.venue}</p>
+        </section>
 
-      <p className={styles.venue}>Venue: {insight.venue}</p>
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Scorecard</h2>
+          <div className={styles.scorecard}>
+            <div className={styles.scoreRow}>
+              <span className={styles.teamName}>{insight.teams.teamA}</span>
+              <span className={styles.scoreValue}>
+                {insight.innings.statsByTeamA.runs}/
+                {insight.innings.statsByTeamA.wickets}
+              </span>
+              <span className={styles.overs}>
+                {insight.innings.statsByTeamA.overs} overs
+              </span>
+            </div>
 
-      {/* SCORECARD */}
-      <div className={styles.scorecard}>
-        <h3>Scorecard</h3>
+            <div className={styles.scoreDivider} />
 
-        <div className={styles.teamScore}>
-          <span className={styles.team}>{insight.teams.teamA}</span>
-          <span>
-            {insight.innings.statsByTeamA.runs}/
-            {insight.innings.statsByTeamA.wickets} (
-            {insight.innings.statsByTeamA.overs} overs)
-          </span>
-        </div>
+            <div className={styles.scoreRow}>
+              <span className={styles.teamName}>{insight.teams.teamB}</span>
+              <span className={styles.scoreValue}>
+                {insight.innings.statsByTeamB.runs}/
+                {insight.innings.statsByTeamB.wickets}
+              </span>
+              <span className={styles.overs}>
+                {insight.innings.statsByTeamB.overs} overs
+              </span>
+            </div>
+          </div>
+        </section>
 
-        <div className={styles.teamScore}>
-          <span className={styles.team}>{insight.teams.teamB}</span>
-          <span>
-            {insight.innings.statsByTeamB.runs}/
-            {insight.innings.statsByTeamB.wickets} (
-            {insight.innings.statsByTeamB.overs} overs)
-          </span>
-        </div>
-      </div>
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Match Analytics</h2>
+          <div className={styles.analyticsGrid}>
+            <div className={styles.statCard}>
+              <span className={styles.statLabel}>Run Rate — Team A</span>
+              <span className={styles.statValue}>
+                {insight.analysis.runRateForTeamA}
+              </span>
+            </div>
 
-      {/* ANALYTICS */}
-      <div className={styles.analytics}>
-        <h3>Match Analytics</h3>
+            <div className={styles.statCard}>
+              <span className={styles.statLabel}>Run Rate — Team B</span>
+              <span className={styles.statValue}>
+                {insight.analysis.runRateForTeamB}
+              </span>
+            </div>
 
-        <p>Run Rate Team A: {insight.analysis.runRateForTeamA}</p>
-        <p>Run Rate Team B: {insight.analysis.runRateForTeamB}</p>
+            <div className={styles.statCard}>
+              <span className={styles.statLabel}>Match Intensity</span>
+              <span className={styles.statValue}>
+                {insight.analysis.matchIntensity}
+              </span>
+            </div>
 
-        <p>Match Intensity: {insight.analysis.matchIntensity}</p>
-        <p>Winner Strength: {insight.analysis.winnerStrength}</p>
-        <p>Win Quality: {insight.analysis.winQuality}</p>
-      </div>
+            <div className={styles.statCard}>
+              <span className={styles.statLabel}>Winner Strength</span>
+              <span className={styles.statValue}>
+                {insight.analysis.winnerStrength}
+              </span>
+            </div>
 
-      <div className={styles.insightBox}>
-        <h3>Insight</h3>
-        <p>{insight.analysis.insights}</p>
-      </div>
+            <div className={styles.statCard}>
+              <span className={styles.statLabel}>Win Quality</span>
+              <span className={styles.statValue}>
+                {insight.analysis.winQuality}
+              </span>
+            </div>
+          </div>
+        </section>
+
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Insight</h2>
+          <div className={styles.insightBox}>
+            <p className={styles.insightText}>{insight.analysis.insights}</p>
+          </div>
+        </section>
+      </main>
     </div>
   );
 };
