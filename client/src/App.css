@@ -1,0 +1,28 @@
+:root {
+  --ci-brand: #1a6b3c;
+  --ci-brand-dark: #145530;
+  --ci-brand-light: #e8f5ee;
+  --ci-accent: #f0a500;
+  --ci-accent-hover: #d49200;
+
+  --ci-bg-primary: #ffffff;
+  --ci-bg-secondary: #f7f9f8;
+  --ci-bg-tertiary: #eef2f0;
+
+  --ci-text-primary: #111c16;
+  --ci-text-secondary: #4a5c52;
+  --ci-text-muted: #8a9e93;
+
+  --ci-border: rgba(26, 107, 60, 0.15);
+  --ci-border-hover: rgba(26, 107, 60, 0.3);
+
+  --ci-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --ci-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+
+  --ci-radius-sm: 6px;
+  --ci-radius-md: 10px;
+  --ci-radius-lg: 16px;
+
+  --ci-nav-height: 60px;
+  --ci-font: "Inter", system-ui, -apple-system, sans-serif;
+}

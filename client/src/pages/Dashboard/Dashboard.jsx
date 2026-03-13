@@ -40,8 +40,8 @@ const Dashboard = () => {
         </h4>
         <h4>
           Most Dominant Match:
-          {data?.mostDominantMatch?.teams?.teamA} vs
-          {data?.mostDominantMatch?.teams?.teamB}
+          {data?.mostDominantMatch?.teams?.teamA?.name} vs
+          {data?.mostDominantMatch?.teams?.teamB?.name}
         </h4>{" "}
       </div>
     </div>

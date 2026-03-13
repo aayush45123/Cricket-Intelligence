@@ -1,0 +1,191 @@
+.navbar {
+  height: var(--ci-nav-height);
+  background: var(--ci-bg-primary);
+  border-bottom: 1px solid var(--ci-border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: var(--ci-shadow-sm);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brandIcon {
+  width: 32px;
+  height: 32px;
+  background: var(--ci-brand);
+  border-radius: var(--ci-radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brandIconDot {
+  width: 14px;
+  height: 14px;
+  background: var(--ci-accent);
+  border-radius: 50%;
+}
+
+.brandName {
+  font-size: 17px;
+  font-weight: 600;
+  color: var(--ci-text-primary);
+  letter-spacing: -0.3px;
+  font-family: var(--ci-font);
+  margin: 0;
+}
+
+.brandName span {
+  color: var(--ci-brand);
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+}
+
+.navList {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  margin: 0;
+  padding: 0;
+}
+
+.navItem {
+  position: relative;
+}
+
+.navLink {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  border-radius: var(--ci-radius-sm);
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--ci-text-secondary);
+  text-decoration: none;
+  font-family: var(--ci-font);
+  letter-spacing: 0.1px;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+  white-space: nowrap;
+}
+
+.navLink:hover {
+  background: var(--ci-bg-secondary);
+  color: var(--ci-text-primary);
+}
+
+.navLink.active {
+  background: var(--ci-brand-light);
+  color: var(--ci-brand);
+}
+
+.navLink.active::after {
+  content: "";
+  position: absolute;
+  bottom: -13px;
+  left: 14px;
+  right: 14px;
+  height: 2px;
+  background: var(--ci-brand);
+  border-radius: 2px 2px 0 0;
+}
+
+.navActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.searchBtn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-sm);
+  background: var(--ci-bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--ci-text-muted);
+  transition:
+    border-color 0.15s,
+    color 0.15s;
+}
+
+.searchBtn:hover {
+  border-color: var(--ci-border-hover);
+  color: var(--ci-text-primary);
+}
+
+.liveBadge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px;
+  background: var(--ci-brand-light);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-sm);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--ci-brand);
+  letter-spacing: 0.4px;
+  font-family: var(--ci-font);
+  cursor: pointer;
+}
+
+.liveDot {
+  width: 7px;
+  height: 7px;
+  background: #22c55e;
+  border-radius: 50%;
+  animation: pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.avatar {
+  width: 32px;
+  height: 32px;
+  background: var(--ci-brand);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  font-family: var(--ci-font);
+  border: 2px solid var(--ci-border);
+  transition: border-color 0.15s;
+}
+
+.avatar:hover {
+  border-color: var(--ci-brand);
+}
+.brandHighlight {
+  color: var(--ci-brand);
+}

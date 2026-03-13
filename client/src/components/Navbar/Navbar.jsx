@@ -1,27 +1,53 @@
 import React from "react";
 import styles from "./Navbar.module.css";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
+  const location = useLocation();
+
+  const links = [
+    { to: "/dashboard", label: "Dashboard" },
+    { to: "/leaderboard", label: "Leaderboard" },
+    { to: "/matches", label: "Matches" },
+  ];
+
   return (
-    <div>
-      <div>
-        <h2>Cricket Intelligence</h2>
+    <nav className={styles.navbar}>
+      <div className={styles.brand}>
+        <div className={styles.brandIcon}>
+          <div className={styles.brandIconDot} />
+        </div>
+        <h2 className={styles.brandName}>
+          Cricket <span className={styles.brandHighlight}>Intelligence</span>
+        </h2>
       </div>
-      <div>
-        <ul>
-          <li>
-            <Link to="/dashboard">Dashboard</Link>
+
+      <ul className={styles.navList}>
+        {links.map(({ to, label }) => (
+          <li key={to} className={styles.navItem}>
+            <Link
+              to={to}
+              className={`${styles.navLink} ${
+                location.pathname === to ? styles.active : ""
+              }`}
+            >
+              {label}
+            </Link>
           </li>
-          <li>
-            <Link to="/leaderboard">Leaderboard</Link>
-          </li>
-          <li>
-            <Link to="/matches">Matches</Link>
-          </li>
-        </ul>
+        ))}
+      </ul>
+
+      <div className={styles.navActions}>
+        <button className={styles.searchBtn} aria-label="Search">
+          &#9906;
+        </button>
+        <div className={styles.liveBadge}>
+          <span className={styles.liveDot} />
+          LIVE
+        </div>
+        <div className={styles.avatar}>CK</div>
       </div>
-    </div>
+    </nav>
   );
 };
 
