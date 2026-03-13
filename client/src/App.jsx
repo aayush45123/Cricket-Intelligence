@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Leaderboard from "./pages/Leaderboard/Leaderboard";
 import Matches from "./pages/Matches/Matches";
 import MatchInsight from "./pages/MatchInsight/MatchInsight";
+import Dashboard from "./pages/Dashboard/Dashboard";
 
 const App = () => {
   return (
