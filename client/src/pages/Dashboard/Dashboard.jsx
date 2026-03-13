@@ -29,10 +29,20 @@ const Dashboard = () => {
       <div>
         <h3>Analytics</h3>
         <h4>Total Matches: {data?.totalMatches || 0}</h4>
-        <h4>Average Run Rate Team A: {data.averageRunRateTeamA || 0}</h4>
-        <h4>Average Run Rate Team B: {data.averageRunRateTeamB || 0}</h4>
-        <h4>Average Pressure Index: {data.averagePressureIndex || 0}</h4>
-        <h4>Most Dominant Match: {data.mostDominantMatch || "N/A"}</h4>
+        <h4>
+          Average Run Rate Team A: {data.averageRunRateTeamA?.toFixed(2) || 0}
+        </h4>
+        <h4>
+          Average Run Rate Team B: {data.averageRunRateTeamB?.toFixed(2) || 0}
+        </h4>
+        <h4>
+          Average Pressure Index: {data.averagePressureIndex?.toFixed(2) || 0}
+        </h4>
+        <h4>
+          Most Dominant Match:
+          {data?.mostDominantMatch?.teams?.teamA} vs
+          {data?.mostDominantMatch?.teams?.teamB}
+        </h4>{" "}
       </div>
     </div>
   );

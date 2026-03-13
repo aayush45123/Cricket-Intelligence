@@ -45,37 +45,64 @@ export const getMatches = async (req, res) => {
     });
   }
 };
-
 export const getAnalyticsSummary = async (req, res) => {
   try {
     const matches = await Match.find();
     const totalMatches = matches.length;
 
-    const analytics = matches.map((match) => generateMatchAnalytics(match));
+    if (totalMatches === 0) {
+      return res.status(200).json({
+        status: "Success",
+        message: "No matches available",
+        data: {
+          totalMatches: 0,
+          averageRunRateTeamA: 0,
+          averageRunRateTeamB: 0,
+          averagePressureIndex: 0,
+          mostDominantMatch: null,
+        },
+      });
+    }
 
+    // Generate analytics for each match
+    const analytics = matches.map((match) => {
+      const analysis = generateMatchAnalytics(match);
+      return {
+        match,
+        analysis,
+      };
+    });
+
+    // Calculate run rates
     const totalRunRateTeamA = analytics.reduce(
-      (sum, match) => sum + match.runRateForTeamA,
+      (sum, item) => sum + item.analysis.runRateForTeamA,
       0,
     );
 
     const totalRunRateTeamB = analytics.reduce(
-      (sum, match) => sum + match.runRateForTeamB,
+      (sum, item) => sum + item.analysis.runRateForTeamB,
       0,
     );
 
     const averageRunRateTeamA = totalRunRateTeamA / totalMatches;
     const averageRunRateTeamB = totalRunRateTeamB / totalMatches;
 
+    // Calculate pressure index
     const totalPI = analytics.reduce(
-      (sum, match) =>
-        sum + match.pressureIndexForTeamA + match.pressureIndexForTeamB,
+      (sum, item) =>
+        sum +
+        item.analysis.pressureIndexForTeamA +
+        item.analysis.pressureIndexForTeamB,
       0,
     );
 
     const averagePI = totalPI / (totalMatches * 2);
 
-    const dominantMatch = analytics.reduce((max, match) => {
-      return match.winnerStrength > max.winnerStrength ? match : max;
+    // Find most dominant match
+    const dominantMatch = analytics.reduce((max, item) => {
+      return item.analysis.winnerStrength > max.analysis.winnerStrength
+        ? item
+        : max;
     });
 
     res.status(200).json({
@@ -83,10 +110,16 @@ export const getAnalyticsSummary = async (req, res) => {
       message: "Analytics summary fetched",
       data: {
         totalMatches,
-        averageRunRateTeamA,
-        averageRunRateTeamB,
-        averagePressureIndex: averagePI,
-        mostDominantMatch: dominantMatch,
+        averageRunRateTeamA: Number(averageRunRateTeamA.toFixed(2)),
+        averageRunRateTeamB: Number(averageRunRateTeamB.toFixed(2)),
+        averagePressureIndex: Number(averagePI.toFixed(2)),
+        mostDominantMatch: {
+          teams: dominantMatch.match.teams,
+          venue: dominantMatch.match.venue,
+          result: dominantMatch.match.result,
+          winnerStrength: dominantMatch.analysis.winnerStrength,
+          winQuality: dominantMatch.analysis.winQuality,
+        },
       },
     });
   } catch (error) {
@@ -97,7 +130,6 @@ export const getAnalyticsSummary = async (req, res) => {
     });
   }
 };
-
 export const getTeamAnalytics = async (req, res) => {
   try {
     const matches = await Match.find();
