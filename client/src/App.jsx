@@ -5,6 +5,7 @@ import Matches from "./pages/Matches/Matches";
 import MatchInsight from "./pages/MatchInsight/MatchInsight";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Navbar from "./components/Navbar/Navbar";
+import "./App.css";
 
 const App = () => {
   return (
