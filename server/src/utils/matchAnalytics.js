@@ -3,17 +3,18 @@ export const generateMatchAnalytics = (match) => {
     match.innings.statsByTeamA.overs > 0
       ? match.innings.statsByTeamA.runs / match.innings.statsByTeamA.overs
       : 0;
+
   const teamBRunRate =
     match.innings.statsByTeamB.overs > 0
       ? match.innings.statsByTeamB.runs / match.innings.statsByTeamB.overs
       : 0;
 
-
-  // PI is known as Pressure Index
+  // Pressure Index
   const PIForTeamA =
     match.innings.statsByTeamA.overs > 0
       ? match.innings.statsByTeamA.wickets / match.innings.statsByTeamA.overs
       : 0;
+
   const PIForTeamB =
     match.innings.statsByTeamB.overs > 0
       ? match.innings.statsByTeamB.wickets / match.innings.statsByTeamB.overs
@@ -22,6 +23,7 @@ export const generateMatchAnalytics = (match) => {
   const runDifference = Math.abs(
     match.innings.statsByTeamA.runs - match.innings.statsByTeamB.runs,
   );
+
   let matchIntensity;
 
   if (runDifference < 5) {
@@ -33,6 +35,7 @@ export const generateMatchAnalytics = (match) => {
   }
 
   const winner = match.result.winner;
+
   let winnerRunRate, loserRunRate;
 
   if (winner === match.teams.teamA.name) {
@@ -42,45 +45,49 @@ export const generateMatchAnalytics = (match) => {
     winnerRunRate = teamBRunRate;
     loserRunRate = teamARunRate;
   }
+
   const winnerStrength = runDifference + (winnerRunRate - loserRunRate) * 5;
-  let winQiuality;
+
+  let winQuality;
+
   if (winnerStrength < 5) {
-    winQiuality = "Narrow/Close Win";
+    winQuality = "Narrow Win";
   } else if (winnerStrength <= 15) {
-    winQiuality = "Decisive Win";
+    winQuality = "Decisive Win";
   } else {
-    winQiuality = "Dominant Win";
+    winQuality = "Dominant Win";
   }
+
   const netRunRateForTeamA = teamARunRate - teamBRunRate;
   const netRunRateForTeamB = teamBRunRate - teamARunRate;
 
   let insights;
 
   if (matchIntensity === "Very Close") {
-    insights = `${winner} secured a thrilling last-moment victory in a very close contest. Both teams maintained similar scoring rates, keeping the match unpredictable until the final moments.`;
+    insights = `${winner} secured a thrilling last-moment victory. Both teams maintained similar scoring rates making the match unpredictable till the end.`;
   } else if (matchIntensity === "Competitive") {
-    insights = `${winner} won a competitive match where both teams displayed strong batting and bowling performances. The contest remained balanced, but the winning side managed to gain a slight advantage at key moments.`;
+    insights = `${winner} won a competitive match where both teams showed strong performances. Key moments created the difference.`;
   } else {
-    insights = `${winner} dominated the match with clear superiority. The winning team controlled the game through better scoring momentum and consistent performance, leaving little opportunity for the opposition to recover.`;
+    insights = `${winner} dominated the match with clear superiority and consistent performance throughout the innings.`;
   }
 
   if (netRunRateForTeamA > 0 && winner === match.teams.teamA.name) {
-    insights += ` Team A maintained a superior net run rate, indicating stronger overall scoring efficiency compared to their opponent.`;
+    insights += ` ${match.teams.teamA.name} maintained a superior net run rate indicating stronger scoring efficiency.`;
   } else if (netRunRateForTeamB > 0 && winner === match.teams.teamB.name) {
-    insights += ` Team B achieved a better net run rate, reflecting their ability to outscore the opposition across the innings.`;
+    insights += ` ${match.teams.teamB.name} achieved a higher net run rate reflecting better overall scoring dominance.`;
   }
 
   return {
-    runRateForTeamA: teamARunRate,
-    runRateForTeamB: teamBRunRate,
-    rundifference: runDifference,
-    matchIntensity: matchIntensity,
-    pressureIndexForTeamA: PIForTeamA,
-    pressureIndexForTeamB: PIForTeamB,
-    winnerStrength: winnerStrength,
-    winQuality: winQiuality,
-    netRunRateForTeamA: netRunRateForTeamA,
-    netRunRateForTeamB: netRunRateForTeamB,
-    insights: insights,
+    runRateForTeamA: Number(teamARunRate.toFixed(2)),
+    runRateForTeamB: Number(teamBRunRate.toFixed(2)),
+    runDifference,
+    matchIntensity,
+    pressureIndexForTeamA: Number(PIForTeamA.toFixed(2)),
+    pressureIndexForTeamB: Number(PIForTeamB.toFixed(2)),
+    winnerStrength: Number(winnerStrength.toFixed(2)),
+    winQuality,
+    netRunRateForTeamA: Number(netRunRateForTeamA.toFixed(2)),
+    netRunRateForTeamB: Number(netRunRateForTeamB.toFixed(2)),
+    insights,
   };
 };
