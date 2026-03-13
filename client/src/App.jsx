@@ -8,6 +8,8 @@ const App = () => {
   return (
     <>
       <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/matches" element={<Matches />} />
         <Route path="/matches/:id" element={<MatchInsight />} />
