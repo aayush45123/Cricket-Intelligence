@@ -1,5 +1,4 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Matches.module.css";
 
@@ -18,29 +17,43 @@ const Matches = () => {
   }, []);
 
   return (
-    <div className={styles.container}>
-      <h3 className={styles.title}> List of Matches</h3>
+    <div className={styles.page}>
+      <main className={styles.main}>
+        <section className={styles.hero}>
+          <h1 className={styles.heroTitle}>Matches</h1>
+          <p className={styles.heroSubtitle}>
+            Browse all matches and view detailed insights.
+          </p>
+        </section>
 
-      {matches.map((match) => (
-        <div className={styles.card} key={match._id}>
-          <div className={styles.teams}>
-            {match.teams.teamA.name} vs {match.teams.teamB.name}
-          </div>
+        <section className={styles.grid}>
+          {matches.map((match) => (
+            <div className={styles.card} key={match._id}>
+              <div className={styles.cardHeader}>
+                <span className={styles.teamNames}>
+                  {match.teams.teamA.name} vs {match.teams.teamB.name}
+                </span>
+                <span className={styles.formatBadge}>{match.format}</span>
+              </div>
 
-          <div className={styles.info}>Venue: {match.venue}</div>
-          <div className={styles.info}>Format: {match.format}</div>
-          <div className={styles.info}>
-            Date: {new Date(match.date).toLocaleDateString()}
-          </div>
+              <div className={styles.cardBody}>
+                <span className={styles.metaItem}>{match.venue}</span>
+                <span className={styles.metaDivider} />
+                <span className={styles.metaItem}>
+                  {new Date(match.date).toLocaleDateString()}
+                </span>
+              </div>
 
-          <button
-            className={styles.button}
-            onClick={() => navigate(`/matches/${match._id}`)}
-          >
-            View Insight
-          </button>
-        </div>
-      ))}
+              <button
+                className={styles.button}
+                onClick={() => navigate(`/matches/${match._id}`)}
+              >
+                View Insight
+              </button>
+            </div>
+          ))}
+        </section>
+      </main>
     </div>
   );
 };
