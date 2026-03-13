@@ -4,10 +4,12 @@ import Leaderboard from "./pages/Leaderboard/Leaderboard";
 import Matches from "./pages/Matches/Matches";
 import MatchInsight from "./pages/MatchInsight/MatchInsight";
 import Dashboard from "./pages/Dashboard/Dashboard";
+import Navbar from "./components/Navbar/Navbar";
 
 const App = () => {
   return (
     <>
+      <Navbar></Navbar>
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/dashboard" element={<Dashboard />} />
