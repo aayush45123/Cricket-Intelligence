@@ -278,3 +278,38 @@ export const getSpecificMatchInsights = async (req, res) => {
     });
   }
 };
+export const getTossImpactAnalytics = async (req, res) => {
+  try {
+    const matches = await Match.find();
+
+    let batFirstWins = 0;
+    let bowlFirstWins = 0;
+
+    matches.forEach((match) => {
+      const tossWinner =
+        match.toss.wonBy === "teamA"
+          ? match.teams.teamA.name
+          : match.teams.teamB.name;
+
+      if (match.result.winner === tossWinner) {
+        if (match.toss.decision === "bat") {
+          batFirstWins++;
+        } else {
+          bowlFirstWins++;
+        }
+      }
+    });
+
+    res.status(200).json({
+      status: "success",
+      data: {
+        batFirstWins,
+        bowlFirstWins,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error calculating toss impact",
+    });
+  }
+};
