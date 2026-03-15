@@ -40,7 +40,7 @@ const MatchIntensityChart = () => {
     <div style={{ width: "100%", height: "350px" }}>
       <h3>Match Intensity</h3>
 
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie
             data={chartData}

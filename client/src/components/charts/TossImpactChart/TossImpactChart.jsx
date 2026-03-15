@@ -36,7 +36,7 @@ const TossImpactChart = () => {
     <div style={{ width: "100%", height: 350 }}>
       <h3>Toss Decision Impact</h3>
 
-      <ResponsiveContainer>
+      <ResponsiveContainer width="100%" height={300}>
         <PieChart>
           <Pie
             data={chartData}
