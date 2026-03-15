@@ -313,3 +313,40 @@ export const getTossImpactAnalytics = async (req, res) => {
     });
   }
 };
+
+export const getMatchIntensityAnalytics = async (req, res) => {
+  try {
+    const matches = await Match.find();
+    let veryCloseCount = 0;
+    let competitiveCount = 0;
+    let oneSidedCount = 0;
+    const intensityData = matches.map((match) => {
+      const analytics = generateMatchAnalytics(match);
+      if (analytics.matchIntensity === "Very Close") {
+        veryCloseCount++;
+      } else if (analytics.matchIntensity === "Competitive") {
+        competitiveCount++;
+      } else {
+        oneSidedCount++;
+      }
+      return {
+        matchId: match._id,
+        data: {
+          veryCloseCount,
+          competitiveCount,
+          oneSidedCount,
+        },
+      };
+    });
+    res.status(200).json({
+      status: "success",
+      data: intensityData,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Error fetching match intensity analytics",
+      error: error.message,
+    });
+  }
+};
