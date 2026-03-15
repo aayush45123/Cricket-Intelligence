@@ -7,6 +7,7 @@ import {
   getTeamLeaderboard,
   getSpecificMatchInsights,
   getTossImpactAnalytics,
+  getMatchIntensityAnalytics,
 } from "../controllers/matchController.js";
 
 const router = express.Router();
@@ -16,6 +17,7 @@ router.get("/teams/analytics", getTeamAnalytics);
 router.get("/teams/leaderboard", getTeamLeaderboard);
 router.get("/:id/insights", getSpecificMatchInsights);
 router.get("/analytics/toss-impact", getTossImpactAnalytics);
+router.get("/analytics/match-intensity", getMatchIntensityAnalytics);
 router.post("/", createMatch);
 router.get("/", getMatches);
 
