@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Dashboard.module.css";
 import TossImpactChart from "../../components/charts/TossImpactChart/TossImpactChart";
+import MatchIntensityChart from "../../components/charts/MatchIntensityChart/MatchIntensityChart";
 
 const Dashboard = () => {
   const [data, setData] = useState(null);
@@ -82,6 +83,7 @@ const Dashboard = () => {
         <div>
           <h2>Analytics</h2>
           <TossImpactChart></TossImpactChart>
+          <MatchIntensityChart></MatchIntensityChart>
         </div>
       </main>
     </div>
