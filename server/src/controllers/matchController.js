@@ -320,7 +320,8 @@ export const getMatchIntensityAnalytics = async (req, res) => {
     let veryCloseCount = 0;
     let competitiveCount = 0;
     let oneSidedCount = 0;
-    const intensityData = matches.map((match) => {
+
+    matches.forEach((match) => {
       const analytics = generateMatchAnalytics(match);
       if (analytics.matchIntensity === "Very Close") {
         veryCloseCount++;
@@ -329,18 +330,15 @@ export const getMatchIntensityAnalytics = async (req, res) => {
       } else {
         oneSidedCount++;
       }
-      return {
-        matchId: match._id,
-        data: {
-          veryCloseCount,
-          competitiveCount,
-          oneSidedCount,
-        },
-      };
     });
+
     res.status(200).json({
       status: "success",
-      data: intensityData,
+      data: {
+        veryCloseCount,
+        competitiveCount,
+        oneSidedCount,
+      },
     });
   } catch (error) {
     res.status(500).json({

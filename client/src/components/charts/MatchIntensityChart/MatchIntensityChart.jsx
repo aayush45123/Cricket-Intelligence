@@ -12,18 +12,22 @@ const MatchIntensityChart = () => {
         const res = await fetch("/api/matches/analytics/match-intensity");
         const result = await res.json();
 
+        const counts = Array.isArray(result.data)
+          ? result.data[result.data.length - 1]?.data || {}
+          : result.data || {};
+
         const data = [
           {
             name: "Very Close Matches",
-            value: result.data.veryCloseCount,
+            value: counts.veryCloseCount || 0,
           },
           {
             name: "Competitive Matches",
-            value: result.data.competitiveCount,
+            value: counts.competitiveCount || 0,
           },
           {
             name: "One Sided Matches",
-            value: result.data.oneSidedCount,
+            value: counts.oneSidedCount || 0,
           },
         ];
 
