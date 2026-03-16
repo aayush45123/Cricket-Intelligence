@@ -8,43 +8,49 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-const TeamWinsChart = () => {
+const RunRateChart = () => {
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
-    const fetchLeaderboard = async () => {
+    const fetchAnalytics = async () => {
       try {
-        const res = await fetch("/api/matches/teams/leaderboard");
+        const res = await fetch("/api/matches/analytics");
         const result = await res.json();
 
-        const data = result.teams.map((team) => ({
-          name: team.team,
-          wins: team.wins,
-        }));
+        const data = [
+          {
+            name: "Team A",
+            runRate: Number(result.data.averageRunRateTeamA.toFixed(2)),
+          },
+          {
+            name: "Team B",
+            runRate: Number(result.data.averageRunRateTeamB.toFixed(2)),
+          },
+        ];
 
         setChartData(data);
       } catch (error) {
-        console.error("Error fetching team wins", error);
+        console.error("Error fetching run rate analytics", error);
       }
     };
 
-    fetchLeaderboard();
+    fetchAnalytics();
   }, []);
 
   return (
     <div style={{ width: "100%", height: 350 }}>
-      <h3>Team Wins</h3>
+      <h3>Run Rate Comparison</h3>
 
       <ResponsiveContainer width="100%" height={300}>
         <BarChart data={chartData}>
           <XAxis dataKey="name" />
           <YAxis />
           <Tooltip />
-          <Bar dataKey="wins" fill="#2e7d32" />
+          <Bar dataKey="runRate" fill="#1976d2" />
         </BarChart>
       </ResponsiveContainer>
     </div>
   );
 };
 
-export default TeamWinsChart;
+export default RunRateChart;

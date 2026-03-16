@@ -3,6 +3,7 @@ import styles from "./Dashboard.module.css";
 import TossImpactChart from "../../components/charts/TossImpactChart/TossImpactChart";
 import MatchIntensityChart from "../../components/charts/MatchIntensityChart/MatchIntensityChart";
 import TeamWins from "../../components/charts/TeamWins/TeamWins";
+import RunRateChart from "../../components/charts/RunRateChart/RunRateChart";
 
 const Dashboard = () => {
   const [data, setData] = useState(null);
@@ -86,6 +87,7 @@ const Dashboard = () => {
           <TossImpactChart></TossImpactChart>
           <MatchIntensityChart></MatchIntensityChart>
           <TeamWins></TeamWins>
+          <RunRateChart></RunRateChart>
         </div>
       </main>
     </div>
