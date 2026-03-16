@@ -22,11 +22,11 @@ const RunRateChart = () => {
 
         const data = [
           {
-            name: "Team A",
+            name: "Batting first ",
             runRate: Number(result.data.averageRunRateTeamA.toFixed(2)),
           },
           {
-            name: "Team B",
+            name: "Batting second",
             runRate: Number(result.data.averageRunRateTeamB.toFixed(2)),
           },
         ];
