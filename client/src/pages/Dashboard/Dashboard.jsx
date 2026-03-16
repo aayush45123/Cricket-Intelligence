@@ -84,6 +84,7 @@ const Dashboard = () => {
           <h2>Analytics</h2>
           <TossImpactChart></TossImpactChart>
           <MatchIntensityChart></MatchIntensityChart>
+          <TeamWins></TeamWins>
         </div>
       </main>
     </div>
