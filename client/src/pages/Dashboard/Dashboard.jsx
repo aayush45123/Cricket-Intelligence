@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import styles from "./Dashboard.module.css";
 import TossImpactChart from "../../components/charts/TossImpactChart/TossImpactChart";
 import MatchIntensityChart from "../../components/charts/MatchIntensityChart/MatchIntensityChart";
+import TeamWins from "../../components/charts/TeamWins/TeamWins";
 
 const Dashboard = () => {
   const [data, setData] = useState(null);
