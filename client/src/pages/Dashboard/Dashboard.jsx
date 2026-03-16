@@ -25,7 +25,6 @@ const Dashboard = () => {
       </div>
     );
   }
-
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -46,21 +45,18 @@ const Dashboard = () => {
                 {data?.totalMatches || 0}
               </span>
             </div>
-
             <div className={styles.statCard}>
               <span className={styles.statLabel}>Avg Run Rate — Team A</span>
               <span className={styles.statValue}>
                 {data.averageRunRateTeamA?.toFixed(2) || 0}
               </span>
             </div>
-
             <div className={styles.statCard}>
               <span className={styles.statLabel}>Avg Run Rate — Team B</span>
               <span className={styles.statValue}>
                 {data.averageRunRateTeamB?.toFixed(2) || 0}
               </span>
             </div>
-
             <div className={styles.statCard}>
               <span className={styles.statLabel}>Avg Pressure Index</span>
               <span className={styles.statValue}>
@@ -82,13 +78,16 @@ const Dashboard = () => {
             </span>
           </div>
         </section>
-        <div>
-          <h2>Analytics</h2>
-          <TossImpactChart></TossImpactChart>
-          <MatchIntensityChart></MatchIntensityChart>
-          <TeamWins></TeamWins>
-          <RunRateChart></RunRateChart>
-        </div>
+
+        <section className={styles.chartsSection}>
+          <h2 className={styles.sectionTitle}>Analytics</h2>
+          <div className={styles.chartsGrid}>
+            <TossImpactChart />
+            <MatchIntensityChart />
+            <TeamWins />
+            <RunRateChart />
+          </div>
+        </section>
       </main>
     </div>
   );
