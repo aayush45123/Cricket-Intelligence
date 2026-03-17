@@ -20,10 +20,12 @@ const TopRunScorer = () => {
         const res = await fetch("/api/matches/players/top-scorers");
         const result = await res.json();
 
-        const data = result.players.map((player) => ({
-          name: player.player,
-          runs: player.runs,
-        }));
+        const data = result.data
+          .sort((a, b) => b.totalRuns - a.totalRuns)
+          .map((player) => ({
+            name: player.playerName,
+            runs: player.totalRuns,
+          }));
 
         setChartData(data);
       } catch (error) {
