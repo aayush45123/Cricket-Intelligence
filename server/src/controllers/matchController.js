@@ -366,3 +366,42 @@ export const getMatchIntensityAnalytics = async (req, res) => {
     });
   }
 };
+
+export const topRunScorers = async (req, res) => {
+  try {
+    const matches = await Match.find();
+    const playerRuns = {};
+
+    matches.forEach((match) => {
+      match.stats.statsByTeamA.runByTeamAPlayers.forEach((player) => {
+        if (!playerRuns[player.playerName]) {
+          playerRuns[player.playerName] = 0;
+        }
+        playerRuns[player.playerName] += player.runs;
+      });
+    });
+
+    matches.forEach((match) => {
+      match.stats.statsByTeamB.runByTeamBPlayers.forEach((player) => {
+        if (!playerRuns[player.playerName]) {
+          playerRuns[player.playerName] = 0;
+        }
+        playerRuns[player.playerName] += player.runs;
+      });
+    });
+
+    const topScorers = Object.keys(playerRuns)
+      .sort((a, b) => playerRuns[b] - playerRuns[a])
+      .slice(0, 10)
+      .map((player) => ({
+        playerName: player,
+        totalRuns: playerRuns[player],
+      }));
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Error fetching top run scorers",
+      error: error.message,
+    });
+  }
+};
