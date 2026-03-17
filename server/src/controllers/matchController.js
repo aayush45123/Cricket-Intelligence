@@ -366,26 +366,27 @@ export const getMatchIntensityAnalytics = async (req, res) => {
     });
   }
 };
-
 export const topRunScorers = async (req, res) => {
   try {
     const matches = await Match.find();
     const playerRuns = {};
 
     matches.forEach((match) => {
-      match.stats.statsByTeamA.runByTeamAPlayers.forEach((player) => {
+      // Team A players
+      match.innings.statsByTeamA.runByTeamAPlayers.forEach((player) => {
         if (!playerRuns[player.playerName]) {
           playerRuns[player.playerName] = 0;
         }
+
         playerRuns[player.playerName] += player.runs;
       });
-    });
 
-    matches.forEach((match) => {
-      match.stats.statsByTeamB.runByTeamBPlayers.forEach((player) => {
+      // Team B players
+      match.innings.statsByTeamB.runByTeamBPlayers.forEach((player) => {
         if (!playerRuns[player.playerName]) {
           playerRuns[player.playerName] = 0;
         }
+
         playerRuns[player.playerName] += player.runs;
       });
     });
@@ -397,6 +398,12 @@ export const topRunScorers = async (req, res) => {
         playerName: player,
         totalRuns: playerRuns[player],
       }));
+
+    res.status(200).json({
+      status: "Success",
+      message: "Top run scorers fetched",
+      data: topScorers,
+    });
   } catch (error) {
     res.status(500).json({
       status: "error",
