@@ -47,13 +47,13 @@ const Dashboard = () => {
               </span>
             </div>
             <div className={styles.statCard}>
-              <span className={styles.statLabel}>Avg Run Rate — Team A</span>
+              <span className={styles.statLabel}>Avg Run Rate — Batting First {}</span>
               <span className={styles.statValue}>
                 {data.averageRunRateTeamA?.toFixed(2) || 0}
               </span>
             </div>
             <div className={styles.statCard}>
-              <span className={styles.statLabel}>Avg Run Rate — Team B</span>
+              <span className={styles.statLabel}>Avg Run Rate — Batting Second </span>
               <span className={styles.statValue}>
                 {data.averageRunRateTeamB?.toFixed(2) || 0}
               </span>
