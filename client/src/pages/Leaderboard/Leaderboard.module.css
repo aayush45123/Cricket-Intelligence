@@ -39,6 +39,43 @@
   flex-direction: column;
 }
 
+.filterSection {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.filterGroup {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.filterButton {
+  border: 1px solid var(--ci-border);
+  background: var(--ci-bg-primary);
+  color: var(--ci-text-secondary);
+  border-radius: 999px;
+  padding: 0.6rem 1rem;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.filterButton:hover {
+  border-color: var(--ci-brand);
+  color: var(--ci-brand);
+}
+
+.filterButtonActive {
+  background: var(--ci-brand);
+  border-color: var(--ci-brand);
+  color: #ffffff;
+}
+
 .tableWrapper {
   background: var(--ci-bg-primary);
   border: 1px solid var(--ci-border);
@@ -79,6 +116,12 @@
 
 .tableBody:hover {
   background: var(--ci-bg-secondary);
+}
+
+.emptyState {
+  padding: 2rem 1.5rem;
+  color: var(--ci-text-secondary);
+  font-size: 14px;
 }
 
 .topRow {
@@ -184,4 +227,25 @@
   font-size: 13px;
   font-weight: 600;
   border: 1px solid var(--ci-border);
+}
+
+@media (max-width: 900px) {
+  .tableRow {
+    grid-template-columns: 64px 1.4fr repeat(4, minmax(72px, 1fr));
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 700px) {
+  .main {
+    padding: 1.5rem 1rem 2rem;
+  }
+
+  .tableWrapper {
+    overflow-x: auto;
+  }
+
+  .tableRow {
+    min-width: 680px;
+  }
 }

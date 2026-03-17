@@ -1,6 +1,8 @@
 import Match from "../models/Match.js";
 import { generateMatchAnalytics } from "../utils/matchAnalytics.js";
 
+const VALID_MATCH_FORMATS = ["T20", "ODI", "TEST", "T10"];
+
 export const createMatch = async (req, res) => {
   try {
     const matchData = req.body;
@@ -194,8 +196,20 @@ export const getTeamAnalytics = async (req, res) => {
 
 export const getTeamLeaderboard = async (req, res) => {
   try {
-    const matches = await Match.find();
+    const requestedFormat = req.query.format?.toUpperCase();
+
+    if (requestedFormat && !VALID_MATCH_FORMATS.includes(requestedFormat)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid match format",
+        validFormats: VALID_MATCH_FORMATS,
+      });
+    }
+
+    const query = requestedFormat ? { format: requestedFormat } : {};
+    const matches = await Match.find(query);
     const stats = {};
+
     matches.forEach((match) => {
       const teamA = match.teams.teamA.name;
       const teamB = match.teams.teamB.name;
@@ -227,16 +241,20 @@ export const getTeamLeaderboard = async (req, res) => {
         stats[teamA].losses++;
       }
     });
-    const teams = Object.keys(stats).map((team) => ({
-      team,
-      matchesPlayed: stats[team].matchesPlayed,
-      wins: stats[team].wins,
-      losses: stats[team].losses,
-      winRate: (stats[team].wins / stats[team].matchesPlayed) * 100,
-    }));
+    const teams = Object.keys(stats)
+      .map((team) => ({
+        team,
+        matchesPlayed: stats[team].matchesPlayed,
+        wins: stats[team].wins,
+        losses: stats[team].losses,
+        winRate: (stats[team].wins / stats[team].matchesPlayed) * 100,
+      }))
+      .sort((a, b) => b.winRate - a.winRate || b.wins - a.wins);
+
     res.status(200).json({
       success: true,
-      teams: teams.sort((a, b) => b.winRate - a.winRate),
+      format: requestedFormat || "ALL",
+      teams,
     });
   } catch (error) {
     res.status(500).json({
