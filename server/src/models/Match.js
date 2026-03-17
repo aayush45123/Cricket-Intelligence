@@ -21,12 +21,22 @@ const matchSchema = new mongoose.Schema(
             type: String, // player name
           },
         ],
+        playing11: [
+          {
+            type: String, // player name
+          },
+        ],
       },
 
       teamB: {
         name: { type: String, required: true },
 
         squad: [
+          {
+            type: String,
+          },
+        ],
+        playing11: [
           {
             type: String,
           },
