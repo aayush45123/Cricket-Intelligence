@@ -8,6 +8,7 @@ import {
   getSpecificMatchInsights,
   getTossImpactAnalytics,
   getMatchIntensityAnalytics,
+  getTopScorers,
 } from "../controllers/matchController.js";
 
 const router = express.Router();
@@ -18,6 +19,7 @@ router.get("/teams/leaderboard", getTeamLeaderboard);
 router.get("/:id/insights", getSpecificMatchInsights);
 router.get("/analytics/toss-impact", getTossImpactAnalytics);
 router.get("/analytics/match-intensity", getMatchIntensityAnalytics);
+router.get("/players/top-scorers", getTopScorers);
 router.post("/", createMatch);
 router.get("/", getMatches);
 
