@@ -77,6 +77,7 @@ const matchSchema = new mongoose.Schema(
         runs: { type: Number, required: true },
         wickets: { type: Number, required: true },
         overs: { type: Number, required: true },
+        extras: { type: Number, required: true },
         runByTeamAPlayers: [
           {
             playerName: { type: String, required: true },
@@ -98,6 +99,7 @@ const matchSchema = new mongoose.Schema(
         runs: { type: Number, required: true },
         wickets: { type: Number, required: true },
         overs: { type: Number, required: true },
+        extras: { type: Number, required: true },
         runByTeamBPlayers: [
           {
             playerName: { type: String, required: true },
