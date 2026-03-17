@@ -67,12 +67,42 @@ const matchSchema = new mongoose.Schema(
         runs: { type: Number, required: true },
         wickets: { type: Number, required: true },
         overs: { type: Number, required: true },
+        runByTeamAPlayers: [
+          {
+            playerName: { type: String, required: true },
+            runs: { type: Number, required: true },
+            balls: { type: Number, required: true },
+          },
+        ],
+        wicketsByTeamAPlayers: [
+          {
+            playerName: { type: String, required: true },
+            wickets: { type: Number, required: true },
+            runsConceded: { type: Number, required: true },
+            ballsBowled: { type: Number, required: true },
+          },
+        ],
       },
 
       statsByTeamB: {
         runs: { type: Number, required: true },
         wickets: { type: Number, required: true },
         overs: { type: Number, required: true },
+        runByTeamBPlayers: [
+          {
+            playerName: { type: String, required: true },
+            runs: { type: Number, required: true },
+            balls: { type: Number, required: true },
+          },
+        ],
+        wicketsByTeamBPlayers: [
+          {
+            playerName: { type: String, required: true },
+            wickets: { type: Number, required: true },
+            runsConceded: { type: Number, required: true },
+            ballsBowled: { type: Number, required: true },
+          },
+        ],
       },
     },
 
