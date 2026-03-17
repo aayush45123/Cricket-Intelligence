@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Leaderboard.module.css";
 
-const FORMAT_OPTIONS = ["ALL", "T20", "ODI", "TEST", "T10"];
+const FORMAT_OPTIONS = ["ALL", "T20", "ODI"];
 
 const Leaderboard = () => {
   const [teams, setTeams] = useState([]);
