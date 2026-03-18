@@ -412,3 +412,44 @@ export const topRunScorers = async (req, res) => {
     });
   }
 };
+
+export const highestWicketTakers = async (req, res) => {
+  try {
+    const matches = await Match.find();
+    const playerWicket = {};
+    matches.forEach((match) => {
+      match.innings.statsByTeamA.wicketsByTeamAPlayers.forEach((player) => {
+        if (!playerWicket[player.playerName]) {
+          playerWicket[player.playerName] = 0;
+        }
+
+        playerWicket[player.playerName] += player.wickets;
+      });
+
+      match.innings.statsByTeamB.wicketsByTeamBPlayers.forEach((player) => {
+        if (!playerWicket[player.playerName]) {
+          playerWicket[player.playerName] = 0;
+        }
+
+        playerWicket[player.playerName] += player.wickets;
+      });
+    });
+    const topWicketTakers = Object.keys(playerWicket)
+      .sort((a, b) => playerWicket[b] - playerWicket[a])
+      .slice(0, 10)
+      .map((player) => ({
+        playerName: player,
+        totalWickets: playerWicket[player],
+      }));
+    res.status(200).json({
+      status: "success",
+      data: topWicketTakers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Error fetching top wicket takers",
+      error: error.message,
+    });
+  }
+};
