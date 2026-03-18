@@ -9,6 +9,7 @@ const Navbar = () => {
     { to: "/dashboard", label: "Dashboard" },
     { to: "/leaderboard", label: "Leaderboard" },
     { to: "/matches", label: "Matches" },
+    { to: "/bowlers", label: "Bowlers" },
   ];
 
   return (

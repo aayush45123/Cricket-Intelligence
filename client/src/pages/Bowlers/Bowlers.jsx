@@ -1,8 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
 import styles from "./Bowlers.module.css";
+import { useNavigate } from "react-router-dom";
 
 const Bowlers = () => {
   const [bowlers, setBowlers] = useState([]);
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchData = async () => {
       try {

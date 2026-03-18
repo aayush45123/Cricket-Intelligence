@@ -474,24 +474,12 @@ export const playerBowlingAnalytics = async (req, res) => {
       return ballsBowled / wickets;
     };
 
-    const bowlerCategory = () => {
-      if (
-        bowlingAverage < 25 &&
-        bowlingEconomyRate < 6 &&
-        bowlingStrikeRate < 30
-      ) {
+    const bowlerCategory = (avg, eco, sr) => {
+      if (avg < 25 && eco < 6 && sr < 30) {
         return "Elite Bowler";
-      } else if (
-        bowlingAverage < 30 &&
-        bowlingEconomyRate < 7 &&
-        bowlingStrikeRate < 40
-      ) {
+      } else if (avg < 30 && eco < 7 && sr < 40) {
         return "Good Bowler";
-      } else if (
-        bowlingAverage < 35 &&
-        bowlingEconomyRate < 8 &&
-        bowlingStrikeRate < 50
-      ) {
+      } else if (avg < 35 && eco < 8 && sr < 50) {
         return "Average Bowler";
       } else {
         return "Below Average Bowler";
@@ -527,25 +515,28 @@ export const playerBowlingAnalytics = async (req, res) => {
     });
 
     const playerAnalytics = Object.keys(playerStats).map((player) => {
+      const eco = calculateBowlingEconomyRate(
+        playerStats[player].totalRunsConceded,
+        playerStats[player].totalBallsBowled,
+      );
+      const avg = calculateBowlingAverage(
+        playerStats[player].totalRunsConceded,
+        playerStats[player].totalWickets,
+      );
+      const sr = calculateBowlingStrikeRate(
+        playerStats[player].totalBallsBowled,
+        playerStats[player].totalWickets,
+      );
       const stats = playerStats[player];
       return {
         playerName: player,
         totalWickets: stats.totalWickets,
         totalRunsConceded: stats.totalRunsConceded,
         totalBallsBowled: stats.totalBallsBowled,
-        bowlingAverage: calculateBowlingAverage(
-          stats.totalRunsConceded,
-          stats.totalWickets,
-        ),
-        bowlingEconomyRate: calculateBowlingEconomyRate(
-          stats.totalRunsConceded,
-          stats.totalBallsBowled,
-        ),
-        bowlingStrikeRate: calculateBowlingStrikeRate(
-          stats.totalBallsBowled,
-          stats.totalWickets,
-        ),
-        category: bowlerCategory(),
+        bowlingAverage: avg,
+        bowlingEconomyRate: eco,
+        bowlingStrikeRate: sr,
+        category: bowlerCategory(avg, eco, sr),
       };
     });
 

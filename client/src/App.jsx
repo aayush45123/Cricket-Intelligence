@@ -6,6 +6,7 @@ import MatchInsight from "./pages/MatchInsight/MatchInsight";
 import Dashboard from "./pages/Dashboard/Dashboard";
 import Navbar from "./components/Navbar/Navbar";
 import "./App.css";
+import Bowlers from "./pages/Bowlers/Bowlers";
 
 const App = () => {
   return (
@@ -17,6 +18,7 @@ const App = () => {
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/matches" element={<Matches />} />
         <Route path="/matches/:id" element={<MatchInsight />} />
+        <Route path="/bowlers" element={<Bowlers />} />
       </Routes>
     </>
   );
