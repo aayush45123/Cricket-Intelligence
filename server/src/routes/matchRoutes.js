@@ -10,6 +10,7 @@ import {
   getMatchIntensityAnalytics,
   topRunScorers,
   highestWicketTakers,
+  playerBowlingAnalytics,
 } from "../controllers/matchController.js";
 
 const router = express.Router();
@@ -22,6 +23,7 @@ router.get("/analytics/toss-impact", getTossImpactAnalytics);
 router.get("/analytics/match-intensity", getMatchIntensityAnalytics);
 router.get("/players/top-scorers", topRunScorers);
 router.get("/players/highest-wicket-takers", highestWicketTakers);
+router.get("/players/bowling-analytics", playerBowlingAnalytics);
 router.post("/", createMatch);
 router.get("/", getMatches);
 
