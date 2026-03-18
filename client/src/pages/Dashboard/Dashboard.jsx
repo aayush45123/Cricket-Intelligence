@@ -5,6 +5,7 @@ import MatchIntensityChart from "../../components/charts/MatchIntensityChart/Mat
 import TeamWins from "../../components/charts/TeamWins/TeamWins";
 import RunRateChart from "../../components/charts/RunRateChart/RunRateChart";
 import TopRunScorer from "../../components/charts/TopRunScorer/TopRunScorer";
+import HighestWicketTaker from "../../components/charts/HighestWicketTaker/HighestWicketTaker";
 
 const Dashboard = () => {
   const [data, setData] = useState(null);
@@ -47,13 +48,17 @@ const Dashboard = () => {
               </span>
             </div>
             <div className={styles.statCard}>
-              <span className={styles.statLabel}>Avg Run Rate — Batting First {}</span>
+              <span className={styles.statLabel}>
+                Avg Run Rate — Batting First {}
+              </span>
               <span className={styles.statValue}>
                 {data.averageRunRateTeamA?.toFixed(2) || 0}
               </span>
             </div>
             <div className={styles.statCard}>
-              <span className={styles.statLabel}>Avg Run Rate — Batting Second </span>
+              <span className={styles.statLabel}>
+                Avg Run Rate — Batting Second{" "}
+              </span>
               <span className={styles.statValue}>
                 {data.averageRunRateTeamB?.toFixed(2) || 0}
               </span>
@@ -88,6 +93,7 @@ const Dashboard = () => {
             <TeamWins />
             <RunRateChart />
             <TopRunScorer></TopRunScorer>
+            <HighestWicketTaker></HighestWicketTaker>
           </div>
         </section>
       </main>
