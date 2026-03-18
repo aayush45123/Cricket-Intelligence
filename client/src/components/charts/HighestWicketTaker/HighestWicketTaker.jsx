@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import styles from "./TopRunScorer.module.css";
+import styles from "./HighestWicketTaker.module.css";
 
 const HighestWicketTaker = () => {
   const [chartData, setChartData] = useState([]);
@@ -17,19 +17,19 @@ const HighestWicketTaker = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const res = await fetch("/api/matches/players/top-scorers");
+        const res = await fetch("/api/matches/players/highest-wicket-takers");
         const result = await res.json();
 
         const data = result.data
-          .sort((a, b) => b.totalRuns - a.totalRuns)
+          .sort((a, b) => b.totalWickets - a.totalWickets       )
           .map((player) => ({
             name: player.playerName,
-            runs: player.totalRuns,
+            runs: player.totalWickets,
           }));
 
         setChartData(data);
       } catch (error) {
-        console.error("Error fetching top run scorers", error);
+        console.error("Error fetching highest wicket takers", error);
       }
     };
 
@@ -38,7 +38,7 @@ const HighestWicketTaker = () => {
 
   return (
     <div className={styles.wrapper}>
-      <h3 className={styles.title}>Top Run Scorers</h3>
+      <h3 className={styles.title}>Top Wicket Takers</h3>
       <div className={styles.chart}>
         <ResponsiveContainer width="100%" height="100%">
           <BarChart
