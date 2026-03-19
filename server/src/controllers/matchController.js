@@ -1,6 +1,7 @@
 import Match from "../models/Match.js";
 import { generateMatchAnalytics } from "../utils/matchAnalytics.js";
 import { computeBowlingStats } from "../utils/bowlingStats.js";
+import { computeBattingStats } from "../utils/battingStats.js";
 
 const VALID_MATCH_FORMATS = ["T20", "ODI", "TEST", "T10"];
 
@@ -499,6 +500,56 @@ export const specificPlayerBowlingAnalytics = async (req, res) => {
     res.status(500).json({
       status: "error",
       message: "Error fetching player bowling analytics",
+      error: error.message,
+    });
+  }
+};
+
+export const playerBattingAnalytics = async (req, res) => {
+  try {
+    const matches = await Match.find();
+
+    const playerAnalytics = computeBattingStats(matches);
+
+    res.status(200).json({
+      status: "success",
+      results: playerAnalytics.length,
+      data: playerAnalytics,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Error fetching batting analytics",
+      error: error.message,
+    });
+  }
+};
+
+export const specificPlayerBattingAnalytics = async (req, res) => {
+  try {
+    const { playerName } = req.params;
+
+    const matches = await Match.find();
+
+    const playerAnalytics = computeBattingStats(matches);
+
+    const player = playerAnalytics.find((p) => p.playerName === playerName);
+
+    if (!player) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Player not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: player,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Error fetching player batting analytics",
       error: error.message,
     });
   }
