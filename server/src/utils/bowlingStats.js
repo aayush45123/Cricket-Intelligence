@@ -15,11 +15,35 @@ export const computeBowlingStats = (matches) => {
     if (ballsBowled === 0) return 0;
     return ballsBowled / wickets;
   };
+  const bowlerCategory = (avg, eco, sr, balls) => {
+    // 🚫 Ignore small sample size
+    if (balls < 60) return "Insufficient Data"; // less than 10 overs
 
-  const bowlerCategory = (avg, eco, sr) => {
-    if (avg < 25 && eco < 6 && sr < 30) return "Elite Bowler";
-    else if (avg < 30 && eco < 7 && sr < 40) return "Good Bowler";
-    else if (avg < 35 && eco < 8 && sr < 50) return "Average Bowler";
+    let score = 0;
+
+    // 🎯 Economy (weight: 40%)
+    if (eco < 5.5) score += 40;
+    else if (eco < 6.5) score += 30;
+    else if (eco < 7.5) score += 20;
+    else score += 10;
+
+    // 🎯 Strike Rate (weight: 35%)
+    if (sr < 20) score += 35;
+    else if (sr < 30) score += 25;
+    else if (sr < 40) score += 15;
+    else score += 5;
+
+    // 🎯 Average (weight: 25%)
+    if (avg < 20) score += 25;
+    else if (avg < 30) score += 18;
+    else if (avg < 40) score += 10;
+    else score += 5;
+
+    // 🏆 Final classification
+    if (score >= 85) return "Elite Bowler 🔥";
+    else if (score >= 65) return "Excellent Bowler";
+    else if (score >= 45) return "Good Bowler";
+    else if (score >= 30) return "Average Bowler";
     else return "Below Average Bowler";
   };
 
@@ -75,7 +99,7 @@ export const computeBowlingStats = (matches) => {
       bowlingAverage: avg,
       bowlingEconomyRate: eco,
       bowlingStrikeRate: sr,
-      category: bowlerCategory(avg, eco, sr),
+      category: bowlerCategory(avg, eco, sr, stats.totalBallsBowled),
     };
   });
 };
