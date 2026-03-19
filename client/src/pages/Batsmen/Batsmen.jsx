@@ -4,6 +4,7 @@ import styles from "./Batsmen.module.css";
 
 const Batsmen = () => {
   const [batsmen, setBatsmen] = useState([]);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -12,13 +13,16 @@ const Batsmen = () => {
         const res = await fetch("/api/matches/players/batting-analytics");
         const result = await res.json();
         setBatsmen(result.data);
-      } catch (fetchError) {
-        console.error("Error fetching batting analytics", fetchError);
-        setError("Unable to load batting analytics right now.");
+      } catch (err) {
+        console.error(err);
+        setError("Unable to load batting analytics");
       }
     };
     fetchData();
   }, []);
+
+  if (error) return <p className={styles.stateText}>{error}</p>;
+  if (!batsmen.length) return <p className={styles.stateText}>Loading...</p>;
 
   return (
     <div className={styles.page}>
@@ -26,34 +30,38 @@ const Batsmen = () => {
         <section className={styles.hero}>
           <h1 className={styles.heroTitle}>Batsmen</h1>
           <p className={styles.heroSubtitle}>
-            Explore run-scoring impact, strike rate, and batting averages for
-            each player.
+            Run-scoring impact, strike rates, and batting profiles for every
+            player.
           </p>
         </section>
 
         <section className={styles.grid}>
-          {batsmen.map((batsmen) => (
-            <div className={styles.card} key={batsmen.playerName}>
+          {batsmen.map((batsman) => (
+            <div className={styles.card} key={batsman.playerName}>
               <div className={styles.cardHeader}>
-                <h3 className={styles.batsmanName}>{batsmen.playerName}</h3>
+                <h3 className={styles.playerName}>{batsman.playerName}</h3>
+                <span className={styles.categoryBadge}>{batsman.category}</span>
               </div>
 
               <div className={styles.stats}>
                 <div className={styles.statItem}>
                   <span className={styles.statLabel}>Total Runs</span>
-                  <span className={styles.statValue}>{batsmen.totalRuns}</span>
+                  <span className={styles.statValue}>{batsman.totalRuns}</span>
                 </div>
-
                 <div className={styles.statItem}>
-                  <span className={styles.statLabel}>Balls Faced</span>
-                  <span className={styles.statValue}>{batsmen.totalBalls}</span>
+                  <span className={styles.statLabel}>Strike Rate</span>
+                  <span className={styles.statValue}>
+                    {batsman.strikeRate.toFixed(1)}
+                  </span>
                 </div>
               </div>
 
               <button
                 className={styles.button}
                 onClick={() =>
-                  navigate(`/players/batting-analytics/${batsmen.playerName}`)
+                  navigate(
+                    `/players/batting-analytics/${encodeURIComponent(batsman.playerName)}`,
+                  )
                 }
               >
                 View Insight

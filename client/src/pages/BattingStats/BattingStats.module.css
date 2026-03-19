@@ -1,0 +1,139 @@
+.page {
+  min-height: 100vh;
+  background-color: var(--ci-bg-secondary);
+  font-family: var(--ci-font);
+}
+
+.main {
+  max-width: 780px;
+  margin: 0 auto;
+  padding: 40px 24px 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.hero {
+  padding: 48px;
+  background: linear-gradient(
+    135deg,
+    var(--ci-brand-dark) 0%,
+    var(--ci-brand) 100%
+  );
+  border-radius: var(--ci-radius-lg);
+  box-shadow: var(--ci-shadow-md);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 80% 40%,
+    rgba(240, 165, 0, 0.14) 0%,
+    transparent 60%
+  );
+  pointer-events: none;
+}
+
+.heroTitle {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+  letter-spacing: -0.5px;
+  line-height: 1.15;
+  position: relative;
+}
+
+.categoryBadge {
+  position: relative;
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--ci-brand-dark);
+  background: var(--ci-accent);
+  border-radius: var(--ci-radius-sm);
+  padding: 6px 14px;
+  white-space: nowrap;
+}
+
+.card {
+  background: var(--ci-bg-primary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-md);
+  padding: 28px;
+  box-shadow: var(--ci-shadow-sm);
+}
+
+.cardTitle {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ci-text-muted);
+  margin: 0 0 20px;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 16px;
+}
+
+.statItem {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 16px;
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-sm);
+  transition: border-color 0.2s ease;
+}
+
+.statItem:hover {
+  border-color: var(--ci-border-hover);
+}
+
+.statItemHighlight {
+  composes: statItem;
+  background: var(--ci-brand-light);
+  border-color: rgba(26, 107, 60, 0.22);
+}
+
+.statLabel {
+  font-size: 0.68rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  color: var(--ci-text-muted);
+}
+
+.statValue {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--ci-brand);
+  letter-spacing: -0.5px;
+  line-height: 1;
+}
+
+.statItemHighlight .statValue {
+  color: var(--ci-brand-dark);
+}
+
+.stateText {
+  text-align: center;
+  padding: 80px 24px;
+  font-size: 0.9rem;
+  color: var(--ci-text-muted);
+  font-family: var(--ci-font);
+}

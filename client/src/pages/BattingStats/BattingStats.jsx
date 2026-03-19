@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import styles from "./BattingStats.module.css";
 
 const BattingStats = () => {
   const { playerName } = useParams();
@@ -22,18 +23,53 @@ const BattingStats = () => {
     fetchData();
   }, [playerName]);
 
-  if (error) return <p>{error}</p>;
-  if (!player) return <p>Loading...</p>;
+  if (error) return <p className={styles.stateText}>{error}</p>;
+  if (!player) return <p className={styles.stateText}>Loading...</p>;
 
   return (
-    <div>
-      <h1>{player.playerName}</h1>
-      <p>Total Runs: {player.totalRuns}</p>
-      <p>Balls: {player.totalBalls}</p>
-      <p>Average: {player.battingAverage.toFixed(2)}</p>
-      <p>Strike Rate: {player.strikeRate.toFixed(2)}</p>
-      <p>Category: {player.category}</p>
-      <p>Score: {player.score}</p>
+    <div className={styles.page}>
+      <main className={styles.main}>
+        <section className={styles.hero}>
+          <div>
+            <h1 className={styles.heroTitle}>{player.playerName}</h1>
+          </div>
+          <span className={styles.categoryBadge}>{player.category}</span>
+        </section>
+
+        <div className={styles.card}>
+          <p className={styles.cardTitle}>Batting Statistics</p>
+          <div className={styles.statsGrid}>
+            <div className={styles.statItemHighlight}>
+              <span className={styles.statLabel}>Total Runs</span>
+              <span className={styles.statValue}>{player.totalRuns}</span>
+            </div>
+
+            <div className={styles.statItem}>
+              <span className={styles.statLabel}>Balls Faced</span>
+              <span className={styles.statValue}>{player.totalBalls}</span>
+            </div>
+
+            <div className={styles.statItem}>
+              <span className={styles.statLabel}>Average</span>
+              <span className={styles.statValue}>
+                {player.battingAverage.toFixed(2)}
+              </span>
+            </div>
+
+            <div className={styles.statItem}>
+              <span className={styles.statLabel}>Strike Rate</span>
+              <span className={styles.statValue}>
+                {player.strikeRate.toFixed(2)}
+              </span>
+            </div>
+
+            <div className={styles.statItem}>
+              <span className={styles.statLabel}>Score</span>
+              <span className={styles.statValue}>{player.score}</span>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   );
 };
