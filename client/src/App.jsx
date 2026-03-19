@@ -8,6 +8,8 @@ import Navbar from "./components/Navbar/Navbar";
 import "./App.css";
 import Bowlers from "./pages/Bowlers/Bowlers";
 import BowlingStats from "./pages/BowlingStats/BowlingStats";
+import Batsmen from "./pages/Batsmen/Batsmen";
+import BattingStats from "./pages/BattingStats/BattingStats";
 
 const App = () => {
   return (
@@ -22,7 +24,13 @@ const App = () => {
         <Route path="/bowlers" element={<Bowlers />} />
         <Route
           path="/players/bowling-analytics/:playerName"
-          element={<BowlingStats />} />
+          element={<BowlingStats />}
+        />
+        <Route path="/batsmen" element={<Batsmen />} />
+        <Route
+          path="/players/batting-analytics/:playerName"
+          element={<BattingStats />}
+        />
       </Routes>
     </>
   );

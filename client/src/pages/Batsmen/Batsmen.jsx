@@ -4,7 +4,6 @@ import styles from "./Batsmen.module.css";
 
 const Batsmen = () => {
   const [batsmen, setBatsmen] = useState([]);
-  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -21,9 +20,6 @@ const Batsmen = () => {
     fetchData();
   }, []);
 
-  if (error) return <p className={styles.stateText}>{error}</p>;
-  if (!batsmen.length) return <p className={styles.stateText}>Loading...</p>;
-
   return (
     <div className={styles.page}>
       <main className={styles.main}>
@@ -36,29 +32,29 @@ const Batsmen = () => {
         </section>
 
         <section className={styles.grid}>
-          {batsmen.map((batsman) => (
-            <div className={styles.card} key={batsman.playerName}>
+          {batsmen.map((batsmen) => (
+            <div className={styles.card} key={batsmen.playerName}>
               <div className={styles.cardHeader}>
-                <h3 className={styles.batsmanName}>{batsman.playerName}</h3>
+                <h3 className={styles.batsmanName}>{batsmen.playerName}</h3>
               </div>
 
               <div className={styles.stats}>
                 <div className={styles.statItem}>
                   <span className={styles.statLabel}>Total Runs</span>
-                  <span className={styles.statValue}>{batsman.totalRuns}</span>
+                  <span className={styles.statValue}>{batsmen.totalRuns}</span>
                 </div>
 
                 <div className={styles.statItem}>
                   <span className={styles.statLabel}>Balls Faced</span>
-                  <span className={styles.statValue}>
-                    {batsman.totalBallsFaced}
-                  </span>
+                  <span className={styles.statValue}>{batsmen.totalBalls}</span>
                 </div>
               </div>
 
               <button
                 className={styles.button}
-                onClick={() => navigate(`/players/${batsman.playerName}`)}
+                onClick={() =>
+                  navigate(`/players/batting-analytics/${batsmen.playerName}`)
+                }
               >
                 View Insight
               </button>
