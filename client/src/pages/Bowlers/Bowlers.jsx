@@ -48,7 +48,9 @@ const Bowlers = () => {
                 </div>
                 <button
                   className={styles.button}
-                  onClick={() => navigate(`/players/${bowler.playerName}`)}
+                  onClick={() =>
+                    navigate(`/players/bowling-analytics/${bowler.playerName}`)
+                  }
                 >
                   View Insight
                 </button>{" "}
