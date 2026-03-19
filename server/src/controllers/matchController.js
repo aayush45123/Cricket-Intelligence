@@ -454,7 +454,7 @@ export const highestWicketTakers = async (req, res) => {
   }
 };
 
-export const playerBowlingAnalytics = async (req, res) => {
+export const specificPlayerBowlingAnalytics = async (req, res) => {
   try {
     const matches = await Match.find();
     const playerStats = {};
