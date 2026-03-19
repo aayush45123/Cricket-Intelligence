@@ -453,101 +453,51 @@ export const highestWicketTakers = async (req, res) => {
     });
   }
 };
-
-export const specificPlayerBowlingAnalytics = async (req, res) => {
+export const playerBowlingAnalytics = async (req, res) => {
   try {
     const matches = await Match.find();
-    const playerStats = {};
 
-    const calculateBowlingAverage = (runsConceded, wickets) => {
-      if (wickets === 0) return runsConceded;
-      return runsConceded / wickets;
-    };
-
-    const calculateBowlingEconomyRate = (runsConceded, ballsBowled) => {
-      if (ballsBowled === 0) return 0;
-      return (runsConceded / ballsBowled) * 6;
-    };
-
-    const calculateBowlingStrikeRate = (ballsBowled, wickets) => {
-      if (ballsBowled === 0) return 0;
-      return ballsBowled / wickets;
-    };
-
-    const bowlerCategory = (avg, eco, sr) => {
-      if (avg < 25 && eco < 6 && sr < 30) {
-        return "Elite Bowler";
-      } else if (avg < 30 && eco < 7 && sr < 40) {
-        return "Good Bowler";
-      } else if (avg < 35 && eco < 8 && sr < 50) {
-        return "Average Bowler";
-      } else {
-        return "Below Average Bowler";
-      }
-    };
-
-    matches.forEach((match) => {
-      match.innings.statsByTeamA.wicketsByTeamAPlayers.forEach((player) => {
-        if (!playerStats[player.playerName]) {
-          playerStats[player.playerName] = {
-            totalWickets: 0,
-            totalRunsConceded: 0,
-            totalBallsBowled: 0,
-          };
-        }
-        playerStats[player.playerName].totalWickets += player.wickets;
-        playerStats[player.playerName].totalRunsConceded += player.runsConceded;
-        playerStats[player.playerName].totalBallsBowled += player.ballsBowled;
-      });
-
-      match.innings.statsByTeamB.wicketsByTeamBPlayers.forEach((player) => {
-        if (!playerStats[player.playerName]) {
-          playerStats[player.playerName] = {
-            totalWickets: 0,
-            totalRunsConceded: 0,
-            totalBallsBowled: 0,
-          };
-        }
-        playerStats[player.playerName].totalWickets += player.wickets;
-        playerStats[player.playerName].totalRunsConceded += player.runsConceded;
-        playerStats[player.playerName].totalBallsBowled += player.ballsBowled;
-      });
-    });
-
-    const playerAnalytics = Object.keys(playerStats).map((player) => {
-      const eco = calculateBowlingEconomyRate(
-        playerStats[player].totalRunsConceded,
-        playerStats[player].totalBallsBowled,
-      );
-      const avg = calculateBowlingAverage(
-        playerStats[player].totalRunsConceded,
-        playerStats[player].totalWickets,
-      );
-      const sr = calculateBowlingStrikeRate(
-        playerStats[player].totalBallsBowled,
-        playerStats[player].totalWickets,
-      );
-      const stats = playerStats[player];
-      return {
-        playerName: player,
-        totalWickets: stats.totalWickets,
-        totalRunsConceded: stats.totalRunsConceded,
-        totalBallsBowled: stats.totalBallsBowled,
-        bowlingAverage: avg,
-        bowlingEconomyRate: eco,
-        bowlingStrikeRate: sr,
-        category: bowlerCategory(avg, eco, sr),
-      };
-    });
+    const playerAnalytics = computeBowlingStats(matches);
 
     res.status(200).json({
       status: "success",
+      results: playerAnalytics.length,
       data: playerAnalytics,
     });
   } catch (error) {
     res.status(500).json({
       status: "error",
       message: "Error fetching bowling analytics",
+      error: error.message,
+    });
+  }
+};
+
+export const specificPlayerBowlingAnalytics = async (req, res) => {
+  try {
+    const { playerName } = req.params;
+
+    const matches = await Match.find();
+
+    const playerAnalytics = computeBowlingStats(matches);
+
+    const player = playerAnalytics.find((p) => p.playerName === playerName);
+
+    if (!player) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Player not found",
+      });
+    }
+
+    res.status(200).json({
+      status: "success",
+      data: player,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "error",
+      message: "Error fetching player bowling analytics",
       error: error.message,
     });
   }
