@@ -1,37 +1,39 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 
 const BowlingStats = () => {
-  const [bowlers, setBowlers] = useState([]);
-  const navigate = useNavigate();
+  const { playerName } = useParams();
+  const [bowler, setBowler] = useState(null);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const res = await fetch(
-          "/api/matches/players/bowling-analytics/:playerName",
+          `/api/matches/players/bowling-analytics/${playerName}`,
         );
         const result = await res.json();
-        setBowlers(result.data);
-      } catch (fetchError) {
-        console.error("Error fetching bowling analytics", fetchError);
-        setError("Unable to load bowling analytics right now.");
+        setBowler(result.data);
+      } catch (err) {
+        console.error(err);
+        setError("Unable to load player stats");
       }
     };
     fetchData();
-  }, []);
+  }, [playerName]);
+
+  if (error) return <p>{error}</p>;
+  if (!bowler) return <p>Loading...</p>;
+
   return (
     <div>
-      <h1>Bowling Stats</h1>
-      {bowlers.map((bowler) => (
-        <div key={bowler.playerName}>
-          <h3>{bowler.playerName}</h3>
-          <p>Total Wickets: {bowler.totalWickets}</p>
-          <p>Total Balls Bowled: {bowler.totalBallsBowled}</p>
-          <p>Economy: {bowler.bowlingeconomy}</p>
-          <p>Strike Rate: {bowler.bowlingstrikeRate}</p>
-          <p>Average: {bowler.bowlingaverage}</p>
-          <p>Category : {bowler.category}</p>
-        </div>
-      ))}
+      <h1>{bowler.playerName}</h1>
+      <p>Total Wickets: {bowler.totalWickets}</p>
+      <p>Total Balls Bowled: {bowler.totalBallsBowled}</p>
+      <p>Economy: {bowler.bowlingEconomyRate.toFixed(2)}</p>
+      <p>Strike Rate: {bowler.bowlingStrikeRate.toFixed(2)}</p>
+      <p>Average: {bowler.bowlingAverage.toFixed(2)}</p>
+      <p>Category: {bowler.category}</p>
     </div>
   );
 };
