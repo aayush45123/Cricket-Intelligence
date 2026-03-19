@@ -108,6 +108,7 @@
 }
 
 .statItemHighlight {
+  composes: statItem;
   background: var(--ci-brand-light);
   border-color: rgba(26, 107, 60, 0.22);
 }
