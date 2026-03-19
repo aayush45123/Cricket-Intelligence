@@ -1,4 +1,4 @@
-const computeBowlingStats = (matches) => {
+export const computeBowlingStats = (matches) => {
   const playerStats = {};
 
   const calculateBowlingAverage = (runsConceded, wickets) => {

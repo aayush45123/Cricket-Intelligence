@@ -7,6 +7,7 @@ import Dashboard from "./pages/Dashboard/Dashboard";
 import Navbar from "./components/Navbar/Navbar";
 import "./App.css";
 import Bowlers from "./pages/Bowlers/Bowlers";
+import BowlingStats from "./pages/BowlingStats/BowlingStats";
 
 const App = () => {
   return (
@@ -19,6 +20,9 @@ const App = () => {
         <Route path="/matches" element={<Matches />} />
         <Route path="/matches/:id" element={<MatchInsight />} />
         <Route path="/bowlers" element={<Bowlers />} />
+        <Route
+          path="/players/bowling-analytics/:playerName"
+          element={<BowlingStats />} />
       </Routes>
     </>
   );

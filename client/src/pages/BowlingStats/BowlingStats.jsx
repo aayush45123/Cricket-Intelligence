@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import styles from "./BowlingStats.module.css";
 
 const BowlingStats = () => {
   const { playerName } = useParams();
@@ -22,18 +23,57 @@ const BowlingStats = () => {
     fetchData();
   }, [playerName]);
 
-  if (error) return <p>{error}</p>;
-  if (!bowler) return <p>Loading...</p>;
+  if (error) return <p className={styles.stateText}>{error}</p>;
+  if (!bowler) return <p className={styles.stateText}>Loading...</p>;
 
   return (
-    <div>
-      <h1>{bowler.playerName}</h1>
-      <p>Total Wickets: {bowler.totalWickets}</p>
-      <p>Total Balls Bowled: {bowler.totalBallsBowled}</p>
-      <p>Economy: {bowler.bowlingEconomyRate.toFixed(2)}</p>
-      <p>Strike Rate: {bowler.bowlingStrikeRate.toFixed(2)}</p>
-      <p>Average: {bowler.bowlingAverage.toFixed(2)}</p>
-      <p>Category: {bowler.category}</p>
+    <div className={styles.page}>
+      <main className={styles.main}>
+        <section className={styles.hero}>
+          <div>
+            <h1 className={styles.heroTitle}>{bowler.playerName}</h1>
+          </div>
+          <span className={styles.categoryBadge}>{bowler.category}</span>
+        </section>
+
+        <div className={styles.card}>
+          <p className={styles.cardTitle}>Bowling Statistics</p>
+          <div className={styles.statsGrid}>
+            <div className={styles.statItemHighlight}>
+              <span className={styles.statLabel}>Total Wickets</span>
+              <span className={styles.statValue}>{bowler.totalWickets}</span>
+            </div>
+
+            <div className={styles.statItem}>
+              <span className={styles.statLabel}>Balls Bowled</span>
+              <span className={styles.statValue}>
+                {bowler.totalBallsBowled}
+              </span>
+            </div>
+
+            <div className={styles.statItem}>
+              <span className={styles.statLabel}>Economy</span>
+              <span className={styles.statValue}>
+                {bowler.bowlingEconomyRate.toFixed(2)}
+              </span>
+            </div>
+
+            <div className={styles.statItem}>
+              <span className={styles.statLabel}>Strike Rate</span>
+              <span className={styles.statValue}>
+                {bowler.bowlingStrikeRate.toFixed(2)}
+              </span>
+            </div>
+
+            <div className={styles.statItem}>
+              <span className={styles.statLabel}>Average</span>
+              <span className={styles.statValue}>
+                {bowler.bowlingAverage.toFixed(2)}
+              </span>
+            </div>
+          </div>
+        </div>
+      </main>
     </div>
   );
 };

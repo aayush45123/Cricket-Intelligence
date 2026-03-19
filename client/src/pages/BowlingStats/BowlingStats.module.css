@@ -7,17 +7,17 @@
 }
 
 .main {
-  max-width: 900px;
+  max-width: 780px;
   margin: 0 auto;
   padding: 40px 24px 80px;
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 24px;
 }
 
 /* Hero */
 .hero {
-  padding: 48px 48px;
+  padding: 48px;
   background: linear-gradient(
     135deg,
     var(--ci-brand-dark) 0%,
@@ -27,6 +27,10 @@
   box-shadow: var(--ci-shadow-md);
   position: relative;
   overflow: hidden;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 16px;
 }
 
 .hero::before {
@@ -34,80 +38,57 @@
   position: absolute;
   inset: 0;
   background: radial-gradient(
-    ellipse at 80% 50%,
-    rgba(240, 165, 0, 0.12) 0%,
+    ellipse at 80% 40%,
+    rgba(240, 165, 0, 0.14) 0%,
     transparent 60%
   );
   pointer-events: none;
 }
 
 .heroTitle {
-  font-size: 1.75rem;
+  font-size: 2rem;
   font-weight: 700;
   color: #ffffff;
   margin: 0 0 8px;
-  letter-spacing: -0.4px;
+  letter-spacing: -0.5px;
+  line-height: 1.15;
 }
 
-.heroSubtitle {
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.65);
-  margin: 0;
+.categoryBadge {
+  position: relative;
+  flex-shrink: 0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--ci-brand-dark);
+  background: var(--ci-accent);
+  border-radius: var(--ci-radius-sm);
+  padding: 6px 14px;
+  white-space: nowrap;
 }
 
-/* Card */
+/* Stats card */
 .card {
   background: var(--ci-bg-primary);
   border: 1px solid var(--ci-border);
   border-radius: var(--ci-radius-md);
   padding: 28px;
   box-shadow: var(--ci-shadow-sm);
-  display: flex;
-  flex-direction: column;
-  gap: 24px;
-  transition:
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
 }
 
-.card:hover {
-  box-shadow: var(--ci-shadow-md);
-  border-color: var(--ci-border-hover);
-}
-
-/* Card header */
-.cardHeader {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--ci-border);
-}
-
-.playerName {
-  font-size: 1.15rem;
-  font-weight: 700;
-  color: var(--ci-text-primary);
-  margin: 0;
-  letter-spacing: -0.3px;
-}
-
-.categoryBadge {
-  font-size: 0.7rem;
+.cardTitle {
+  font-size: 0.72rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--ci-brand);
-  background: var(--ci-brand-light);
-  border: 1px solid var(--ci-border);
-  border-radius: var(--ci-radius-sm);
-  padding: 4px 10px;
+  color: var(--ci-text-muted);
+  margin: 0 0 20px;
 }
 
-/* Stats grid */
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 16px;
 }
 
@@ -115,10 +96,20 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  padding: 16px;
+  padding: 18px 16px;
   background: var(--ci-bg-secondary);
   border: 1px solid var(--ci-border);
   border-radius: var(--ci-radius-sm);
+  transition: border-color 0.2s ease;
+}
+
+.statItem:hover {
+  border-color: var(--ci-border-hover);
+}
+
+.statItemHighlight {
+  background: var(--ci-brand-light);
+  border-color: rgba(26, 107, 60, 0.22);
 }
 
 .statLabel {
@@ -130,20 +121,22 @@
 }
 
 .statValue {
-  font-size: 1.4rem;
+  font-size: 1.6rem;
   font-weight: 700;
   color: var(--ci-brand);
-  letter-spacing: -0.4px;
+  letter-spacing: -0.5px;
   line-height: 1;
-}
-
-/* Highlight stat (wickets) */
-.statItemHighlight {
-  composes: statItem;
-  background: var(--ci-brand-light);
-  border-color: rgba(26, 107, 60, 0.25);
 }
 
 .statItemHighlight .statValue {
   color: var(--ci-brand-dark);
+}
+
+/* Error / Loading */
+.stateText {
+  text-align: center;
+  padding: 80px 24px;
+  font-size: 0.9rem;
+  color: var(--ci-text-muted);
+  font-family: var(--ci-font);
 }
