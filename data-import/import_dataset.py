@@ -1,7 +1,19 @@
 import pandas as pd
+from pymongo import MongoClient
 
-# Step 1: Read CSV
+# Read CSV
 df = pd.read_csv("IPL.csv")
 
-# Step 2: Print first 5 rows
-print(df.head())
+# Connect MongoDB
+client = MongoClient("mongodb://localhost:27017/")
+db = client["cricket_db"]
+
+collection = db["test_data"]
+
+# Convert to JSON
+data = df.head(100).to_dict("records")  # only 100 rows for test
+
+# Insert into Mongo
+collection.insert_many(data)
+
+print("Data inserted successfully!")
