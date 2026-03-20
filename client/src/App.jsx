@@ -10,6 +10,7 @@ import Bowlers from "./pages/Bowlers/Bowlers";
 import BowlingStats from "./pages/BowlingStats/BowlingStats";
 import Batsmen from "./pages/Batsmen/Batsmen";
 import BattingStats from "./pages/BattingStats/BattingStats";
+import Footer from "./components/Footer/Footer";
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
           element={<BattingStats />}
         />
       </Routes>
+      <Footer></Footer>
     </>
   );
 };
