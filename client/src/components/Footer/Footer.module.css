@@ -1,0 +1,32 @@
+.footer {
+  width: 100%;
+  border-top: 1px solid var(--ci-border);
+  background: var(--ci-bg-primary);
+  font-family: var(--ci-font);
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 24px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.brand {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ci-brand);
+  letter-spacing: -0.1px;
+}
+
+.divider {
+  font-size: 0.8rem;
+  color: var(--ci-border-hover);
+}
+
+.copy {
+  font-size: 0.78rem;
+  color: var(--ci-text-muted);
+}
