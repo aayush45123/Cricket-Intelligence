@@ -109,6 +109,144 @@ const MatchInsight = () => {
             <p className={styles.insightText}>{insight.analysis.insights}</p>
           </div>
         </section>
+
+        <section className={styles.section}>
+          <h2 className={styles.sectionTitle}>Scoreboard</h2>
+
+          {/* FIRST INNINGS */}
+          <div className={styles.inningsBlock}>
+            <h3 className={styles.inningsTitle}>First Innings</h3>
+
+            {/* Batting */}
+            <h4 className={styles.subTitle}>Batting</h4>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Player</th>
+                  <th>Runs</th>
+                  <th>Balls</th>
+                  <th>SR</th>
+                </tr>
+              </thead>
+              <tbody>
+                {insight.innings.statsByTeamA.runByTeamAPlayers.map((p, i) => (
+                  <tr key={i}>
+                    <td>{p.playerName}</td>
+                    <td>{p.runs}</td>
+                    <td>{p.balls}</td>
+                    <td>{((p.runs / p.balls) * 100).toFixed(1)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {/* Extras + Total */}
+            <div className={styles.extraRow}>
+              Extras: {insight.innings.statsByTeamA.extras}
+            </div>
+            <div className={styles.totalRow}>
+              Total: {insight.innings.statsByTeamA.runs}/
+              {insight.innings.statsByTeamA.wickets} (
+              {insight.innings.statsByTeamA.overs} overs)
+            </div>
+
+            {/* Bowling */}
+            <h4 className={styles.subTitle}>Bowling</h4>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Bowler</th>
+                  <th>Wickets</th>
+                  <th>Runs</th>
+                  <th>Overs</th>
+                  <th>Economy</th>
+                </tr>
+              </thead>
+              <tbody>
+                {insight.innings.statsByTeamB.wicketsByTeamBPlayers.map(
+                  (p, i) => (
+                    <tr key={i}>
+                      <td>{p.playerName}</td>
+                      <td>{p.wickets}</td>
+                      <td>{p.runsConceded}</td>
+                      <td>{(p.ballsBowled / 6).toFixed(1)}</td>
+                      <td>
+                        {(p.runsConceded / (p.ballsBowled / 6)).toFixed(2)}
+                      </td>
+                    </tr>
+                  ),
+                )}
+              </tbody>
+            </table>
+          </div>
+
+          {/* SECOND INNINGS */}
+          <div className={styles.inningsBlock}>
+            <h3 className={styles.inningsTitle}>Second Innings</h3>
+
+            {/* Batting */}
+            <h4 className={styles.subTitle}>Batting</h4>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Player</th>
+                  <th>Runs</th>
+                  <th>Balls</th>
+                  <th>SR</th>
+                </tr>
+              </thead>
+              <tbody>
+                {insight.innings.statsByTeamB.runByTeamBPlayers.map((p, i) => (
+                  <tr key={i}>
+                    <td>{p.playerName}</td>
+                    <td>{p.runs}</td>
+                    <td>{p.balls}</td>
+                    <td>{((p.runs / p.balls) * 100).toFixed(1)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {/* Extras + Total */}
+            <div className={styles.extraRow}>
+              Extras: {insight.innings.statsByTeamB.extras}
+            </div>
+            <div className={styles.totalRow}>
+              Total: {insight.innings.statsByTeamB.runs}/
+              {insight.innings.statsByTeamB.wickets} (
+              {insight.innings.statsByTeamB.overs} overs)
+            </div>
+
+            {/* Bowling */}
+            <h4 className={styles.subTitle}>Bowling</h4>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>Bowler</th>
+                  <th>Wickets</th>
+                  <th>Runs</th>
+                  <th>Overs</th>
+                  <th>Economy</th>
+                </tr>
+              </thead>
+              <tbody>
+                {insight.innings.statsByTeamA.wicketsByTeamAPlayers.map(
+                  (p, i) => (
+                    <tr key={i}>
+                      <td>{p.playerName}</td>
+                      <td>{p.wickets}</td>
+                      <td>{p.runsConceded}</td>
+                      <td>{(p.ballsBowled / 6).toFixed(1)}</td>
+                      <td>
+                        {(p.runsConceded / (p.ballsBowled / 6)).toFixed(2)}
+                      </td>
+                    </tr>
+                  ),
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
       </main>
     </div>
   );
