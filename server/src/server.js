@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import matchRoutes from "./routes/matchRoutes.js";
+import playerRoutes from "./routes/playerRoutes.js";
 
 dotenv.config();
 
@@ -13,6 +14,7 @@ const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
 app.use("/api/matches", matchRoutes);
+app.use("/api/players", playerRoutes);
 
 connectDB();
 
