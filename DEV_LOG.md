@@ -330,3 +330,165 @@ The project now functions as a **basic cricket analytics dashboard with a React 
     * Adjusted container CSS to ensure responsive behavior across different screen sizes.
 
 
+
+## 📅 Date: 20 March 2026  
+## 🗓️ Day: Friday  
+## 🕒 Session: ~3:00 pm to 6:30 pm  
+
+---
+
+## ✅ Work Done Today
+
+### 🧠 Dataset Integration (MAJOR UPGRADE 🚀)
+
+- Integrated **IPL Ball-by-Ball Dataset (2008–2025)** into the project
+- Dataset contains **278K+ deliveries with 60+ attributes**
+- Understood dataset structure including:
+  - Batter & Bowler stats
+  - Match metadata (venue, date, teams)
+  - Ball-by-ball runs, extras, wickets
+  - Toss & match results
+- Decided to store dataset in a new collection:
+
+```
+deliveries
+```
+
+---
+
+### 🐍 Python Setup for Data Import
+
+- Created new folder:
+
+```
+/server/python
+```
+
+- Installed required Python libraries:
+  - pandas
+  - pymongo
+
+- Wrote Python script to:
+  - Read CSV dataset using pandas
+  - Convert rows to JSON format
+  - Insert data into MongoDB Atlas
+
+- Connected Python script to MongoDB using:
+
+```
+mongodb+srv://<username>:<password>@cluster-url/cricket-intelligence
+```
+
+- Successfully imported **entire dataset into MongoDB**
+
+---
+
+### 🗄️ Database Expansion
+
+- Added new collection:
+
+```
+deliveries
+```
+
+- Verified data in MongoDB Compass
+- Confirmed:
+  - Large dataset successfully stored
+  - Ready for analytics queries
+
+---
+
+### ⚡ Performance Optimization (VERY IMPORTANT 🔥)
+
+- Used `mongosh` to create indexes for faster queries:
+
+```js
+db.deliveries.createIndex({ batter: 1 });
+db.deliveries.createIndex({ bowler: 1 });
+db.deliveries.createIndex({ match_id: 1 });
+```
+
+- Verified indexes using:
+
+```js
+db.deliveries.getIndexes();
+```
+
+- Confirmed indexes:
+  - batter_1 ✅
+  - bowler_1 ✅
+  - match_id_1 ✅
+
+---
+
+### 🧠 Data Modeling Decision
+
+- Decided to:
+  - Keep existing `Match` schema (for app UI & manual data)
+  - Use new `deliveries` collection for **real analytics engine**
+
+- Chose **not to over-normalize initially**
+- Plan to gradually optimize schema later if needed
+
+---
+
+### 🔥 Backend Planning (Next Step Ready)
+
+- Planned new analytics APIs using aggregation:
+  - Top Run Scorers
+  - Top Wicket Takers
+  - Strike Rate Leaders
+  - Economy Rate
+
+- Designed first aggregation pipeline for:
+
+```
+Top Run Scorers (using deliveries collection)
+```
+
+---
+
+## 🚀 Current Status
+
+Project has now evolved into a **REAL DATA-DRIVEN ANALYTICS SYSTEM**
+
+Now includes:
+
+- Full-stack MERN application ✅
+- Custom match analytics engine ✅
+- React dashboard with charts ✅
+- IPL ball-by-ball dataset (278K+ records) ✅
+- MongoDB optimized with indexes ✅
+
+---
+
+## 🔥 System Level Upgrade
+
+```
+Before → Demo Project ❌
+Now → Production-Level Analytics Engine ✅🔥
+```
+
+---
+
+## 🎯 Next Plan
+
+- Build **Player Analytics APIs**
+- Connect frontend charts to real IPL dataset
+- Implement:
+  - Top Run Scorers
+  - Top Bowlers
+  - Advanced filters (season, team)
+
+---
+
+## 💬 Notes
+
+- First time integrating Python into MERN workflow
+- Successfully handled large dataset ingestion
+- Understood importance of indexing for performance
+- System is now ready for **real-world scale analytics**
+
+---
+
+

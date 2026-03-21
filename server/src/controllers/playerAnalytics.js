@@ -1,4 +1,4 @@
-import Delivery from "../models/Delivery.js";
+import Delivery from "../models/Deliveries.js";
 
 export const getTopRunScorers = async (req, res) => {
   try {
