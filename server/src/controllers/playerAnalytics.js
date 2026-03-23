@@ -35,25 +35,13 @@ export const getTopRunScorers = async (req, res) => {
     });
   }
 };
-
 export const getTopWicketTakers = async (req, res) => {
   try {
     const topBowlers = await Delivery.aggregate([
       {
         $group: {
           _id: "$bowler",
-          totalWickets: {
-            $sum: {
-              $cond: [
-                {
-                  $or: [
-                    { $eq: ["$dismissal_kind", "bowled"] },
-                    { $eq: ["$dismissal_kind", "caught"] },
-                  ],
-                },
-              ],
-            },
-          },
+          totalWickets: { $sum: "$bowler_wicket" },
         },
       },
       {
@@ -70,6 +58,7 @@ export const getTopWicketTakers = async (req, res) => {
         },
       },
     ]);
+
     res.json({
       status: "success",
       data: topBowlers,
