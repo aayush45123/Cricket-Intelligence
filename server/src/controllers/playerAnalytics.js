@@ -30,7 +30,53 @@ export const getTopRunScorers = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({
-      message: "Error fetching top scorers",
+      message: "Error fetching top run scorers",
+      error: error.message,
+    });
+  }
+};
+
+export const getTopWicketTakers = async (req, res) => {
+  try {
+    const topBowlers = await Delivery.aggregate([
+      {
+        $group: {
+          _id: "$bowler",
+          totalWickets: {
+            $sum: {
+              $cond: [
+                {
+                  $or: [
+                    { $eq: ["$dismissal_kind", "bowled"] },
+                    { $eq: ["$dismissal_kind", "caught"] },
+                  ],
+                },
+              ],
+            },
+          },
+        },
+      },
+      {
+        $sort: { totalWickets: -1 },
+      },
+      {
+        $limit: 10,
+      },
+      {
+        $project: {
+          _id: 0,
+          playerName: "$_id",
+          totalWickets: 1,
+        },
+      },
+    ]);
+    res.json({
+      status: "success",
+      data: topBowlers,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching top wicket takers",
       error: error.message,
     });
   }
