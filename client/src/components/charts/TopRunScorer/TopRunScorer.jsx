@@ -17,11 +17,10 @@ const TopRunScorer = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const res = await fetch("/api/matches/players/top-scorers");
+        const res = await fetch("/api/players/top-scorers");
         const result = await res.json();
 
         const data = result.data
-          .sort((a, b) => b.totalRuns - a.totalRuns)
           .map((player) => ({
             name: player.playerName,
             runs: player.totalRuns,
