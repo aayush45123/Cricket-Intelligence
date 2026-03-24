@@ -84,7 +84,7 @@ export const getTopRunScorer = async (req, res) => {
         $sort: { totalRuns: -1 },
       },
       {
-        $limit: 1,
+        $limit: 10,
       },
       {
         $project: {
