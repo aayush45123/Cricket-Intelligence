@@ -17,15 +17,13 @@ const HighestWicketTaker = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const res = await fetch("/api/matches/players/highest-wicket-takers");
+        const res = await fetch("/api/players/top-wicket-takers");
         const result = await res.json();
 
-        const data = result.data
-          .sort((a, b) => b.totalWickets - a.totalWickets       )
-          .map((player) => ({
-            name: player.playerName,
-            runs: player.totalWickets,
-          }));
+        const data = result.data.map((player) => ({
+          name: player.playerName,
+          runs: player.totalWickets,
+        }));
 
         setChartData(data);
       } catch (error) {
