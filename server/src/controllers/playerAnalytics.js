@@ -70,3 +70,39 @@ export const getTopWicketTakers = async (req, res) => {
     });
   }
 };
+
+export const getTopRunScorer = async (req, res) => {
+  try {
+    const topRunScorer = await Delivery.aggregate([
+      {
+        $group: {
+          _id: "$batter",
+          totalRuns: { $sum: "$runs_batter" },
+        },
+      },
+      {
+        $sort: { totalRuns: -1 },
+      },
+      {
+        $limit: 1,
+      },
+      {
+        $project: {
+          _id: 0,
+          playerName: "$_id",
+          totalRuns: 1,
+        },
+      },
+    ]);
+
+    res.json({
+      status: "success",
+      data: topRunScorer,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching top run scorer",
+      error: error.message,
+    });
+  }
+};
