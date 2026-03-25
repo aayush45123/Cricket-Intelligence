@@ -1,5 +1,29 @@
 import Delivery from "../models/Deliveries.js";
-import { computeBowlingStats } from "../utils/bowlingStats.js";
+
+const buildBowlingStatsFromDeliveries = (rows) => {
+  return rows.map((row) => {
+    const totalWickets = row.totalWickets || 0;
+    const totalBallsBowled = row.totalBallsBowled || 0;
+    const totalRunsConceded = row.totalRunsConceded || 0;
+
+    const bowlingEconomyRate =
+      totalBallsBowled > 0 ? (totalRunsConceded / totalBallsBowled) * 6 : 0;
+    const bowlingAverage =
+      totalWickets > 0 ? totalRunsConceded / totalWickets : totalRunsConceded;
+    const bowlingStrikeRate =
+      totalWickets > 0 ? totalBallsBowled / totalWickets : 0;
+
+    return {
+      playerName: row.playerName,
+      totalWickets,
+      totalRunsConceded,
+      totalBallsBowled,
+      bowlingAverage,
+      bowlingEconomyRate,
+      bowlingStrikeRate,
+    };
+  });
+};
 
 export const getTopWicketTakers = async (req, res) => {
   try {
@@ -75,8 +99,35 @@ export const getTopRunScorer = async (req, res) => {
 
 export const getBowlingStats = async (req, res) => {
   try {
-    const matches = await Delivery.find({});
-    const stats = computeBowlingStats(matches);
+    const statsByBowler = await Delivery.aggregate([
+      {
+        $group: {
+          _id: "$bowler",
+          totalWickets: { $sum: "$bowler_wicket" },
+          totalRunsConceded: { $sum: "$runs_bowler" },
+          totalBallsBowled: {
+            $sum: {
+              $cond: [{ $eq: ["$valid_ball", 1] }, 1, 0],
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          playerName: "$_id",
+          totalWickets: 1,
+          totalRunsConceded: 1,
+          totalBallsBowled: 1,
+        },
+      },
+      {
+        $sort: { totalWickets: -1, totalRunsConceded: 1 },
+      },
+    ]);
+
+    const stats = buildBowlingStatsFromDeliveries(statsByBowler);
+
     res.json({
       status: "success",
       results: stats.length,
@@ -92,15 +143,43 @@ export const getBowlingStats = async (req, res) => {
 
 export const specificBowlerStats = async (req, res) => {
   try {
-    const { playerName } = req.params;
-    const matches = await Delivery.find({ bowler: playerName });
-    const stats = computeBowlingStats(matches);
-    const playerStats = stats.find((stat) => stat.playerName === playerName);
-    if (!playerStats) {
+    const playerName = decodeURIComponent(req.params.playerName);
+
+    const statsByBowler = await Delivery.aggregate([
+      {
+        $match: { bowler: playerName },
+      },
+      {
+        $group: {
+          _id: "$bowler",
+          totalWickets: { $sum: "$bowler_wicket" },
+          totalRunsConceded: { $sum: "$runs_bowler" },
+          totalBallsBowled: {
+            $sum: {
+              $cond: [{ $eq: ["$valid_ball", 1] }, 1, 0],
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          playerName: "$_id",
+          totalWickets: 1,
+          totalRunsConceded: 1,
+          totalBallsBowled: 1,
+        },
+      },
+    ]);
+
+    if (!statsByBowler.length) {
       return res.status(404).json({
         message: "Bowler not found",
       });
     }
+
+    const playerStats = buildBowlingStatsFromDeliveries(statsByBowler)[0];
+
     res.json({
       status: "success",
       data: playerStats,

@@ -10,9 +10,7 @@ const BowlingStats = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(
-          `/api/matches/players/bowling-analytics/${playerName}`,
-        );
+        const res = await fetch(`/api/players/bowling-stats/${playerName}`);
         const result = await res.json();
         setBowler(result.data);
       } catch (err) {

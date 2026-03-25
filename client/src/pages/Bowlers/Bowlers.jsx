@@ -8,7 +8,7 @@ const Bowlers = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("/api/matches/players/bowling-analytics");
+        const res = await fetch("/api/players/bowling-stats");
         const result = await res.json();
         setBowlers(result.data);
       } catch (fetchError) {
