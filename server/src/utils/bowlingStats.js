@@ -16,8 +16,7 @@ export const computeBowlingStats = (matches) => {
     return ballsBowled / wickets;
   };
   const bowlerCategory = (avg, eco, sr, balls) => {
-    // 🚫 Ignore small sample size
-    if (balls < 60) return "Insufficient Data"; // less than 10 overs
+    if (balls < 60) return "Insufficient Data"; 
 
     let score = 0;
 

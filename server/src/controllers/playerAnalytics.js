@@ -1,4 +1,5 @@
 import Delivery from "../models/Deliveries.js";
+import { computeBowlingStats } from "../utils/bowlingStats.js";
 
 export const getTopWicketTakers = async (req, res) => {
   try {
@@ -72,4 +73,42 @@ export const getTopRunScorer = async (req, res) => {
   }
 };
 
+export const getBowlingStats = async (req, res) => {
+  try {
+    const matches = await Delivery.find({});
+    const stats = computeBowlingStats(matches);
+    res.json({
+      status: "success",
+      results: stats.length,
+      data: stats,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching bowling stats",
+      error: error.message,
+    });
+  }
+};
 
+export const specificBowlerStats = async (req, res) => {
+  try {
+    const { playerName } = req.params;
+    const matches = await Delivery.find({ bowler: playerName });
+    const stats = computeBowlingStats(matches);
+    const playerStats = stats.find((stat) => stat.playerName === playerName);
+    if (!playerStats) {
+      return res.status(404).json({
+        message: "Bowler not found",
+      });
+    }
+    res.json({
+      status: "success",
+      data: playerStats,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching bowler stats",
+      error: error.message,
+    });
+  }
+};

@@ -17,14 +17,13 @@ const TopRunScorer = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const res = await fetch("/api/players/top-scorers");
+        const res = await fetch("/api/players/top-run-scorers");
         const result = await res.json();
 
-        const data = result.data
-          .map((player) => ({
-            name: player.playerName,
-            runs: player.totalRuns,
-          }));
+        const data = result.data.map((player) => ({
+          name: player.playerName,
+          runs: player.totalRuns,
+        }));
 
         setChartData(data);
       } catch (error) {
