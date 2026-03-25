@@ -6,27 +6,35 @@ const BowlingStats = () => {
   const { playerName } = useParams();
   const [bowler, setBowler] = useState(null);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(`/api/players/bowling-stats/${playerName}`);
+        setLoading(true);
+        setError(null);
+
+        const res = await fetch(`/api/players/bowler-stats/${playerName}`);
+
+        if (!res.ok) {
+          throw new Error(`Request failed with status ${res.status}`);
+        }
+
         const result = await res.json();
-        setBowler(
-          Array.isArray(result.data) && result.data.length > 0
-            ? result.data[0]
-            : null,
-        );
+        setBowler(result?.data ?? null);
       } catch (err) {
         console.error(err);
         setError("Unable to load player stats");
+      } finally {
+        setLoading(false);
       }
     };
     fetchData();
   }, [playerName]);
 
   if (error) return <p className={styles.stateText}>{error}</p>;
-  if (!bowler) return <p className={styles.stateText}>Loading...</p>;
+  if (loading) return <p className={styles.stateText}>Loading...</p>;
+  if (!bowler) return <p className={styles.stateText}>Bowler not found.</p>;
 
   return (
     <div className={styles.page}>
@@ -35,7 +43,9 @@ const BowlingStats = () => {
           <div>
             <h1 className={styles.heroTitle}>{bowler.playerName}</h1>
           </div>
-          <span className={styles.categoryBadge}>{bowler.category}</span>
+          <span className={styles.categoryBadge}>
+            {bowler.category || "Bowling Profile"}
+          </span>
         </section>
 
         <div className={styles.card}>
