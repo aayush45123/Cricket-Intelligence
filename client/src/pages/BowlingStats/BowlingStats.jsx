@@ -12,7 +12,11 @@ const BowlingStats = () => {
       try {
         const res = await fetch(`/api/players/bowling-stats/${playerName}`);
         const result = await res.json();
-        setBowler(result.data);
+        setBowler(
+          Array.isArray(result.data) && result.data.length > 0
+            ? result.data[0]
+            : null,
+        );
       } catch (err) {
         console.error(err);
         setError("Unable to load player stats");
