@@ -65,6 +65,18 @@
   gap: 20px;
 }
 
+.message {
+  margin: 0;
+  color: var(--ci-text-secondary);
+  font-weight: 500;
+}
+
+.messageError {
+  margin: 0;
+  color: #b42318;
+  font-weight: 600;
+}
+
 /* Card */
 .card {
   background: var(--ci-bg-primary);
