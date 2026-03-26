@@ -191,3 +191,36 @@ export const specificBowlerStats = async (req, res) => {
     });
   }
 };
+
+export const teamLeaderboard = async (req, res) => {
+  try {
+    const teamName = decodeURIComponent(req.params.teamName);
+    const teamWins = await Match.aggregate([
+      {
+        $match: { winner: teamName },
+      },
+      {
+        $group: {
+          _id: "$winner",
+          totalWins: { $sum: 1 },
+        },
+      },
+      {
+        $project: {
+          _id: 0,
+          teamName: "$_id",
+          totalWins: 1,
+        },
+      },
+    ]);
+    res.json({
+      status: "success",
+      data: teamWins,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching team wins",
+      error: error.message,
+    });
+  }
+};

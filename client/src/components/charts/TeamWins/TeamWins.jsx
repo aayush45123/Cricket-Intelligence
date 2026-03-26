@@ -17,12 +17,12 @@ const TeamWins = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const res = await fetch("/api/matches/teams/leaderboard");
+        const res = await fetch("/api/players/team-leaderboard");
         const result = await res.json();
 
-        const data = result.teams.map((team) => ({
-          name: team.team,
-          wins: team.wins,
+        const data = result.data.map((team) => ({
+          name: team.teamName,
+          wins: team.totalWins,
         }));
 
         setChartData(data);
