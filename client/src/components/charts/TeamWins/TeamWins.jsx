@@ -39,7 +39,7 @@ const TeamWins = () => {
     <div className={styles.wrapper}>
       <h3 className={styles.title}>Team Wins</h3>
       <div className={styles.chart}>
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height={280}>
           <BarChart
             data={chartData}
             barCategoryGap="35%"

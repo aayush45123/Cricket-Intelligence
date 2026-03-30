@@ -198,12 +198,12 @@ export const teamLeaderboard = async (req, res) => {
     const teamWins = await Match.aggregate([
       {
         $match: {
-          winner: { $ne: null, $nin: [""] },
+          "result.winner": { $nin: [null, "", "No Result"] },
         },
       },
       {
         $group: {
-          _id: "$winner",
+          _id: "$result.winner",
           totalWins: { $sum: 1 },
         },
       },
