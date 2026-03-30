@@ -1,4 +1,5 @@
 import Delivery from "../models/Deliveries.js";
+import Match from "../models/Match.js";
 
 const buildBowlingStatsFromDeliveries = (rows) => {
   return rows.map((row) => {
@@ -194,16 +195,20 @@ export const specificBowlerStats = async (req, res) => {
 
 export const teamLeaderboard = async (req, res) => {
   try {
-    const teamName = decodeURIComponent(req.params.teamName);
     const teamWins = await Match.aggregate([
       {
-        $match: { winner: teamName },
+        $match: {
+          winner: { $ne: null, $nin: [""] },
+        },
       },
       {
         $group: {
           _id: "$winner",
           totalWins: { $sum: 1 },
         },
+      },
+      {
+        $sort: { totalWins: -1 },
       },
       {
         $project: {

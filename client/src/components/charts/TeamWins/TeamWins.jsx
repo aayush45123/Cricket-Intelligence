@@ -20,7 +20,8 @@ const TeamWins = () => {
         const res = await fetch("/api/players/team-leaderboard");
         const result = await res.json();
 
-        const data = result.data.map((team) => ({
+        const teams = Array.isArray(result?.data) ? result.data : [];
+        const data = teams.map((team) => ({
           name: team.teamName,
           wins: team.totalWins,
         }));
