@@ -113,6 +113,50 @@ export const getMatchById = async (req, res) => {
 
     const meta = await Delivery.findOne(matchQuery);
 
+    // Fetch detailed batting stats by batter
+    const batterStats = await Delivery.aggregate([
+      { $match: matchQuery },
+      {
+        $group: {
+          _id: { batter: "$batter", batting_team: "$batting_team" },
+          runs: { $sum: "$runs_batter" },
+          balls: { $sum: 1 },
+          dismissal: { $first: "$wicket_kind" },
+          dismissedBy: { $first: "$bowler" },
+        },
+      },
+      { $sort: { runs: -1 } },
+    ]);
+
+    // Fetch detailed bowling stats by bowler
+    const bowlerStats = await Delivery.aggregate([
+      { $match: matchQuery },
+      {
+        $group: {
+          _id: { bowler: "$bowler", bowling_team: "$bowling_team" },
+          runs: { $sum: "$runs_bowler" },
+          wickets: { $sum: "$bowler_wicket" },
+          balls: {
+            $sum: {
+              $cond: [{ $eq: ["$valid_ball", 1] }, 1, 0],
+            },
+          },
+        },
+      },
+      { $sort: { wickets: -1 } },
+    ]);
+
+    // Fetch extras
+    const extrasData = await Delivery.aggregate([
+      { $match: matchQuery },
+      {
+        $group: {
+          _id: "$batting_team",
+          extras: { $sum: "$runs_extras" },
+        },
+      },
+    ]);
+
     const matchObject = {
       teams: {
         teamA: { name: teamA.team },
@@ -123,11 +167,47 @@ export const getMatchById = async (req, res) => {
           runs: teamA.runs,
           wickets: teamA.wickets,
           overs: ballsToOvers(teamA.balls),
+          batters: batterStats
+            .filter((b) => b._id.batting_team === teamA.team)
+            .map((b) => ({
+              playerName: b._id.batter,
+              runs: b.runs,
+              balls: b.balls,
+              dismissal: b.dismissal || "Not Out",
+              dismissedBy: b.dismissedBy,
+            })),
+          bowlers: bowlerStats
+            .filter((b) => b._id.bowling_team === teamB.team)
+            .map((b) => ({
+              playerName: b._id.bowler,
+              runs: b.runs,
+              wickets: b.wickets,
+              overs: ballsToOvers(b.balls),
+            })),
+          extras: extrasData.find((e) => e._id === teamA.team)?.extras || 0,
         },
         statsByTeamB: {
           runs: teamB.runs,
           wickets: teamB.wickets,
           overs: ballsToOvers(teamB.balls),
+          batters: batterStats
+            .filter((b) => b._id.batting_team === teamB.team)
+            .map((b) => ({
+              playerName: b._id.batter,
+              runs: b.runs,
+              balls: b.balls,
+              dismissal: b.dismissal || "Not Out",
+              dismissedBy: b.dismissedBy,
+            })),
+          bowlers: bowlerStats
+            .filter((b) => b._id.bowling_team === teamA.team)
+            .map((b) => ({
+              playerName: b._id.bowler,
+              runs: b.runs,
+              wickets: b.wickets,
+              overs: ballsToOvers(b.balls),
+            })),
+          extras: extrasData.find((e) => e._id === teamB.team)?.extras || 0,
         },
       },
       result: {

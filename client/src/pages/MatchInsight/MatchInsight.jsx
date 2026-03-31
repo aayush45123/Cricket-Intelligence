@@ -128,28 +128,161 @@ const MatchInsight = () => {
           </div>
         </section>
 
-        {/* DETAILED SCOREBOARD — only if player data exists */}
-        {innings.statsByTeamA.runByTeamAPlayers && (
+        {/* DETAILED SCOREBOARD */}
+        {innings.statsByTeamA.batters && (
           <section className={styles.section}>
-            <h2 className={styles.sectionTitle}>Detailed Scoreboard</h2>
+            <h2 className={styles.sectionTitle}>Detailed Scorecard</h2>
+
+            {/* Team A INNINGS */}
             <div className={styles.inningsBlock}>
-              <h3 className={styles.inningsHeading}>First Innings</h3>
+              <h3 className={styles.inningsHeading}>
+                {teams.teamA.name} Innings
+              </h3>
               <table className={styles.table}>
                 <thead>
                   <tr>
-                    <th>Player</th>
+                    <th>Batter</th>
                     <th>Runs</th>
                     <th>Balls</th>
+                    <th>SR</th>
+                    <th>Dismissal</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {innings.statsByTeamA.runByTeamAPlayers.map((p, i) => (
+                  {innings.statsByTeamA.batters.map((p, i) => (
                     <tr key={i}>
                       <td>{p.playerName}</td>
                       <td>{p.runs}</td>
                       <td>{p.balls}</td>
+                      <td>
+                        {p.balls > 0
+                          ? ((p.runs / p.balls) * 100).toFixed(1)
+                          : "0.0"}
+                      </td>
+                      <td>
+                        {p.dismissal && p.dismissal !== "null"
+                          ? `${p.dismissal} b ${p.dismissedBy}`
+                          : "Not Out"}
+                      </td>
                     </tr>
                   ))}
+                  <tr className={styles.totalRow}>
+                    <td>
+                      <strong>Total</strong>
+                    </td>
+                    <td>
+                      <strong>{innings.statsByTeamA.runs}</strong>
+                    </td>
+                    <td>
+                      <strong>—</strong>
+                    </td>
+                    <td>
+                      <strong>—</strong>
+                    </td>
+                    <td>
+                      <strong>Extras: {innings.statsByTeamA.extras}</strong>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h4 className={styles.subHeading}>Bowling</h4>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Bowler</th>
+                    <th>Overs</th>
+                    <th>Runs</th>
+                    <th>Wickets</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {innings.statsByTeamA.bowlers &&
+                    innings.statsByTeamA.bowlers.map((p, i) => (
+                      <tr key={i}>
+                        <td>{p.playerName}</td>
+                        <td>{p.overs}</td>
+                        <td>{p.runs}</td>
+                        <td>{p.wickets}</td>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Team B INNINGS */}
+            <div className={styles.inningsBlock}>
+              <h3 className={styles.inningsHeading}>
+                {teams.teamB.name} Innings
+              </h3>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Batter</th>
+                    <th>Runs</th>
+                    <th>Balls</th>
+                    <th>SR</th>
+                    <th>Dismissal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {innings.statsByTeamB.batters.map((p, i) => (
+                    <tr key={i}>
+                      <td>{p.playerName}</td>
+                      <td>{p.runs}</td>
+                      <td>{p.balls}</td>
+                      <td>
+                        {p.balls > 0
+                          ? ((p.runs / p.balls) * 100).toFixed(1)
+                          : "0.0"}
+                      </td>
+                      <td>
+                        {p.dismissal && p.dismissal !== "null"
+                          ? `${p.dismissal} b ${p.dismissedBy}`
+                          : "Not Out"}
+                      </td>
+                    </tr>
+                  ))}
+                  <tr className={styles.totalRow}>
+                    <td>
+                      <strong>Total</strong>
+                    </td>
+                    <td>
+                      <strong>{innings.statsByTeamB.runs}</strong>
+                    </td>
+                    <td>
+                      <strong>—</strong>
+                    </td>
+                    <td>
+                      <strong>—</strong>
+                    </td>
+                    <td>
+                      <strong>Extras: {innings.statsByTeamB.extras}</strong>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+              <h4 className={styles.subHeading}>Bowling</h4>
+              <table className={styles.table}>
+                <thead>
+                  <tr>
+                    <th>Bowler</th>
+                    <th>Overs</th>
+                    <th>Runs</th>
+                    <th>Wickets</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {innings.statsByTeamB.bowlers &&
+                    innings.statsByTeamB.bowlers.map((p, i) => (
+                      <tr key={i}>
+                        <td>{p.playerName}</td>
+                        <td>{p.overs}</td>
+                        <td>{p.runs}</td>
+                        <td>{p.wickets}</td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>

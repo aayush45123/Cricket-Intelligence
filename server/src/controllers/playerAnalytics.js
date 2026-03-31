@@ -269,7 +269,7 @@ const buildBattingStatsFromDeliveries = (rows) => {
     const battingAverage = totalBalls > 0 ? totalRuns / row.innings : 0;
 
     return {
-      playerName: row.playerName,
+      playerName: row._id,
       totalRuns,
       totalBalls,
       strikeRate,

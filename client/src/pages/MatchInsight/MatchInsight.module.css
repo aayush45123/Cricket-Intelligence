@@ -207,3 +207,22 @@
 .table tbody tr:hover td {
   background: var(--ci-bg-tertiary);
 }
+
+.totalRow {
+  background: var(--ci-bg-tertiary) !important;
+  font-weight: 700;
+}
+
+.totalRow td {
+  border-bottom: 1px solid var(--ci-border) !important;
+  color: var(--ci-brand);
+}
+
+.subHeading {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--ci-text-secondary);
+  margin: 20px 0 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
