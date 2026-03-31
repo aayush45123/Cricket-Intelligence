@@ -1,4 +1,5 @@
 import Match from "../models/Match.js";
+import Delivery from "../models/Deliveries.js";
 import { generateMatchAnalytics } from "../utils/matchAnalytics.js";
 import { computeBowlingStats } from "../utils/bowlingStats.js";
 import { computeBattingStats } from "../utils/battingStats.js";
@@ -51,7 +52,65 @@ export const getMatches = async (req, res) => {
 };
 export const getAnalyticsSummary = async (req, res) => {
   try {
-    const matches = await Match.find();
+    // Get all unique matches from Delivery collection
+    const matches = await Delivery.aggregate([
+      {
+        $group: {
+          _id: "$match_id",
+          date: { $first: "$date" },
+          teamA: { $first: "$batting_team" },
+          teamB: { $first: "$bowling_team" },
+          winner: { $first: "$match_won_by" },
+          runsTeamA: {
+            $sum: {
+              $cond: [
+                { $eq: ["$batting_team", "$batting_team"] },
+                "$runs_total",
+                0,
+              ],
+            },
+          },
+          runsTeamB: {
+            $sum: {
+              $cond: [
+                { $eq: ["$bowling_team", "$bowling_team"] },
+                "$runs_total",
+                0,
+              ],
+            },
+          },
+          ballsTeamA: {
+            $sum: {
+              $cond: [
+                {
+                  $and: [
+                    { $eq: ["$batting_team", "$batting_team"] },
+                    { $eq: ["$valid_ball", 1] },
+                  ],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+          ballsTeamB: {
+            $sum: {
+              $cond: [
+                {
+                  $and: [
+                    { $eq: ["$bowling_team", "$bowling_team"] },
+                    { $eq: ["$valid_ball", 1] },
+                  ],
+                },
+                1,
+                0,
+              ],
+            },
+          },
+        },
+      },
+    ]);
+
     const totalMatches = matches.length;
 
     if (totalMatches === 0) {
@@ -68,16 +127,26 @@ export const getAnalyticsSummary = async (req, res) => {
       });
     }
 
-    // Generate analytics for each match
+    // Calculate run rates for each match
     const analytics = matches.map((match) => {
-      const analysis = generateMatchAnalytics(match);
+      const ballsToOvers = (balls) =>
+        Number((Math.floor(balls / 6) + (balls % 6) / 10).toFixed(1));
+
+      const runRateTeamA =
+        match.ballsTeamA > 0 ? (match.runsTeamA / match.ballsTeamA) * 6 : 0;
+      const runRateTeamB =
+        match.ballsTeamB > 0 ? (match.runsTeamB / match.ballsTeamB) * 6 : 0;
+
       return {
         match,
-        analysis,
+        analysis: {
+          runRateForTeamA: Number(runRateTeamA.toFixed(2)),
+          runRateForTeamB: Number(runRateTeamB.toFixed(2)),
+        },
       };
     });
 
-    // Calculate run rates
+    // Calculate averages
     const totalRunRateTeamA = analytics.reduce(
       (sum, item) => sum + item.analysis.runRateForTeamA,
       0,
@@ -91,22 +160,25 @@ export const getAnalyticsSummary = async (req, res) => {
     const averageRunRateTeamA = totalRunRateTeamA / totalMatches;
     const averageRunRateTeamB = totalRunRateTeamB / totalMatches;
 
-    // Calculate pressure index
+    // Calculate pressure index (simple metric: higher run rate difference = higher pressure)
     const totalPI = analytics.reduce(
       (sum, item) =>
         sum +
-        item.analysis.pressureIndexForTeamA +
-        item.analysis.pressureIndexForTeamB,
+        Math.abs(item.analysis.runRateForTeamA - item.analysis.runRateForTeamB),
       0,
     );
 
-    const averagePI = totalPI / (totalMatches * 2);
+    const averagePI = totalPI / totalMatches;
 
-    // Find most dominant match
+    // Find most dominant match (highest run rate difference wins)
     const dominantMatch = analytics.reduce((max, item) => {
-      return item.analysis.winnerStrength > max.analysis.winnerStrength
-        ? item
-        : max;
+      const currentDiff = Math.abs(
+        item.analysis.runRateForTeamA - item.analysis.runRateForTeamB,
+      );
+      const maxDiff = Math.abs(
+        max.analysis.runRateForTeamA - max.analysis.runRateForTeamB,
+      );
+      return currentDiff > maxDiff ? item : max;
     });
 
     res.status(200).json({
@@ -118,11 +190,13 @@ export const getAnalyticsSummary = async (req, res) => {
         averageRunRateTeamB: Number(averageRunRateTeamB.toFixed(2)),
         averagePressureIndex: Number(averagePI.toFixed(2)),
         mostDominantMatch: {
-          teams: dominantMatch.match.teams,
-          venue: dominantMatch.match.venue,
-          result: dominantMatch.match.result,
-          winnerStrength: dominantMatch.analysis.winnerStrength,
-          winQuality: dominantMatch.analysis.winQuality,
+          teams: {
+            teamA: { name: dominantMatch.match.teamA },
+            teamB: { name: dominantMatch.match.teamB },
+          },
+          winner: dominantMatch.match.winner,
+          runRateTeamA: dominantMatch.analysis.runRateForTeamA,
+          runRateTeamB: dominantMatch.analysis.runRateForTeamB,
         },
       },
     });

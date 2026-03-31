@@ -121,8 +121,31 @@ export const getMatchById = async (req, res) => {
           _id: { batter: "$batter", batting_team: "$batting_team" },
           runs: { $sum: "$runs_batter" },
           balls: { $sum: 1 },
-          dismissal: { $first: "$wicket_kind" },
-          dismissedBy: { $first: "$bowler" },
+          dismissals: {
+            $push: {
+              wicket_kind: "$wicket_kind",
+              bowler: "$bowler",
+            },
+          },
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          runs: 1,
+          balls: 1,
+          dismissalEvent: {
+            $arrayElemAt: [
+              {
+                $filter: {
+                  input: "$dismissals",
+                  as: "d",
+                  cond: { $ne: ["$$d.wicket_kind", null] },
+                },
+              },
+              0,
+            ],
+          },
         },
       },
       { $sort: { runs: -1 } },
@@ -173,8 +196,8 @@ export const getMatchById = async (req, res) => {
               playerName: b._id.batter,
               runs: b.runs,
               balls: b.balls,
-              dismissal: b.dismissal || "Not Out",
-              dismissedBy: b.dismissedBy,
+              dismissal: b.dismissalEvent?.wicket_kind || "Not Out",
+              dismissedBy: b.dismissalEvent?.bowler,
             })),
           bowlers: bowlerStats
             .filter((b) => b._id.bowling_team === teamB.team)
@@ -196,8 +219,8 @@ export const getMatchById = async (req, res) => {
               playerName: b._id.batter,
               runs: b.runs,
               balls: b.balls,
-              dismissal: b.dismissal || "Not Out",
-              dismissedBy: b.dismissedBy,
+              dismissal: b.dismissalEvent?.wicket_kind || "Not Out",
+              dismissedBy: b.dismissalEvent?.bowler,
             })),
           bowlers: bowlerStats
             .filter((b) => b._id.bowling_team === teamA.team)
