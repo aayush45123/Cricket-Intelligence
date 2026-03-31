@@ -12,7 +12,6 @@ const Matches = () => {
       try {
         const res = await fetch("/api/matches");
         const result = await res.json();
-
         setMatches(result.data || []);
       } catch (err) {
         console.error(err);
@@ -28,25 +27,35 @@ const Matches = () => {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <h1>Matches</h1>
+        <h1 className={styles.heading}>Matches</h1>
 
         <section className={styles.grid}>
           {loading ? (
-            <p>Loading...</p>
+            <p className={styles.statusText}>Loading...</p>
           ) : matches.length === 0 ? (
-            <p>No matches found</p>
+            <p className={styles.statusText}>No matches found</p>
           ) : (
             matches.map((match) => (
               <div key={match.matchId} className={styles.card}>
-                <h3>
-                  {match.teamA} vs {match.teamB}
+                <h3 className={styles.cardTitle}>
+                  {match.teamA} <span className={styles.vs}>vs</span>{" "}
+                  {match.teamB}
                 </h3>
-
-                <p>{match.venue}</p>
-                <p>{new Date(match.date).toLocaleDateString()}</p>
-                <p>Winner: {match.winner}</p>
-
-                <button onClick={() => navigate(`/matches/${match.matchId}`)}>
+                <p className={styles.cardMeta}>{match.venue}</p>
+                <p className={styles.cardMeta}>
+                  {new Date(match.date).toLocaleDateString("en-IN", {
+                    year: "numeric",
+                    month: "short",
+                    day: "numeric",
+                  })}
+                </p>
+                <p className={styles.cardWinner}>
+                  Winner: <span>{match.winner || "—"}</span>
+                </p>
+                <button
+                  className={styles.insightBtn}
+                  onClick={() => navigate(`/matches/${match.matchId}`)}
+                >
                   View Insight
                 </button>
               </div>

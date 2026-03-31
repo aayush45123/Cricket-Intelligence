@@ -7,119 +7,98 @@
 .main {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 2.5rem 2rem;
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  padding: 48px 24px 72px;
 }
 
-.hero {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.heroTitle {
-  font-size: 26px;
-  font-weight: 600;
+.heading {
+  font-size: 2rem;
+  font-weight: 800;
   color: var(--ci-text-primary);
-  letter-spacing: -0.4px;
-  margin: 0;
+  margin: 0 0 32px;
 }
 
-.heroSubtitle {
-  font-size: 14.5px;
-  color: var(--ci-text-secondary);
-  line-height: 1.6;
-  margin: 0;
+.statusText {
+  font-size: 0.95rem;
+  color: var(--ci-text-muted);
+  padding: 24px 0;
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
 }
 
 .card {
   background: var(--ci-bg-primary);
   border: 1px solid var(--ci-border);
-  border-radius: var(--ci-radius-md);
-  padding: 1.25rem 1.5rem;
+  border-radius: var(--ci-radius-lg);
+  padding: 24px;
+  box-shadow: var(--ci-shadow-sm);
   display: flex;
   flex-direction: column;
-  gap: 14px;
-  transition: border-color 0.15s ease;
+  gap: 6px;
+  transition:
+    box-shadow 0.2s ease,
+    border-color 0.2s ease,
+    transform 0.15s ease;
 }
 
 .card:hover {
+  box-shadow: var(--ci-shadow-md);
   border-color: var(--ci-border-hover);
+  transform: translateY(-2px);
 }
 
-.cardHeader {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.teamNames {
-  font-size: 15px;
-  font-weight: 600;
+.cardTitle {
+  font-size: 1rem;
+  font-weight: 700;
   color: var(--ci-text-primary);
-  letter-spacing: -0.2px;
+  margin: 0 0 6px;
   line-height: 1.4;
 }
 
-.formatBadge {
-  font-size: 11px;
+.vs {
+  font-weight: 400;
+  color: var(--ci-text-muted);
+  font-size: 0.85rem;
+  margin: 0 4px;
+}
+
+.cardMeta {
+  font-size: 0.875rem;
+  color: var(--ci-text-secondary);
+  margin: 0;
+}
+
+.cardWinner {
+  font-size: 0.875rem;
+  color: var(--ci-text-secondary);
+  margin: 4px 0 0;
+}
+
+.cardWinner span {
   font-weight: 600;
   color: var(--ci-brand);
-  background: var(--ci-brand-light);
-  border: 1px solid var(--ci-border);
+}
+
+.insightBtn {
+  margin-top: 14px;
+  padding: 10px 0;
+  background: transparent;
+  border: 1.5px solid var(--ci-brand);
   border-radius: var(--ci-radius-sm);
-  padding: 3px 8px;
-  white-space: nowrap;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
-  flex-shrink: 0;
-}
-
-.cardBody {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.metaItem {
-  font-size: 13px;
-  color: var(--ci-text-muted);
-  font-weight: 400;
-}
-
-.metaDivider {
-  width: 3px;
-  height: 3px;
-  border-radius: 50%;
-  background: var(--ci-text-muted);
-  flex-shrink: 0;
-}
-
-.button {
-  margin-top: auto;
-  padding: 8px 16px;
-  background: var(--ci-brand);
-  color: #ffffff;
-  border: none;
-  border-radius: var(--ci-radius-sm);
-  font-size: 13px;
+  color: var(--ci-brand);
+  font-size: 0.875rem;
   font-weight: 600;
-  font-family: var(--ci-font);
   cursor: pointer;
-  letter-spacing: 0.2px;
-  transition: background 0.15s ease;
-  align-self: flex-start;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease;
+  font-family: var(--ci-font);
 }
 
-.button:hover {
-  background: var(--ci-brand-dark);
+.insightBtn:hover {
+  background: var(--ci-brand);
+  color: #fff;
 }

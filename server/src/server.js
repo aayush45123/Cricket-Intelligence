@@ -1,22 +1,22 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
-import matchRoutes from "./routes/matchRoutes.js";
 import playerRoutes from "./routes/playerRoutes.js";
 import iplMatchRoutes from "./routes/iplMatchRoutes.js";
 
 dotenv.config();
 
 const app = express();
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
-app.use("/api/matches", matchRoutes);
+
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
+
+app.use("/api/matches", iplMatchRoutes);
 app.use("/api/players", playerRoutes);
-app.use("/api/iplmatches", iplMatchRoutes);
 
 connectDB();
 

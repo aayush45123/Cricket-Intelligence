@@ -98,9 +98,7 @@ export const getMatchById = async (req, res) => {
     const teamA = matchData.teams[0];
     const teamB = matchData.teams[1];
 
-    const meta = await Delivery.findOne({
-      match_id: Number(matchId),
-    });
+    const meta = await Delivery.findOne({ match_id: Number(matchId) });
 
     const matchObject = {
       teams: {

@@ -5,8 +5,11 @@ import styles from "./MatchInsight.module.css";
 const MatchInsight = () => {
   const { matchId } = useParams();
   const [insight, setInsight] = useState(null);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!matchId) return;
+
     const fetchInsights = async () => {
       try {
         const res = await fetch(`/api/matches/${matchId}`);
@@ -14,14 +17,25 @@ const MatchInsight = () => {
 
         if (res.ok) {
           setInsight(result.data);
+        } else {
+          setError(result.message || "Failed to load match.");
         }
-      } catch (error) {
-        console.error("Error fetching match insights:", error);
+      } catch (err) {
+        console.error("Error fetching match insights:", err);
+        setError("Something went wrong. Please try again.");
       }
     };
 
     fetchInsights();
   }, [matchId]);
+
+  if (error) {
+    return (
+      <div className={styles.loadingWrapper}>
+        <p className={styles.errorText}>{error}</p>
+      </div>
+    );
+  }
 
   if (!insight) {
     return (
@@ -47,7 +61,6 @@ const MatchInsight = () => {
         {/* SCORECARD */}
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Scorecard</h2>
-
           <div className={styles.scorecard}>
             <div className={styles.scoreRow}>
               <span>{teams.teamA.name}</span>
@@ -56,9 +69,7 @@ const MatchInsight = () => {
               </span>
               <span>{innings.statsByTeamA.overs} overs</span>
             </div>
-
             <div className={styles.scoreDivider} />
-
             <div className={styles.scoreRow}>
               <span>{teams.teamB.name}</span>
               <span>
@@ -72,31 +83,30 @@ const MatchInsight = () => {
         {/* ANALYTICS */}
         <section className={styles.section}>
           <h2 className={styles.sectionTitle}>Match Analytics</h2>
-
           <div className={styles.analyticsGrid}>
             <div className={styles.statCard}>
-              <span>Run Rate — Team A</span>
+              <span>Run Rate — {teams.teamA.name}</span>
               <span>{analytics.runRateForTeamA}</span>
             </div>
-
             <div className={styles.statCard}>
-              <span>Run Rate — Team B</span>
+              <span>Run Rate — {teams.teamB.name}</span>
               <span>{analytics.runRateForTeamB}</span>
             </div>
-
             <div className={styles.statCard}>
               <span>Match Intensity</span>
               <span>{analytics.matchIntensity}</span>
             </div>
-
             <div className={styles.statCard}>
               <span>Winner Strength</span>
               <span>{analytics.winnerStrength}</span>
             </div>
-
             <div className={styles.statCard}>
               <span>Win Quality</span>
               <span>{analytics.winQuality}</span>
+            </div>
+            <div className={styles.statCard}>
+              <span>Run Difference</span>
+              <span>{analytics.runDifference}</span>
             </div>
           </div>
         </section>
@@ -109,16 +119,12 @@ const MatchInsight = () => {
           </div>
         </section>
 
-        {/* ⚠️ ADVANCED TABLES (SAFE RENDER) */}
-        {/* Only render if backend supports player-level stats */}
+        {/* DETAILED SCOREBOARD (optional — only if player data exists) */}
         {innings.statsByTeamA.runByTeamAPlayers && (
           <section className={styles.section}>
             <h2 className={styles.sectionTitle}>Detailed Scoreboard</h2>
-
-            {/* FIRST INNINGS */}
             <div className={styles.inningsBlock}>
-              <h3>First Innings</h3>
-
+              <h3 className={styles.inningsHeading}>First Innings</h3>
               <table className={styles.table}>
                 <thead>
                   <tr>

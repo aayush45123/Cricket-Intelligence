@@ -9,7 +9,6 @@ export const generateMatchAnalytics = (match) => {
       ? match.innings.statsByTeamB.runs / match.innings.statsByTeamB.overs
       : 0;
 
-  // Pressure Index
   const PIForTeamA =
     match.innings.statsByTeamA.overs > 0
       ? match.innings.statsByTeamA.wickets / match.innings.statsByTeamA.overs
@@ -25,7 +24,6 @@ export const generateMatchAnalytics = (match) => {
   );
 
   let matchIntensity;
-
   if (runDifference < 5) {
     matchIntensity = "Very Close";
   } else if (runDifference <= 20) {
@@ -37,7 +35,6 @@ export const generateMatchAnalytics = (match) => {
   const winner = match.result.winner;
 
   let winnerRunRate, loserRunRate;
-
   if (winner === match.teams.teamA.name) {
     winnerRunRate = teamARunRate;
     loserRunRate = teamBRunRate;
@@ -49,7 +46,6 @@ export const generateMatchAnalytics = (match) => {
   const winnerStrength = runDifference + (winnerRunRate - loserRunRate) * 5;
 
   let winQuality;
-
   if (winnerStrength < 5) {
     winQuality = "Narrow Win";
   } else if (winnerStrength <= 15) {
@@ -62,7 +58,6 @@ export const generateMatchAnalytics = (match) => {
   const netRunRateForTeamB = teamBRunRate - teamARunRate;
 
   let insights;
-
   if (matchIntensity === "Very Close") {
     insights = `${winner} secured a thrilling last-moment victory. Both teams maintained similar scoring rates making the match unpredictable till the end.`;
   } else if (matchIntensity === "Competitive") {
