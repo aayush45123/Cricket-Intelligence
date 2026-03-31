@@ -5,6 +5,8 @@ import {
   getBowlingStats,
   specificBowlerStats,
   teamLeaderboard,
+  getBattingStats,
+  specificBatterStats,
 } from "../controllers/playerAnalytics.js";
 
 const router = express.Router();
@@ -14,6 +16,8 @@ router.get("/top-run-scorers", getTopRunScorer);
 router.get("/bowling-stats", getBowlingStats);
 router.get("/bowling-stats/:playerName", specificBowlerStats);
 router.get("/bowler-stats/:playerName", specificBowlerStats);
+router.get("/batting-analytics", getBattingStats);
+router.get("/batting-analytics/:playerName", specificBatterStats);
 router.get("/team-leaderboard", teamLeaderboard);
 
 export default router;

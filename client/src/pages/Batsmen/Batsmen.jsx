@@ -10,7 +10,7 @@ const Batsmen = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("/api/matches/players/batting-analytics");
+        const res = await fetch("/api/players/batting-analytics");
         const result = await res.json();
         setBatsmen(result.data);
       } catch (err) {

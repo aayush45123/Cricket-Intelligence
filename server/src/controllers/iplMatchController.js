@@ -160,7 +160,7 @@ export const getTossImpactAnalytics = async (req, res) => {
       {
         $group: {
           _id: "$match_id",
-          tossWinner: { $first: "$toss_won_by" },
+          tossWinner: { $first: "$toss_winner" },
           tossDecision: { $first: "$toss_decision" },
           winner: { $first: "$match_won_by" },
           teamA: { $first: "$batting_team" },

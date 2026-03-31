@@ -259,3 +259,98 @@ export const teamLeaderboard = async (req, res) => {
     });
   }
 };
+
+const buildBattingStatsFromDeliveries = (rows) => {
+  return rows.map((row) => {
+    const totalRuns = row.totalRuns || 0;
+    const totalBalls = row.totalBalls || 0;
+
+    const strikeRate = totalBalls > 0 ? (totalRuns / totalBalls) * 100 : 0;
+    const battingAverage = totalBalls > 0 ? totalRuns / row.innings : 0;
+
+    return {
+      playerName: row.playerName,
+      totalRuns,
+      totalBalls,
+      strikeRate,
+      battingAverage,
+      innings: row.innings || 0,
+      score: row.maxScore || 0,
+      category: "Batsman",
+    };
+  });
+};
+
+export const getBattingStats = async (req, res) => {
+  try {
+    const statsByBatter = await Delivery.aggregate([
+      {
+        $match: { batter: { $exists: true, $ne: null } },
+      },
+      {
+        $group: {
+          _id: "$batter",
+          totalRuns: { $sum: "$runs_batter" },
+          totalBalls: { $sum: 1 },
+          innings: { $sum: 1 },
+          maxScore: { $max: "$runs_batter" },
+        },
+      },
+      {
+        $sort: { totalRuns: -1 },
+      },
+    ]);
+
+    const stats = buildBattingStatsFromDeliveries(statsByBatter);
+
+    res.json({
+      status: "success",
+      results: stats.length,
+      data: stats,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching batting stats",
+      error: error.message,
+    });
+  }
+};
+
+export const specificBatterStats = async (req, res) => {
+  try {
+    const playerName = decodeURIComponent(req.params.playerName);
+
+    const statsByBatter = await Delivery.aggregate([
+      {
+        $match: { batter: playerName },
+      },
+      {
+        $group: {
+          _id: "$batter",
+          totalRuns: { $sum: "$runs_batter" },
+          totalBalls: { $sum: 1 },
+          innings: { $sum: 1 },
+          maxScore: { $max: "$runs_batter" },
+        },
+      },
+    ]);
+
+    if (!statsByBatter.length) {
+      return res.status(404).json({
+        message: "Batsman not found",
+      });
+    }
+
+    const playerStats = buildBattingStatsFromDeliveries(statsByBatter)[0];
+
+    res.json({
+      status: "success",
+      data: playerStats,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching batsman stats",
+      error: error.message,
+    });
+  }
+};

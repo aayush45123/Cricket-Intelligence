@@ -10,9 +10,7 @@ const BattingStats = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch(
-          `/api/matches/players/batting-analytics/${playerName}`,
-        );
+        const res = await fetch(`/api/players/batting-analytics/${playerName}`);
         const result = await res.json();
         setPlayer(result.data);
       } catch (err) {
