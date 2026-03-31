@@ -8,7 +8,7 @@ const Matches = () => {
 
   useEffect(() => {
     const fetchMatches = async () => {
-      const res = await fetch("/api/matches");
+      const res = await fetch("/api/players/matches");
       const data = await res.json();
       setMatches(data.data);
     };
