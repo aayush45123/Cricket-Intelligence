@@ -13,9 +13,7 @@ const MatchIntensityChart = () => {
         const res = await fetch("/api/matches/analytics/match-intensity");
         const result = await res.json();
 
-        const counts = Array.isArray(result.data)
-          ? result.data[result.data.length - 1]?.data || {}
-          : result.data || {};
+        const counts = result.data || {};
 
         const data = [
           { name: "Very Close", value: counts.veryCloseCount || 0 },

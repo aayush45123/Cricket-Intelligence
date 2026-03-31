@@ -14,8 +14,8 @@ const TossImpactChart = () => {
         const result = await res.json();
 
         const data = [
-          { name: "Bat First Wins", value: result.data.batFirstWins },
-          { name: "Bowl First Wins", value: result.data.bowlFirstWins },
+          { name: "Bat First Wins", value: result.data?.batFirstWins || 0 },
+          { name: "Bowl First Wins", value: result.data?.bowlFirstWins || 0 },
         ];
 
         setChartData(data);

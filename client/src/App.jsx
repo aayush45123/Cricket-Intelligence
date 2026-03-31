@@ -21,7 +21,7 @@ const App = () => {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/leaderboard" element={<Leaderboard />} />
         <Route path="/matches" element={<Matches />} />
-        <Route path="/matches/:id" element={<MatchInsight />} />
+        <Route path="/matches/:matchId" element={<MatchInsight />} />
         <Route path="/bowlers" element={<Bowlers />} />
         <Route
           path="/players/bowling-analytics/:playerName"

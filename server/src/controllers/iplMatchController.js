@@ -147,11 +147,118 @@ export const getMatchById = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res
-      .status(500)
-      .json({
-        message: "Error fetching match analytics",
-        error: error.message,
-      });
+    res.status(500).json({
+      message: "Error fetching match analytics",
+      error: error.message,
+    });
+  }
+};
+
+export const getTossImpactAnalytics = async (req, res) => {
+  try {
+    const matches = await Delivery.aggregate([
+      {
+        $group: {
+          _id: "$match_id",
+          tossWinner: { $first: "$toss_won_by" },
+          tossDecision: { $first: "$toss_decision" },
+          winner: { $first: "$match_won_by" },
+          teamA: { $first: "$batting_team" },
+        },
+      },
+    ]);
+
+    let batFirstWins = 0;
+    let bowlFirstWins = 0;
+
+    matches.forEach((match) => {
+      if (!match.tossWinner || !match.winner) return;
+
+      const tossWinnerName = match.tossWinner;
+      const matchWinner = match.winner;
+      const decision = match.tossDecision || "bat";
+
+      if (tossWinnerName === matchWinner) {
+        if (decision === "bat") {
+          batFirstWins++;
+        } else {
+          bowlFirstWins++;
+        }
+      }
+    });
+
+    res.json({
+      status: "success",
+      data: {
+        batFirstWins,
+        bowlFirstWins,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error calculating toss impact",
+      error: error.message,
+    });
+  }
+};
+
+export const getMatchIntensityAnalytics = async (req, res) => {
+  try {
+    const matches = await Delivery.aggregate([
+      {
+        $group: {
+          _id: {
+            match: "$match_id",
+            battingTeam: "$batting_team",
+          },
+          runs: { $sum: "$runs_total" },
+        },
+      },
+      {
+        $group: {
+          _id: "$_id.match",
+          teams: {
+            $push: {
+              team: "$_id.battingTeam",
+              runs: "$runs",
+            },
+          },
+        },
+      },
+    ]);
+
+    let veryCloseCount = 0;
+    let competitiveCount = 0;
+    let oneSidedCount = 0;
+
+    matches.forEach((match) => {
+      if (!match.teams || match.teams.length < 2) return;
+
+      const team1Runs = match.teams[0]?.runs || 0;
+      const team2Runs = match.teams[1]?.runs || 0;
+      const runDiff = Math.abs(team1Runs - team2Runs);
+
+      if (runDiff <= 10) {
+        veryCloseCount++;
+      } else if (runDiff <= 30) {
+        competitiveCount++;
+      } else {
+        oneSidedCount++;
+      }
+    });
+
+    res.json({
+      status: "success",
+      data: {
+        veryCloseCount,
+        competitiveCount,
+        oneSidedCount,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching match intensity analytics",
+      error: error.message,
+    });
   }
 };
