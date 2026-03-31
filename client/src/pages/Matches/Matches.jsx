@@ -4,13 +4,22 @@ import styles from "./Matches.module.css";
 
 const Matches = () => {
   const [matches, setMatches] = useState([]);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchMatches = async () => {
-      const res = await fetch("/api/players/matches");
-      const data = await res.json();
-      setMatches(data.data);
+      try {
+        const res = await fetch("/api/matches");
+        const result = await res.json();
+
+        setMatches(result.data || []);
+      } catch (err) {
+        console.error(err);
+        setMatches([]);
+      } finally {
+        setLoading(false);
+      }
     };
 
     fetchMatches();
@@ -19,39 +28,30 @@ const Matches = () => {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        <section className={styles.hero}>
-          <h1 className={styles.heroTitle}>Matches</h1>
-          <p className={styles.heroSubtitle}>
-            Browse all matches and view detailed insights.
-          </p>
-        </section>
+        <h1>Matches</h1>
 
         <section className={styles.grid}>
-          {matches.map((match) => (
-            <div className={styles.card} key={match._id}>
-              <div className={styles.cardHeader}>
-                <span className={styles.teamNames}>
-                  {match.teams.teamA.name} vs {match.teams.teamB.name}
-                </span>
-                <span className={styles.formatBadge}>{match.format}</span>
-              </div>
+          {loading ? (
+            <p>Loading...</p>
+          ) : matches.length === 0 ? (
+            <p>No matches found</p>
+          ) : (
+            matches.map((match) => (
+              <div key={match.matchId} className={styles.card}>
+                <h3>
+                  {match.teamA} vs {match.teamB}
+                </h3>
 
-              <div className={styles.cardBody}>
-                <span className={styles.metaItem}>{match.venue}</span>
-                <span className={styles.metaDivider} />
-                <span className={styles.metaItem}>
-                  {new Date(match.date).toLocaleDateString()}
-                </span>
-              </div>
+                <p>{match.venue}</p>
+                <p>{new Date(match.date).toLocaleDateString()}</p>
+                <p>Winner: {match.winner}</p>
 
-              <button
-                className={styles.button}
-                onClick={() => navigate(`/matches/${match._id}`)}
-              >
-                View Insight
-              </button>
-            </div>
-          ))}
+                <button onClick={() => navigate(`/matches/${match.matchId}`)}>
+                  View Insight
+                </button>
+              </div>
+            ))
+          )}
         </section>
       </main>
     </div>
