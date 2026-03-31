@@ -21,6 +21,12 @@ const TeamWins = () => {
         const result = await res.json();
 
         const teams = Array.isArray(result?.data) ? result.data : [];
+        teams.sort(
+          (a, b) =>
+            (b.totalWins || 0) - (a.totalWins || 0) ||
+            (b.winRate || 0) - (a.winRate || 0) ||
+            (a.teamName || "").localeCompare(b.teamName || ""),
+        );
         const data = teams.map((team) => ({
           name: team.teamName,
           wins: team.totalWins,

@@ -193,43 +193,68 @@ export const specificBowlerStats = async (req, res) => {
 };
 export const teamLeaderboard = async (req, res) => {
   try {
-    const teamWins = await Delivery.aggregate([
-      {
-        $match: {
-          match_won_by: { $nin: [null, "", "NA"] },
-        },
-      },
+    const matches = await Delivery.aggregate([
       {
         $group: {
-          _id: "$match_id", // group per match first
+          _id: "$match_id",
+          team1: { $first: "$batting_team" },
+          team2: { $first: "$bowling_team" },
           winner: { $first: "$match_won_by" },
-        },
-      },
-      {
-        $group: {
-          _id: "$winner",
-          totalWins: { $sum: 1 },
-        },
-      },
-      {
-        $sort: { totalWins: -1 },
-      },
-      {
-        $project: {
-          _id: 0,
-          teamName: "$_id",
-          totalWins: 1,
         },
       },
     ]);
 
+    const teamStats = {};
+
+    matches.forEach((match) => {
+      const { team1, team2, winner } = match;
+
+      if (!teamStats[team1]) {
+        teamStats[team1] = { matches: 0, wins: 0 };
+      }
+      if (!teamStats[team2]) {
+        teamStats[team2] = { matches: 0, wins: 0 };
+      }
+
+      teamStats[team1].matches++;
+      teamStats[team2].matches++;
+
+      if (winner && teamStats[winner]) {
+        teamStats[winner].wins++;
+      }
+    });
+
+    const result = Object.keys(teamStats).map((team) => {
+      const matches = teamStats[team].matches;
+      const wins = teamStats[team].wins;
+      const losses = matches - wins;
+      const winRate = matches > 0 ? (wins / matches) * 100 : 0;
+
+      return {
+        teamName: team,
+        matchesPlayed: matches,
+        totalWins: wins,
+        losses,
+        winRate,
+      };
+    });
+
+    result.sort(
+      (a, b) =>
+        b.totalWins - a.totalWins ||
+        b.winRate - a.winRate ||
+        a.teamName.localeCompare(b.teamName),
+    );
+
     res.json({
       status: "success",
-      data: teamWins,
+      data: result,
     });
   } catch (error) {
+    console.error("Leaderboard error:", error);
+
     res.status(500).json({
-      message: "Error fetching team wins",
+      message: "Error fetching leaderboard",
       error: error.message,
     });
   }
