@@ -1,24 +1,30 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import styles from "./MatchInsight.module.css";
 
 const MatchInsight = () => {
   const { matchId } = useParams();
+  const navigate = useNavigate();
   const [insight, setInsight] = useState(null);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    if (!matchId) return;
+    if (!matchId) {
+      setError("No match ID provided.");
+      return;
+    }
 
     const fetchInsights = async () => {
       try {
         const res = await fetch(`/api/matches/${matchId}`);
         const result = await res.json();
 
-        if (res.ok) {
+        console.log("API response:", result); // ← helps debug in browser console
+
+        if (res.ok && result.data) {
           setInsight(result.data);
         } else {
-          setError(result.message || "Failed to load match.");
+          setError(result.message || "Match data not available.");
         }
       } catch (err) {
         console.error("Error fetching match insights:", err);
@@ -33,6 +39,9 @@ const MatchInsight = () => {
     return (
       <div className={styles.loadingWrapper}>
         <p className={styles.errorText}>{error}</p>
+        <button className={styles.backBtn} onClick={() => navigate("/matches")}>
+          ← Back to Matches
+        </button>
       </div>
     );
   }
@@ -119,7 +128,7 @@ const MatchInsight = () => {
           </div>
         </section>
 
-        {/* DETAILED SCOREBOARD (optional — only if player data exists) */}
+        {/* DETAILED SCOREBOARD — only if player data exists */}
         {innings.statsByTeamA.runByTeamAPlayers && (
           <section className={styles.section}>
             <h2 className={styles.sectionTitle}>Detailed Scoreboard</h2>

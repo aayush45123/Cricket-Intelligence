@@ -27,21 +27,15 @@ export const getAllMatches = async (req, res) => {
           winner: 1,
         },
       },
-      {
-        $sort: { date: -1 },
-      },
+      { $sort: { date: -1 } },
     ]);
 
-    res.json({
-      status: "success",
-      data: matches,
-    });
+    res.json({ status: "success", data: matches });
   } catch (error) {
     console.error(error);
-    res.status(500).json({
-      message: "Error fetching matches",
-      error: error.message,
-    });
+    res
+      .status(500)
+      .json({ message: "Error fetching matches", error: error.message });
   }
 };
 
@@ -49,10 +43,26 @@ export const getMatchById = async (req, res) => {
   try {
     const { matchId } = req.params;
 
+    // ✅ Handle both string and number storage in DB
+    const matchIdNum = Number(matchId);
+    const matchQuery = isNaN(matchIdNum)
+      ? { match_id: matchId }
+      : { match_id: { $in: [matchIdNum, matchId] } };
+
+    // Debug: confirm records exist
+    const sampleDoc = await Delivery.findOne(matchQuery);
+    if (!sampleDoc) {
+      console.log(`No delivery found for match_id: ${matchId}`);
+      return res.status(404).json({ message: "Match not found" });
+    }
+    console.log(
+      "Sample doc match_id:",
+      sampleDoc.match_id,
+      typeof sampleDoc.match_id,
+    );
+
     const matchStats = await Delivery.aggregate([
-      {
-        $match: { match_id: Number(matchId) },
-      },
+      { $match: matchQuery },
       {
         $group: {
           _id: {
@@ -87,18 +97,21 @@ export const getMatchById = async (req, res) => {
       },
     ]);
 
-    if (!matchStats.length) {
-      return res.status(404).json({ message: "Match not found" });
+    console.log("matchStats:", JSON.stringify(matchStats, null, 2));
+
+    if (!matchStats.length || matchStats[0].teams.length < 2) {
+      return res.status(404).json({ message: "Insufficient match data" });
     }
 
     const matchData = matchStats[0];
 
-    const ballsToOvers = (balls) => Math.floor(balls / 6) + (balls % 6) / 10;
+    const ballsToOvers = (balls) =>
+      Number((Math.floor(balls / 6) + (balls % 6) / 10).toFixed(1));
 
     const teamA = matchData.teams[0];
     const teamB = matchData.teams[1];
 
-    const meta = await Delivery.findOne({ match_id: Number(matchId) });
+    const meta = await Delivery.findOne(matchQuery);
 
     const matchObject = {
       teams: {
@@ -134,9 +147,11 @@ export const getMatchById = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.status(500).json({
-      message: "Error fetching match analytics",
-      error: error.message,
-    });
+    res
+      .status(500)
+      .json({
+        message: "Error fetching match analytics",
+        error: error.message,
+      });
   }
 };
