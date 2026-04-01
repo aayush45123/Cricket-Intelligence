@@ -1,28 +1,327 @@
+/* ============================================================
+   CRICKET INTELLIGENCE — GLOBAL DESIGN SYSTEM
+   Aesthetic: Dark Command Center × Sports Analytics Terminal
+   ============================================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Barlow+Condensed:wght@400;500;600;700;800&display=swap");
+
+/* ── Reset ─────────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  background-color: var(--ci-bg-primary);
+  color: var(--ci-text-primary);
+  font-family: var(--ci-font);
+  line-height: 1.6;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+img,
+svg {
+  display: block;
+  max-width: 100%;
+}
+button {
+  cursor: pointer;
+  font-family: inherit;
+  border: none;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+ul,
+ol {
+  list-style: none;
+}
+
+/* ── CSS Variables ──────────────────────────────────────────── */
 :root {
-  --ci-brand: #1a6b3c;
-  --ci-brand-dark: #145530;
-  --ci-brand-light: #e8f5ee;
-  --ci-accent: #f0a500;
-  --ci-accent-hover: #d49200;
+  /* Background Layers */
+  --ci-bg-primary: #070b14; /* deepest navy-black */
+  --ci-bg-secondary: #0c1221; /* card base */
+  --ci-bg-tertiary: #111829; /* elevated/hover */
+  --ci-bg-quaternary: #172036; /* deeply elevated */
+  --ci-bg-glass: rgba(11, 17, 32, 0.75);
+  --ci-bg-overlay: rgba(7, 11, 20, 0.85);
 
-  --ci-bg-primary: #ffffff;
-  --ci-bg-secondary: #f7f9f8;
-  --ci-bg-tertiary: #eef2f0;
+  /* Brand — Electric Mint (cricket pitch, electrified) */
+  --ci-brand: #00e5a0;
+  --ci-brand-dark: #00b87a;
+  --ci-brand-dim: #00744d;
+  --ci-brand-glow: rgba(0, 229, 160, 0.18);
+  --ci-brand-subtle: rgba(0, 229, 160, 0.07);
 
-  --ci-text-primary: #111c16;
-  --ci-text-secondary: #4a5c52;
-  --ci-text-muted: #8a9e93;
+  /* Accent — Amber (cricket ball gold) */
+  --ci-accent: #f59b00;
+  --ci-accent-dark: #c07a00;
+  --ci-accent-glow: rgba(245, 155, 0, 0.18);
+  --ci-accent-subtle: rgba(245, 155, 0, 0.07);
 
-  --ci-border: rgba(26, 107, 60, 0.15);
-  --ci-border-hover: rgba(26, 107, 60, 0.3);
+  /* Accent Blue — pitch crease */
+  --ci-blue: #3d8eff;
+  --ci-blue-dark: #2563eb;
+  --ci-blue-glow: rgba(61, 142, 255, 0.18);
 
-  --ci-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
-  --ci-shadow-md: 0 4px 16px rgba(0, 0, 0, 0.08);
+  /* Data Semantic */
+  --ci-success: #00e5a0;
+  --ci-warning: #f59b00;
+  --ci-danger: #ff4d6d;
+  --ci-info: #3d8eff;
 
-  --ci-radius-sm: 6px;
-  --ci-radius-md: 10px;
+  /* Typography Scale */
+  --ci-text-primary: #eaf0fb;
+  --ci-text-secondary: #8b97b4;
+  --ci-text-muted: #4a5770;
+  --ci-text-disabled: #2e3a52;
+  --ci-text-inverse: #070b14;
+
+  /* Borders */
+  --ci-border: rgba(255, 255, 255, 0.055);
+  --ci-border-subtle: rgba(255, 255, 255, 0.03);
+  --ci-border-medium: rgba(255, 255, 255, 0.1);
+  --ci-border-brand: rgba(0, 229, 160, 0.28);
+  --ci-border-accent: rgba(245, 155, 0, 0.28);
+
+  /* Shadows */
+  --ci-shadow-xs: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --ci-shadow-sm: 0 2px 10px rgba(0, 0, 0, 0.45);
+  --ci-shadow-md: 0 6px 28px rgba(0, 0, 0, 0.55);
+  --ci-shadow-lg: 0 16px 56px rgba(0, 0, 0, 0.65);
+  --ci-shadow-brand:
+    0 0 24px rgba(0, 229, 160, 0.14), 0 0 60px rgba(0, 229, 160, 0.06);
+  --ci-shadow-accent: 0 0 24px rgba(245, 155, 0, 0.14);
+  --ci-shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+
+  /* Radius */
+  --ci-radius-xs: 4px;
+  --ci-radius-sm: 8px;
+  --ci-radius-md: 12px;
   --ci-radius-lg: 16px;
+  --ci-radius-xl: 24px;
+  --ci-radius-full: 9999px;
 
-  --ci-nav-height: 60px;
-  --ci-font: "Inter", system-ui, -apple-system, sans-serif;
+  /* Typography */
+  --ci-font: "Outfit", system-ui, sans-serif;
+  --ci-font-mono: "DM Mono", "Fira Code", monospace;
+  --ci-font-display: "Barlow Condensed", sans-serif;
+
+  /* Spacing scale (8pt grid) */
+  --ci-space-1: 4px;
+  --ci-space-2: 8px;
+  --ci-space-3: 12px;
+  --ci-space-4: 16px;
+  --ci-space-5: 20px;
+  --ci-space-6: 24px;
+  --ci-space-8: 32px;
+  --ci-space-10: 40px;
+  --ci-space-12: 48px;
+  --ci-space-16: 64px;
+  --ci-space-20: 80px;
+  --ci-space-24: 96px;
+
+  /* Layout */
+  --ci-max-width: 1320px;
+  --ci-nav-height: 64px;
+  --ci-sidebar-width: 220px;
+
+  /* Transitions */
+  --ci-ease: cubic-bezier(0.16, 1, 0.3, 1);
+  --ci-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --ci-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --ci-duration-sm: 140ms;
+  --ci-duration-md: 260ms;
+  --ci-duration-lg: 420ms;
+
+  /* Scanline overlay intensity */
+  --ci-scanline-opacity: 0.018;
+
+  /* Chart palette — ordered */
+  --ci-chart-1: #00e5a0;
+  --ci-chart-2: #f59b00;
+  --ci-chart-3: #3d8eff;
+  --ci-chart-4: #ff4d6d;
+  --ci-chart-5: #a855f7;
+  --ci-chart-6: #22d3ee;
+}
+
+/* ── Global Patterns ────────────────────────────────────────── */
+
+/* Subtle dot grid on body */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(
+    circle at 1px 1px,
+    rgba(255, 255, 255, 0.025) 1px,
+    transparent 0
+  );
+  background-size: 32px 32px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Ambient brand glow at top */
+body::after {
+  content: "";
+  position: fixed;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 900px;
+  height: 400px;
+  background: radial-gradient(
+    ellipse,
+    rgba(0, 229, 160, 0.05) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--ci-bg-primary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--ci-text-disabled);
+  border-radius: var(--ci-radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--ci-text-muted);
+}
+
+/* ── Selection ──────────────────────────────────────────────── */
+::selection {
+  background: var(--ci-brand-glow);
+  color: var(--ci-brand);
+}
+
+/* ── Focus Visible ──────────────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--ci-brand);
+  outline-offset: 2px;
+  border-radius: var(--ci-radius-xs);
+}
+
+/* ── Utility Classes ────────────────────────────────────────── */
+.ci-mono {
+  font-family: var(--ci-font-mono);
+}
+.ci-display {
+  font-family: var(--ci-font-display);
+}
+.ci-brand-text {
+  color: var(--ci-brand);
+}
+.ci-accent-text {
+  color: var(--ci-accent);
+}
+
+/* ── Card Base ──────────────────────────────────────────────── */
+.ci-card {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-md);
+  box-shadow: var(--ci-shadow-sm), var(--ci-shadow-inset);
+  transition:
+    border-color var(--ci-duration-md) var(--ci-ease),
+    box-shadow var(--ci-duration-md) var(--ci-ease);
+}
+
+.ci-card:hover {
+  border-color: var(--ci-border-medium);
+  box-shadow: var(--ci-shadow-md), var(--ci-shadow-inset);
+}
+
+/* ── Badge Base ─────────────────────────────────────────────── */
+.ci-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 3px 10px;
+  border-radius: var(--ci-radius-full);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-family: var(--ci-font-mono);
+}
+
+/* ── Keyframes ──────────────────────────────────────────────── */
+@keyframes ci-fadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes ci-fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes ci-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes ci-shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+
+@keyframes ci-livePulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(0, 229, 160, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(0, 229, 160, 0);
+  }
+}
+
+@keyframes ci-scanLine {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
 }
