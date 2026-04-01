@@ -1,139 +1,186 @@
+/* ── BattingStats.module.css ────────────────────────────────── */
+
 .page {
   min-height: 100vh;
-  background-color: var(--ci-bg-secondary);
-  font-family: var(--ci-font);
+  padding-top: var(--ci-nav-height);
+  position: relative;
+  z-index: 1;
 }
 
 .main {
-  max-width: 780px;
+  max-width: 760px;
   margin: 0 auto;
-  padding: 40px 24px 80px;
+  padding: var(--ci-space-10) var(--ci-space-6) var(--ci-space-16);
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: var(--ci-space-6);
 }
 
+/* ── Hero ───────────────────────────────────────────────────── */
 .hero {
-  padding: 48px;
-  background: linear-gradient(
-    135deg,
-    var(--ci-brand-dark) 0%,
-    var(--ci-brand) 100%
-  );
-  border-radius: var(--ci-radius-lg);
-  box-shadow: var(--ci-shadow-md);
-  position: relative;
-  overflow: hidden;
   display: flex;
-  align-items: flex-end;
+  align-items: flex-start;
   justify-content: space-between;
-  gap: 16px;
-}
-
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    ellipse at 80% 40%,
-    rgba(240, 165, 0, 0.14) 0%,
-    transparent 60%
-  );
-  pointer-events: none;
+  gap: var(--ci-space-4);
+  padding-bottom: var(--ci-space-8);
+  border-bottom: 1px solid var(--ci-border);
+  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) both;
 }
 
 .heroTitle {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin: 0;
-  letter-spacing: -0.5px;
-  line-height: 1.15;
-  position: relative;
+  font-family: var(--ci-font-display);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ci-text-primary);
+  line-height: 1;
 }
 
 .categoryBadge {
-  position: relative;
-  flex-shrink: 0;
-  font-size: 0.72rem;
-  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 14px;
+  background: var(--ci-accent-subtle);
+  border: 1px solid var(--ci-border-accent);
+  border-radius: var(--ci-radius-full);
+  font-family: var(--ci-font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  letter-spacing: 0.09em;
-  color: var(--ci-brand-dark);
-  background: var(--ci-accent);
-  border-radius: var(--ci-radius-sm);
-  padding: 6px 14px;
-  white-space: nowrap;
+  color: var(--ci-accent);
+  flex-shrink: 0;
+  margin-top: var(--ci-space-2);
 }
 
+/* ── Card ───────────────────────────────────────────────────── */
 .card {
-  background: var(--ci-bg-primary);
+  background: var(--ci-bg-secondary);
   border: 1px solid var(--ci-border);
-  border-radius: var(--ci-radius-md);
-  padding: 28px;
-  box-shadow: var(--ci-shadow-sm);
+  border-radius: var(--ci-radius-lg);
+  padding: var(--ci-space-6) var(--ci-space-6);
+  box-shadow: var(--ci-shadow-md);
+  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) 100ms both;
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(
+    90deg,
+    var(--ci-brand-dark),
+    var(--ci-brand),
+    var(--ci-blue)
+  );
 }
 
 .cardTitle {
-  font-size: 0.72rem;
-  font-weight: 600;
+  font-family: var(--ci-font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
   color: var(--ci-text-muted);
-  margin: 0 0 20px;
+  margin-bottom: var(--ci-space-5);
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-3);
 }
 
+.cardTitle::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 1.5px;
+  background: var(--ci-brand);
+  border-radius: 1px;
+}
+
+/* ── Stats Grid ─────────────────────────────────────────────── */
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--ci-space-3);
+}
+
+@media (max-width: 700px) {
+  .statsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 460px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.statItemHighlight {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-2);
+  padding: var(--ci-space-4);
+  background: var(--ci-brand-subtle);
+  border: 1px solid var(--ci-border-brand);
+  border-radius: var(--ci-radius-md);
+  box-shadow: var(--ci-shadow-brand);
+  grid-column: span 2;
+}
+
+.statItemHighlight .statValue {
+  font-size: 3rem !important;
+  color: var(--ci-brand) !important;
 }
 
 .statItem {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding: 18px 16px;
-  background: var(--ci-bg-secondary);
+  gap: var(--ci-space-2);
+  padding: var(--ci-space-4);
+  background: var(--ci-bg-tertiary);
   border: 1px solid var(--ci-border);
-  border-radius: var(--ci-radius-sm);
-  transition: border-color 0.2s ease;
+  border-radius: var(--ci-radius-md);
+  transition: border-color var(--ci-duration-sm) var(--ci-ease);
 }
 
 .statItem:hover {
-  border-color: var(--ci-border-hover);
-}
-
-.statItemHighlight {
-  composes: statItem;
-  background: var(--ci-brand-light);
-  border-color: rgba(26, 107, 60, 0.22);
+  border-color: var(--ci-border-medium);
 }
 
 .statLabel {
-  font-size: 0.68rem;
-  font-weight: 500;
+  font-family: var(--ci-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
   color: var(--ci-text-muted);
 }
 
 .statValue {
-  font-size: 1.6rem;
+  font-family: var(--ci-font-display);
+  font-size: 2rem;
   font-weight: 700;
-  color: var(--ci-brand);
-  letter-spacing: -0.5px;
+  color: var(--ci-text-primary);
   line-height: 1;
+  letter-spacing: -0.01em;
 }
 
-.statItemHighlight .statValue {
-  color: var(--ci-brand-dark);
-}
-
+/* ── State Text ─────────────────────────────────────────────── */
 .stateText {
-  text-align: center;
-  padding: 80px 24px;
-  font-size: 0.9rem;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ci-font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--ci-text-muted);
-  font-family: var(--ci-font);
+  animation: ci-pulse 1.8s ease-in-out infinite;
 }
