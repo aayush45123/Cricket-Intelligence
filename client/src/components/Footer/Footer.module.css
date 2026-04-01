@@ -1,32 +1,54 @@
+/* ── Footer.module.css ──────────────────────────────────────── */
+
 .footer {
-  width: 100%;
-  border-top: 1px solid var(--ci-border);
+  position: relative;
+  z-index: 10;
+  margin-top: auto;
+  padding: var(--ci-space-6) var(--ci-space-6);
   background: var(--ci-bg-primary);
-  font-family: var(--ci-font);
+  border-top: 1px solid var(--ci-border);
+}
+
+.footer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--ci-border-medium) 50%,
+    transparent 100%
+  );
 }
 
 .inner {
-  max-width: 1200px;
+  max-width: var(--ci-max-width);
   margin: 0 auto;
-  padding: 20px 24px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--ci-space-3);
 }
 
 .brand {
+  font-family: var(--ci-font-display);
   font-size: 0.8rem;
   font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--ci-brand);
-  letter-spacing: -0.1px;
 }
 
 .divider {
-  font-size: 0.8rem;
-  color: var(--ci-border-hover);
+  color: var(--ci-text-disabled);
+  font-size: 0.9rem;
 }
 
 .copy {
-  font-size: 0.78rem;
+  font-family: var(--ci-font-mono);
+  font-size: 0.72rem;
   color: var(--ci-text-muted);
+  letter-spacing: 0.03em;
 }

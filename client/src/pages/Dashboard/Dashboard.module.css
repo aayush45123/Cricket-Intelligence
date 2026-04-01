@@ -1,182 +1,242 @@
+/* ── Dashboard.module.css ───────────────────────────────────── */
+
 .page {
   min-height: 100vh;
-  background-color: var(--ci-bg-secondary);
-  font-family: var(--ci-font);
+  padding-top: var(--ci-nav-height);
+  position: relative;
+  z-index: 1;
 }
 
 .main {
-  max-width: 1200px;
+  max-width: var(--ci-max-width);
   margin: 0 auto;
-  padding: 40px 24px 80px;
+  padding: var(--ci-space-10) var(--ci-space-6) var(--ci-space-16);
   display: flex;
   flex-direction: column;
-  gap: 48px;
+  gap: var(--ci-space-12);
 }
 
-/* Hero */
+/* ── Hero ───────────────────────────────────────────────────── */
 .hero {
-  padding: 56px 48px;
-  background: linear-gradient(
-    135deg,
-    var(--ci-brand-dark) 0%,
-    var(--ci-brand) 100%
-  );
-  border-radius: var(--ci-radius-lg);
-  box-shadow: var(--ci-shadow-md);
-  position: relative;
-  overflow: hidden;
-}
-
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-    ellipse at 80% 50%,
-    rgba(240, 165, 0, 0.12) 0%,
-    transparent 60%
-  );
-  pointer-events: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-2);
+  padding-bottom: var(--ci-space-8);
+  border-bottom: 1px solid var(--ci-border);
+  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) both;
 }
 
 .heroTitle {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #ffffff;
-  margin: 0 0 10px;
-  letter-spacing: -0.5px;
-  line-height: 1.2;
+  font-family: var(--ci-font-display);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ci-text-primary);
+  line-height: 1.05;
+}
+
+.heroTitle::after {
+  content: ".";
+  color: var(--ci-brand);
 }
 
 .heroSubtitle {
-  font-size: 1rem;
-  color: rgba(255, 255, 255, 0.72);
-  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ci-text-secondary);
   max-width: 520px;
   line-height: 1.6;
 }
 
-/* Section titles */
+/* ── Section Title ──────────────────────────────────────────── */
 .sectionTitle {
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--ci-text-primary);
-  margin: 0 0 20px;
-  letter-spacing: -0.2px;
+  font-family: var(--ci-font-mono);
+  font-size: 0.7rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
   color: var(--ci-text-muted);
+  margin-bottom: var(--ci-space-4);
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-3);
 }
 
-/* Analytics section */
+.sectionTitle::before {
+  content: "";
+  display: inline-block;
+  width: 16px;
+  height: 1.5px;
+  background: var(--ci-brand);
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+/* ── Analytics Stats Grid ───────────────────────────────────── */
 .analyticsSection {
-  display: flex;
-  flex-direction: column;
+  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) 80ms both;
 }
 
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--ci-space-4);
+}
+
+@media (max-width: 900px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 500px) {
+  .statsGrid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .statCard {
-  background: var(--ci-bg-primary);
-  border: 1px solid var(--ci-border);
-  border-radius: var(--ci-radius-md);
-  padding: 24px 20px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
-  box-shadow: var(--ci-shadow-sm);
+  gap: var(--ci-space-2);
+  padding: var(--ci-space-5) var(--ci-space-5);
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-md);
+  box-shadow: var(--ci-shadow-sm), var(--ci-shadow-inset);
   transition:
-    box-shadow 0.2s ease,
-    border-color 0.2s ease;
+    border-color var(--ci-duration-md) var(--ci-ease),
+    transform var(--ci-duration-md) var(--ci-ease);
+  position: relative;
+  overflow: hidden;
+}
+
+.statCard::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ci-brand-dim), var(--ci-brand));
+  opacity: 0;
+  transition: opacity var(--ci-duration-md) var(--ci-ease);
 }
 
 .statCard:hover {
-  box-shadow: var(--ci-shadow-md);
-  border-color: var(--ci-border-hover);
+  border-color: var(--ci-border-brand);
+  transform: translateY(-2px);
+}
+
+.statCard:hover::before {
+  opacity: 1;
 }
 
 .statLabel {
-  font-size: 0.72rem;
-  font-weight: 500;
+  font-family: var(--ci-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
   text-transform: uppercase;
-  letter-spacing: 0.07em;
   color: var(--ci-text-muted);
 }
 
 .statValue {
-  font-size: 1.9rem;
+  font-family: var(--ci-font-display);
+  font-size: 2.4rem;
   font-weight: 700;
-  color: var(--ci-brand);
+  color: var(--ci-text-primary);
   line-height: 1;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.01em;
 }
 
-/* Dominant match section */
+/* ── Most Dominant Match ────────────────────────────────────── */
 .dominantSection {
-  display: flex;
-  flex-direction: column;
+  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) 160ms both;
 }
 
 .matchCard {
-  background: var(--ci-bg-primary);
-  border: 1px solid var(--ci-border);
-  border-radius: var(--ci-radius-md);
-  padding: 28px 32px;
   display: flex;
   align-items: center;
-  gap: 20px;
-  box-shadow: var(--ci-shadow-sm);
-  width: fit-content;
+  justify-content: center;
+  gap: var(--ci-space-6);
+  padding: var(--ci-space-8) var(--ci-space-10);
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border-brand);
+  border-radius: var(--ci-radius-lg);
+  box-shadow: var(--ci-shadow-brand), var(--ci-shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.matchCard::after {
+  content: "MOST DOMINANT";
+  position: absolute;
+  top: var(--ci-space-3);
+  right: var(--ci-space-4);
+  font-family: var(--ci-font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.15em;
+  color: var(--ci-brand);
+  opacity: 0.5;
+  text-transform: uppercase;
 }
 
 .teamName {
-  font-size: 1.25rem;
+  font-family: var(--ci-font-display);
+  font-size: clamp(1.4rem, 3vw, 2.2rem);
   font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
   color: var(--ci-text-primary);
-  letter-spacing: -0.3px;
 }
 
 .matchVs {
-  font-size: 0.78rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  font-family: var(--ci-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.15em;
   color: var(--ci-text-muted);
-  background: var(--ci-bg-tertiary);
-  padding: 4px 10px;
+  text-transform: uppercase;
+  padding: var(--ci-space-2) var(--ci-space-4);
+  border: 1px solid var(--ci-border);
   border-radius: var(--ci-radius-sm);
 }
 
-/* Charts grid */
+/* ── Charts Section ─────────────────────────────────────────── */
 .chartsSection {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) 240ms both;
 }
 
 .chartsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--ci-space-5);
 }
 
-/* Loading */
+@media (max-width: 1100px) {
+  .chartsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .chartsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Loading ────────────────────────────────────────────────── */
 .loadingWrapper {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--ci-bg-secondary);
 }
 
 .loadingText {
-  font-family: var(--ci-font);
-  font-size: 0.95rem;
+  font-family: var(--ci-font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
   color: var(--ci-text-muted);
-  letter-spacing: 0.02em;
+  animation: ci-pulse 1.8s ease-in-out infinite;
 }
