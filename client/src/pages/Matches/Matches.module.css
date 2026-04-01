@@ -1,104 +1,163 @@
+/* ── Matches.module.css ─────────────────────────────────────── */
+
 .page {
   min-height: 100vh;
-  background: var(--ci-bg-secondary);
-  font-family: var(--ci-font);
+  padding-top: var(--ci-nav-height);
+  position: relative;
+  z-index: 1;
 }
 
 .main {
-  max-width: 1200px;
+  max-width: var(--ci-max-width);
   margin: 0 auto;
-  padding: 48px 24px 72px;
+  padding: var(--ci-space-10) var(--ci-space-6) var(--ci-space-16);
 }
 
 .heading {
-  font-size: 2rem;
+  font-family: var(--ci-font-display);
+  font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
   color: var(--ci-text-primary);
-  margin: 0 0 32px;
+  line-height: 1;
+  margin-bottom: var(--ci-space-8);
+  padding-bottom: var(--ci-space-6);
+  border-bottom: 1px solid var(--ci-border);
+  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) both;
 }
 
-.statusText {
-  font-size: 0.95rem;
-  color: var(--ci-text-muted);
-  padding: 24px 0;
+.heading::after {
+  content: ".";
+  color: var(--ci-brand);
 }
 
+/* ── Grid ───────────────────────────────────────────────────── */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  gap: var(--ci-space-5);
+  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) 80ms both;
 }
 
+/* ── Card ───────────────────────────────────────────────────── */
 .card {
-  background: var(--ci-bg-primary);
+  background: var(--ci-bg-secondary);
   border: 1px solid var(--ci-border);
-  border-radius: var(--ci-radius-lg);
-  padding: 24px;
-  box-shadow: var(--ci-shadow-sm);
+  border-radius: var(--ci-radius-md);
+  padding: var(--ci-space-5) var(--ci-space-5);
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: var(--ci-space-2);
+  box-shadow: var(--ci-shadow-sm);
   transition:
-    box-shadow 0.2s ease,
-    border-color 0.2s ease,
-    transform 0.15s ease;
+    border-color var(--ci-duration-md) var(--ci-ease),
+    transform var(--ci-duration-md) var(--ci-ease),
+    box-shadow var(--ci-duration-md) var(--ci-ease);
+  position: relative;
+  overflow: hidden;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 3px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    var(--ci-brand) 0%,
+    var(--ci-brand-dark) 100%
+  );
+  opacity: 0;
+  border-radius: 0 0 0 var(--ci-radius-md);
+  transition: opacity var(--ci-duration-md) var(--ci-ease);
 }
 
 .card:hover {
+  border-color: var(--ci-border-medium);
+  transform: translateY(-3px);
   box-shadow: var(--ci-shadow-md);
-  border-color: var(--ci-border-hover);
-  transform: translateY(-2px);
+}
+
+.card:hover::before {
+  opacity: 1;
 }
 
 .cardTitle {
-  font-size: 1rem;
+  font-family: var(--ci-font-display);
+  font-size: 1.15rem;
   font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
   color: var(--ci-text-primary);
-  margin: 0 0 6px;
-  line-height: 1.4;
+  line-height: 1.2;
 }
 
 .vs {
-  font-weight: 400;
+  font-family: var(--ci-font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
   color: var(--ci-text-muted);
-  font-size: 0.85rem;
+  text-transform: uppercase;
   margin: 0 4px;
 }
 
 .cardMeta {
-  font-size: 0.875rem;
-  color: var(--ci-text-secondary);
-  margin: 0;
+  font-family: var(--ci-font-mono);
+  font-size: 0.72rem;
+  color: var(--ci-text-muted);
+  letter-spacing: 0.04em;
 }
 
 .cardWinner {
-  font-size: 0.875rem;
+  margin-top: var(--ci-space-2);
+  font-size: 0.8rem;
   color: var(--ci-text-secondary);
-  margin: 4px 0 0;
+  font-family: var(--ci-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
 }
 
 .cardWinner span {
-  font-weight: 600;
   color: var(--ci-brand);
+  font-weight: 500;
 }
 
 .insightBtn {
-  margin-top: 14px;
-  padding: 10px 0;
+  margin-top: var(--ci-space-3);
+  padding: var(--ci-space-2) var(--ci-space-4);
   background: transparent;
-  border: 1.5px solid var(--ci-brand);
+  border: 1px solid var(--ci-border-brand);
   border-radius: var(--ci-radius-sm);
+  font-family: var(--ci-font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
   color: var(--ci-brand);
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
+  align-self: flex-start;
   transition:
-    background 0.2s ease,
-    color 0.2s ease;
-  font-family: var(--ci-font);
+    background var(--ci-duration-sm) var(--ci-ease),
+    box-shadow var(--ci-duration-sm) var(--ci-ease),
+    transform var(--ci-duration-sm) var(--ci-ease);
 }
 
 .insightBtn:hover {
-  background: var(--ci-brand);
-  color: #fff;
+  background: var(--ci-brand-subtle);
+  box-shadow: var(--ci-shadow-brand);
+  transform: translateX(3px);
+}
+
+/* ── Status Text ────────────────────────────────────────────── */
+.statusText {
+  font-family: var(--ci-font-mono);
+  font-size: 0.8rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+  padding: var(--ci-space-12) 0;
+  text-align: center;
+  animation: ci-pulse 1.8s ease-in-out infinite;
 }
