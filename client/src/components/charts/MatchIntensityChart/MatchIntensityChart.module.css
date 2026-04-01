@@ -1,28 +1,61 @@
+/* ── MatchIntensityChart.module.css ─────────────────────────── */
+
 .wrapper {
-  background: var(--ci-bg-primary);
+  background: var(--ci-bg-secondary);
   border: 1px solid var(--ci-border);
   border-radius: var(--ci-radius-md);
-  padding: 24px;
-  box-shadow: var(--ci-shadow-sm);
-  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+  padding: var(--ci-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-4);
+  box-shadow: var(--ci-shadow-sm), var(--ci-shadow-inset);
+  transition:
+    border-color var(--ci-duration-md) var(--ci-ease),
+    box-shadow var(--ci-duration-md) var(--ci-ease);
+  position: relative;
+  overflow: hidden;
+}
+
+.wrapper::before {
+  content: "INTENSITY";
+  position: absolute;
+  top: var(--ci-space-3);
+  right: var(--ci-space-4);
+  font-family: var(--ci-font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: var(--ci-text-disabled);
+  text-transform: uppercase;
 }
 
 .wrapper:hover {
-  box-shadow: var(--ci-shadow-md);
-  border-color: var(--ci-border-hover);
+  border-color: var(--ci-border-medium);
+  box-shadow: var(--ci-shadow-md), var(--ci-shadow-inset);
 }
 
 .title {
-  font-family: var(--ci-font);
-  font-size: 0.78rem;
-  font-weight: 600;
+  font-family: var(--ci-font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
-  letter-spacing: 0.08em;
   color: var(--ci-text-muted);
-  margin: 0 0 20px;
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-3);
+}
+
+.title::before {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 1.5px;
+  background: var(--ci-blue);
+  border-radius: 1px;
+  flex-shrink: 0;
 }
 
 .chart {
-  width: 100%;
-  height: 280px;
+  flex: 1;
+  min-height: 240px;
 }
