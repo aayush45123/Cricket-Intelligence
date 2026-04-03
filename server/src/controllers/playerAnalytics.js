@@ -387,3 +387,173 @@ export const getAllPlayers = async (req, res) => {
     });
   }
 };
+
+
+export const getPlayerFullStats = async (req, res) => {
+  try {
+    const playerName = decodeURIComponent(req.params.playerName);
+
+    // =========================
+    // 🔥 BATTING DATA
+    // =========================
+    const batting = await Delivery.aggregate([
+      { $match: { batter: playerName } },
+
+      {
+        $addFields: {
+          phase: {
+            $switch: {
+              branches: [
+                { case: { $lte: ["$over", 5] }, then: "Powerplay" },
+                { case: { $lte: ["$over", 14] }, then: "Middle" },
+              ],
+              default: "Death",
+            },
+          },
+        },
+      },
+
+      {
+        $group: {
+          _id: "$phase",
+          runs: { $sum: "$runs_batter" },
+          balls: { $sum: 1 },
+          dotBalls: {
+            $sum: {
+              $cond: [{ $eq: ["$runs_batter", 0] }, 1, 0],
+            },
+          },
+          boundaryRuns: {
+            $sum: {
+              $cond: [
+                { $in: ["$runs_batter", [4, 6]] },
+                "$runs_batter",
+                0,
+              ],
+            },
+          },
+        },
+      },
+    ]);
+
+    // overall batting
+    const battingOverall = await Delivery.aggregate([
+      { $match: { batter: playerName } },
+      {
+        $group: {
+          _id: null,
+          totalRuns: { $sum: "$runs_batter" },
+          totalBalls: { $sum: 1 },
+          dotBalls: {
+            $sum: {
+              $cond: [{ $eq: ["$runs_batter", 0] }, 1, 0],
+            },
+          },
+          boundaryRuns: {
+            $sum: {
+              $cond: [
+                { $in: ["$runs_batter", [4, 6]] },
+                "$runs_batter",
+                0,
+              ],
+            },
+          },
+        },
+      },
+    ]);
+
+    let battingStats = null;
+
+    if (battingOverall.length) {
+      const b = battingOverall[0];
+
+      battingStats = {
+        totalRuns: b.totalRuns,
+        totalBalls: b.totalBalls,
+        strikeRate: (b.totalRuns / b.totalBalls) * 100,
+        dotBallPercent: (b.dotBalls / b.totalBalls) * 100,
+        boundaryPercent: (b.boundaryRuns / b.totalRuns) * 100,
+
+        phaseStats: batting.map((p) => ({
+          phase: p._id,
+          strikeRate: (p.runs / p.balls) * 100,
+        })),
+      };
+    }
+
+    // =========================
+    // 🔥 BOWLING DATA
+    // =========================
+    const bowling = await Delivery.aggregate([
+      { $match: { bowler: playerName } },
+
+      {
+        $group: {
+          _id: null,
+          totalWickets: { $sum: "$bowler_wicket" },
+          totalRuns: { $sum: "$runs_bowler" },
+          totalBalls: {
+            $sum: {
+              $cond: [{ $eq: ["$valid_ball", 1] }, 1, 0],
+            },
+          },
+          dotBalls: {
+            $sum: {
+              $cond: [{ $eq: ["$runs_bowler", 0] }, 1, 0],
+            },
+          },
+        },
+      },
+    ]);
+
+    let bowlingStats = null;
+
+    if (bowling.length) {
+      const bw = bowling[0];
+
+      bowlingStats = {
+        totalWickets: bw.totalWickets,
+        economy: (bw.totalRuns / bw.totalBalls) * 6,
+        strikeRate:
+          bw.totalWickets > 0 ? bw.totalBalls / bw.totalWickets : 0,
+        dotBallPercent: (bw.dotBalls / bw.totalBalls) * 100,
+      };
+    }
+
+    // =========================
+    // 🔥 IMPACT SCORE
+    // =========================
+    let impactScore = 0;
+
+    if (battingStats) {
+      impactScore +=
+        battingStats.totalRuns * (battingStats.strikeRate / 100);
+    }
+
+    if (bowlingStats) {
+      impactScore += bowlingStats.totalWickets * 20;
+    }
+
+    if (battingStats) {
+      impactScore -= battingStats.dotBallPercent;
+    }
+
+    // =========================
+    // ✅ FINAL RESPONSE
+    // =========================
+    res.json({
+      status: "success",
+      playerName,
+      batting:
+        battingStats || "No data available for batting",
+      bowling:
+        bowlingStats || "No data available for bowling",
+      impactScore: impactScore.toFixed(2),
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching player full stats",
+      error: error.message,
+    });
+  }
+};
