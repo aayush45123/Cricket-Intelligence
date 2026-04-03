@@ -354,3 +354,36 @@ export const specificBatterStats = async (req, res) => {
     });
   }
 };
+
+
+export const getAllPlayers = async (req, res) => {
+  try {
+    const players = await Delivery.aggregate([
+      {
+        $group: {
+          _id: null,
+          batters: { $addToSet: "$batter" },
+          bowlers: { $addToSet: "$bowler" },
+        },
+      },
+      {
+        $project: {
+          players: {
+            $setUnion: ["$batters", "$bowlers"],
+          },
+          _id: 0,
+        },
+      },
+    ]);
+
+    res.json({
+      status: "success",
+      data: players[0].players,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: "Error fetching players",
+      error: error.message,
+    });
+  }
+};

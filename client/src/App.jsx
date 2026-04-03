@@ -11,6 +11,7 @@ import BowlingStats from "./pages/BowlingStats/BowlingStats";
 import Batsmen from "./pages/Batsmen/Batsmen";
 import BattingStats from "./pages/BattingStats/BattingStats";
 import Footer from "./components/Footer/Footer";
+import Players from "./pages/Players/Players";
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
           path="/players/batting-analytics/:playerName"
           element={<BattingStats />}
         />
+        <Route path="/players" element={<Players />} />
       </Routes>
       <Footer></Footer>
     </>
