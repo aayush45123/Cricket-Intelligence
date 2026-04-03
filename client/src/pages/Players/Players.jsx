@@ -128,9 +128,7 @@ const Players = () => {
 
                 <button
                   className={styles.insightBtn}
-                  onClick={() =>
-                    navigate(`/players/${encodeURIComponent(player)}`)
-                  }
+                  onClick={() => navigate(`/players/${player}`)}
                 >
                   View Insight
                   <span className={styles.insightArrow}>→</span>

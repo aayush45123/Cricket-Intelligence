@@ -12,6 +12,7 @@ import Batsmen from "./pages/Batsmen/Batsmen";
 import BattingStats from "./pages/BattingStats/BattingStats";
 import Footer from "./components/Footer/Footer";
 import Players from "./pages/Players/Players";
+import PlayerDetail from "./pages/PlayerDetail/PlayerDetail";
 
 const App = () => {
   return (
@@ -34,6 +35,7 @@ const App = () => {
           element={<BattingStats />}
         />
         <Route path="/players" element={<Players />} />
+        <Route path="/players/:playerName" element={<PlayerDetail />} />
       </Routes>
       <Footer></Footer>
     </>
