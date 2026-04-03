@@ -1,0 +1,174 @@
+/* ── BattingBreakdownChart.module.css ───────────────────────── */
+
+.wrapper {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-md);
+  padding: var(--ci-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-4);
+  box-shadow: var(--ci-shadow-sm), var(--ci-shadow-inset);
+  transition:
+    border-color var(--ci-duration-md) var(--ci-ease),
+    box-shadow var(--ci-duration-md) var(--ci-ease);
+}
+
+.wrapper:hover {
+  border-color: var(--ci-border-medium);
+  box-shadow: var(--ci-shadow-md), var(--ci-shadow-inset);
+}
+
+/* ── Title ──────────────────────────────────────────────────── */
+.title {
+  font-family: var(--ci-font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-3);
+}
+
+.title::before {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 1.5px;
+  background: var(--ci-blue);
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+/* ── Donut Row ──────────────────────────────────────────────── */
+.donutRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ci-space-4);
+}
+
+.donutBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ci-space-2);
+  flex: 1;
+}
+
+.donutChart {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  flex-shrink: 0;
+}
+
+.donutCenter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  pointer-events: none;
+}
+
+.donutValue {
+  font-family: var(--ci-font-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.01em;
+}
+
+.donutSub {
+  font-family: var(--ci-font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+}
+
+.donutLabel {
+  font-family: var(--ci-font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+}
+
+.donutDivider {
+  width: 1px;
+  height: 80px;
+  background: var(--ci-border);
+  flex-shrink: 0;
+}
+
+/* ── Tooltip ────────────────────────────────────────────────── */
+.tooltip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--ci-bg-primary);
+  border: 1px solid var(--ci-border-medium);
+  border-radius: var(--ci-radius-sm);
+  padding: var(--ci-space-2) var(--ci-space-3);
+  box-shadow: var(--ci-shadow-md);
+}
+
+.tooltipLabel {
+  font-family: var(--ci-font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+}
+
+.tooltipValue {
+  font-family: var(--ci-font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ci-text-primary);
+  line-height: 1;
+}
+
+/* ── Summary Grid ───────────────────────────────────────────── */
+.summaryGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ci-space-2) var(--ci-space-3);
+  padding-top: var(--ci-space-3);
+  border-top: 1px solid var(--ci-border-subtle);
+}
+
+.summaryItem {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-2);
+}
+
+.summaryDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.summaryLabel {
+  flex: 1;
+  font-family: var(--ci-font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+}
+
+.summaryValue {
+  font-family: var(--ci-font-mono);
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ci-text-secondary);
+}

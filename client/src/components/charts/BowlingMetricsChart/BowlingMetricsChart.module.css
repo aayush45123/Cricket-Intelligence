@@ -1,0 +1,166 @@
+/* ── BowlingMetricsChart.module.css ─────────────────────────── */
+
+.wrapper {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-md);
+  padding: var(--ci-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-5);
+  box-shadow: var(--ci-shadow-sm), var(--ci-shadow-inset);
+  transition:
+    border-color var(--ci-duration-md) var(--ci-ease),
+    box-shadow var(--ci-duration-md) var(--ci-ease);
+}
+
+.wrapper:hover {
+  border-color: rgba(255, 77, 109, 0.25);
+  box-shadow:
+    0 0 24px rgba(255, 77, 109, 0.06),
+    var(--ci-shadow-md);
+}
+
+/* ── Title ──────────────────────────────────────────────────── */
+.title {
+  font-family: var(--ci-font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-3);
+}
+
+.title::before {
+  content: "";
+  display: inline-block;
+  width: 14px;
+  height: 1.5px;
+  background: var(--ci-danger);
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+/* ── Charts Row ─────────────────────────────────────────────── */
+.chartsRow {
+  display: flex;
+  align-items: stretch;
+  gap: var(--ci-space-4);
+}
+
+.radarBlock,
+.barBlock {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-2);
+}
+
+.chartLabel {
+  font-family: var(--ci-font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ci-text-disabled);
+}
+
+.radarChart {
+  height: 200px;
+}
+
+.barChart {
+  height: 200px;
+}
+
+.divider {
+  width: 1px;
+  background: var(--ci-border);
+  flex-shrink: 0;
+  margin: var(--ci-space-4) 0;
+}
+
+/* ── Tooltip ────────────────────────────────────────────────── */
+.tooltip {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--ci-bg-primary);
+  border: 1px solid var(--ci-border-medium);
+  border-radius: var(--ci-radius-sm);
+  padding: var(--ci-space-2) var(--ci-space-3);
+  box-shadow: var(--ci-shadow-md);
+}
+
+.tooltipLabel {
+  font-family: var(--ci-font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+}
+
+.tooltipValue {
+  font-family: var(--ci-font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--ci-text-primary);
+  line-height: 1;
+}
+
+.tooltipSub {
+  font-family: var(--ci-font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.08em;
+  color: var(--ci-text-muted);
+  text-transform: uppercase;
+}
+
+/* ── Score Tiles ────────────────────────────────────────────── */
+.scoreTiles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-2);
+  padding-top: var(--ci-space-3);
+  border-top: 1px solid var(--ci-border-subtle);
+}
+
+.scoreTile {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-3);
+}
+
+.scoreTileLabel {
+  font-family: var(--ci-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+  min-width: 80px;
+  flex-shrink: 0;
+}
+
+.scoreTileBar {
+  flex: 1;
+  height: 5px;
+  background: var(--ci-bg-tertiary);
+  border-radius: var(--ci-radius-full);
+  overflow: hidden;
+}
+
+.scoreTileFill {
+  height: 100%;
+  border-radius: var(--ci-radius-full);
+  transition: width 1s var(--ci-ease);
+}
+
+.scoreTileVal {
+  font-family: var(--ci-font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  min-width: 28px;
+  text-align: right;
+}
