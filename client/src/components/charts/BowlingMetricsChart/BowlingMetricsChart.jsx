@@ -16,27 +16,21 @@ import {
 } from "recharts";
 import styles from "./BowlingMetricsChart.module.css";
 
-/* Normalise each bowling metric to a 0–100 score for radar display.
-   Lower economy / higher dot% / lower SR = better score. */
+/* ── Normalise each metric to 0–100 (for bar width + radar only)
+   Lower economy / higher dot% / lower SR / more wickets = better.
+   These scores ONLY drive the visual bar width — raw values are
+   always shown as the displayed number.                         */
 const normalise = (bowling) => {
-  // economy: ideal ≈ 6, terrible ≈ 12+  → score = 100 - clamp((eco-6)/6*100, 0, 100)
   const ecoScore = Math.max(
     0,
     Math.min(100, 100 - ((bowling.economy - 6) / 6) * 100),
   );
-
-  // dotBallPercent: higher = better, max realistic ~60%
-  const dotScore = Math.min(100, (bowling.dotBallPercent / 50) * 100);
-
-  // strikeRate: lower = better. ideal ~15, bad ~60+
+  const dotScore = Math.min(100, (bowling.dotBallPercent / 60) * 100);
   const srScore = Math.max(
     0,
     Math.min(100, 100 - ((bowling.strikeRate - 15) / 45) * 100),
   );
-
-  // wickets: relative — we scale 0–30 to 0–100
-  const wktScore = Math.min(100, (bowling.totalWickets / 30) * 100);
-
+  const wktScore = Math.min(100, (bowling.totalWickets / 50) * 100);
   return { ecoScore, dotScore, srScore, wktScore };
 };
 
@@ -46,7 +40,7 @@ const CustomTooltip = ({ active, payload }) => {
     <div className={styles.tooltip}>
       <span className={styles.tooltipLabel}>{payload[0].payload.metric}</span>
       <span className={styles.tooltipValue}>{payload[0].value.toFixed(1)}</span>
-      <span className={styles.tooltipSub}>Normalised Score</span>
+      <span className={styles.tooltipSub}>Performance Score /100</span>
     </div>
   );
 };
@@ -86,6 +80,60 @@ const BowlingMetricsChart = ({ bowling }) => {
       label: "Dot Ball %",
       value: parseFloat(bowling.dotBallPercent.toFixed(2)),
       color: "var(--ci-blue)",
+    },
+  ];
+
+  /* Score tiles:
+     - barWidth  = normalised 0–100 score  → drives the bar width only
+     - rawValue  = actual real metric       → the number shown to the user  */
+  const scoreTiles = [
+    {
+      label: "Economy",
+      rawValue: bowling.economy.toFixed(2),
+      note: "runs / over",
+      barWidth: ecoScore,
+      color:
+        ecoScore >= 70
+          ? "var(--ci-brand)"
+          : ecoScore >= 40
+            ? "var(--ci-blue)"
+            : "var(--ci-danger)",
+    },
+    {
+      label: "Dot Ball %",
+      rawValue: bowling.dotBallPercent.toFixed(1) + "%",
+      note: "of deliveries",
+      barWidth: dotScore,
+      color:
+        dotScore >= 70
+          ? "var(--ci-brand)"
+          : dotScore >= 40
+            ? "var(--ci-blue)"
+            : "var(--ci-danger)",
+    },
+    {
+      label: "Strike Rate",
+      rawValue: bowling.strikeRate > 0 ? bowling.strikeRate.toFixed(1) : "—",
+      note: "balls / wicket",
+      barWidth: srScore,
+      color:
+        srScore >= 70
+          ? "var(--ci-brand)"
+          : srScore >= 40
+            ? "var(--ci-blue)"
+            : "var(--ci-danger)",
+    },
+    {
+      label: "Wickets",
+      rawValue: bowling.totalWickets, // ← always the real wicket count e.g. 4
+      note: "total taken",
+      barWidth: wktScore, // ← 4/50 * 100 = 8, just moves the bar
+      color:
+        wktScore >= 70
+          ? "var(--ci-brand)"
+          : wktScore >= 40
+            ? "var(--ci-blue)"
+            : "var(--ci-danger)",
     },
   ];
 
@@ -135,10 +183,9 @@ const BowlingMetricsChart = ({ bowling }) => {
           </div>
         </div>
 
-        {/* Divider */}
         <div className={styles.divider} />
 
-        {/* Bar metrics */}
+        {/* Bar metrics — raw values */}
         <div className={styles.barBlock}>
           <span className={styles.chartLabel}>Raw Metrics</span>
           <div className={styles.barChart}>
@@ -168,6 +215,7 @@ const BowlingMetricsChart = ({ bowling }) => {
                 <YAxis
                   type="category"
                   dataKey="label"
+                  width={70}
                   tick={{
                     fontSize: 10,
                     fill: "var(--ci-text-muted)",
@@ -175,7 +223,6 @@ const BowlingMetricsChart = ({ bowling }) => {
                   }}
                   axisLine={false}
                   tickLine={false}
-                  width={70}
                 />
                 <Tooltip
                   content={<BarTooltip />}
@@ -192,31 +239,36 @@ const BowlingMetricsChart = ({ bowling }) => {
         </div>
       </div>
 
-      {/* Score tiles */}
+      {/* Performance breakdown — bar = normalised score, number = raw value */}
+      <div className={styles.scoreTilesHeader}>
+        <span className={styles.scoreTilesTitle}>Performance Breakdown</span>
+        <span className={styles.scoreTilesHint}>
+          bar width = relative score /100
+        </span>
+      </div>
+
       <div className={styles.scoreTiles}>
-        {radarData.map((d) => {
-          const pct = d.score;
-          const color =
-            pct >= 70
-              ? "var(--ci-brand)"
-              : pct >= 40
-                ? "var(--ci-blue)"
-                : "var(--ci-danger)";
-          return (
-            <div className={styles.scoreTile} key={d.metric}>
-              <span className={styles.scoreTileLabel}>{d.metric}</span>
-              <div className={styles.scoreTileBar}>
-                <div
-                  className={styles.scoreTileFill}
-                  style={{ width: `${pct}%`, background: color }}
-                />
-              </div>
-              <span className={styles.scoreTileVal} style={{ color }}>
-                {pct.toFixed(0)}
-              </span>
+        {scoreTiles.map((d) => (
+          <div className={styles.scoreTile} key={d.label}>
+            <div className={styles.scoreTileMeta}>
+              <span className={styles.scoreTileLabel}>{d.label}</span>
+              <span className={styles.scoreTileNote}>{d.note}</span>
             </div>
-          );
-        })}
+            <div className={styles.scoreTileBar}>
+              <div
+                className={styles.scoreTileFill}
+                style={{
+                  width: `${Math.max(d.barWidth, 2)}%`,
+                  background: d.color,
+                }}
+              />
+            </div>
+            {/* This always shows the REAL value — never the normalised score */}
+            <span className={styles.scoreTileVal} style={{ color: d.color }}>
+              {d.rawValue}
+            </span>
+          </div>
+        ))}
       </div>
     </div>
   );
