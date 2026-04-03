@@ -1,0 +1,364 @@
+/* ── Players.module.css ─────────────────────────────────────── */
+
+.page {
+  min-height: 100vh;
+  padding-top: var(--ci-nav-height);
+  position: relative;
+  z-index: 1;
+}
+
+.main {
+  max-width: var(--ci-max-width);
+  margin: 0 auto;
+  padding: var(--ci-space-10) var(--ci-space-6) var(--ci-space-16);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-8);
+}
+
+/* ── Hero ───────────────────────────────────────────────────── */
+.hero {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--ci-space-4);
+  padding-bottom: var(--ci-space-8);
+  border-bottom: 1px solid var(--ci-border);
+  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) both;
+}
+
+.heroText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-2);
+}
+
+.heroTitle {
+  font-family: var(--ci-font-display);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  color: var(--ci-text-primary);
+  line-height: 1;
+}
+
+.heroTitle::after {
+  content: ".";
+  color: var(--ci-blue);
+}
+
+.heroSubtitle {
+  font-size: 0.87rem;
+  color: var(--ci-text-secondary);
+  max-width: 440px;
+  line-height: 1.65;
+}
+
+.heroMeta {
+  flex-shrink: 0;
+}
+
+.countBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--ci-space-2) var(--ci-space-4);
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border-medium);
+  border-radius: var(--ci-radius-full);
+  font-family: var(--ci-font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-text-secondary);
+}
+
+/* ── Search ─────────────────────────────────────────────────── */
+.searchSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-3);
+  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) 80ms both;
+}
+
+.searchWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  max-width: 480px;
+}
+
+.searchIcon {
+  position: absolute;
+  left: var(--ci-space-4);
+  font-size: 1.15rem;
+  color: var(--ci-text-muted);
+  pointer-events: none;
+  line-height: 1;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.searchInput {
+  width: 100%;
+  padding: var(--ci-space-3) var(--ci-space-4) var(--ci-space-3)
+    var(--ci-space-10);
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border-medium);
+  border-radius: var(--ci-radius-sm);
+  font-family: var(--ci-font-mono);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  color: var(--ci-text-primary);
+  outline: none;
+  transition:
+    border-color var(--ci-duration-sm) var(--ci-ease),
+    box-shadow var(--ci-duration-sm) var(--ci-ease);
+}
+
+.searchInput::placeholder {
+  color: var(--ci-text-muted);
+}
+
+.searchInput:focus {
+  border-color: var(--ci-border-brand);
+  box-shadow: 0 0 0 3px var(--ci-brand-glow);
+}
+
+.clearBtn {
+  position: absolute;
+  right: var(--ci-space-3);
+  background: none;
+  border: none;
+  font-size: 0.7rem;
+  color: var(--ci-text-muted);
+  padding: var(--ci-space-1);
+  border-radius: var(--ci-radius-xs);
+  transition: color var(--ci-duration-sm) var(--ci-ease);
+}
+
+.clearBtn:hover {
+  color: var(--ci-text-secondary);
+}
+
+.resultCount {
+  font-family: var(--ci-font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  color: var(--ci-text-muted);
+}
+
+/* ── State ──────────────────────────────────────────────────── */
+.stateWrapper {
+  display: flex;
+  justify-content: center;
+  padding: var(--ci-space-16) 0;
+}
+
+.stateText {
+  font-family: var(--ci-font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+  animation: ci-pulse 1.8s ease-in-out infinite;
+}
+
+.errorText {
+  font-family: var(--ci-font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  color: var(--ci-danger);
+}
+
+/* ── Grid ───────────────────────────────────────────────────── */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: var(--ci-space-4);
+  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) 160ms both;
+}
+
+@media (max-width: 640px) {
+  .grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Card ───────────────────────────────────────────────────── */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-4);
+  padding: var(--ci-space-5);
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-md);
+  box-shadow: var(--ci-shadow-sm), var(--ci-shadow-inset);
+  position: relative;
+  overflow: hidden;
+  transition:
+    border-color var(--ci-duration-md) var(--ci-ease),
+    transform var(--ci-duration-md) var(--ci-ease),
+    box-shadow var(--ci-duration-md) var(--ci-ease);
+}
+
+/* Diagonal top-right corner accent */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 48px;
+  height: 48px;
+  background: linear-gradient(225deg, var(--ci-blue-glow) 0%, transparent 60%);
+  border-radius: 0 var(--ci-radius-md) 0 0;
+  pointer-events: none;
+}
+
+/* Bottom bar on hover */
+.card::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--ci-blue), var(--ci-brand));
+  opacity: 0;
+  transition: opacity var(--ci-duration-md) var(--ci-ease);
+}
+
+.card:hover {
+  border-color: rgba(61, 142, 255, 0.3);
+  transform: translateY(-4px);
+  box-shadow: var(--ci-shadow-md), var(--ci-blue-glow);
+}
+
+.card:hover::after {
+  opacity: 1;
+}
+
+/* ── Index Badge ────────────────────────────────────────────── */
+.indexBadge {
+  position: absolute;
+  top: var(--ci-space-3);
+  right: var(--ci-space-4);
+  font-family: var(--ci-font-display);
+  font-size: 1.4rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  color: var(--ci-text-disabled);
+  line-height: 1;
+  user-select: none;
+}
+
+/* ── Card Body ──────────────────────────────────────────────── */
+.cardBody {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-4);
+}
+
+/* ── Avatar ─────────────────────────────────────────────────── */
+.avatar {
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--ci-radius-sm);
+  background: linear-gradient(
+    135deg,
+    var(--ci-bg-quaternary) 0%,
+    var(--ci-bg-tertiary) 100%
+  );
+  border: 1px solid var(--ci-border-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--ci-font-display);
+  font-size: 1rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: var(--ci-blue);
+  text-transform: uppercase;
+  transition:
+    background var(--ci-duration-md) var(--ci-ease),
+    border-color var(--ci-duration-md) var(--ci-ease);
+}
+
+.card:hover .avatar {
+  background: linear-gradient(
+    135deg,
+    var(--ci-blue-glow) 0%,
+    var(--ci-bg-tertiary) 100%
+  );
+  border-color: rgba(61, 142, 255, 0.4);
+}
+
+/* ── Card Info ──────────────────────────────────────────────── */
+.cardInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.playerName {
+  font-family: var(--ci-font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--ci-text-primary);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.playerLabel {
+  font-family: var(--ci-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+}
+
+/* ── Insight Button ─────────────────────────────────────────── */
+.insightBtn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--ci-space-3) var(--ci-space-4);
+  background: transparent;
+  border: 1px solid rgba(61, 142, 255, 0.28);
+  border-radius: var(--ci-radius-sm);
+  font-family: var(--ci-font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ci-blue);
+  transition:
+    background var(--ci-duration-sm) var(--ci-ease),
+    box-shadow var(--ci-duration-sm) var(--ci-ease),
+    border-color var(--ci-duration-sm) var(--ci-ease);
+  margin-top: auto;
+}
+
+.insightBtn:hover {
+  background: var(--ci-blue-glow);
+  border-color: rgba(61, 142, 255, 0.55);
+  box-shadow: var(--ci-blue-glow);
+}
+
+.insightArrow {
+  font-size: 0.9rem;
+  transition: transform var(--ci-duration-sm) var(--ci-ease);
+}
+
+.insightBtn:hover .insightArrow {
+  transform: translateX(4px);
+}
