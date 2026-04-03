@@ -8,6 +8,7 @@ import {
   getBattingStats,
   specificBatterStats,
   getAllPlayers,
+  getPlayerFullStats,
 } from "../controllers/playerAnalytics.js";
 
 const router = express.Router();
@@ -20,6 +21,7 @@ router.get("/bowler-stats/:playerName", specificBowlerStats);
 router.get("/batting-analytics", getBattingStats);
 router.get("/batting-analytics/:playerName", specificBatterStats);
 router.get("/team-leaderboard", teamLeaderboard);
-router.get("/", getAllPlayers);
+router.get("/player", getAllPlayers);
+router.get("/player/:playerName", getPlayerFullStats);
 
 export default router;

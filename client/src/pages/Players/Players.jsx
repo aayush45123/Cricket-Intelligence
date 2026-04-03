@@ -12,7 +12,7 @@ const Players = () => {
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
-        const res = await fetch("/api/players/");
+        const res = await fetch("/api/players/player");
         const result = await res.json();
         setData(result.data || []);
       } catch (err) {
