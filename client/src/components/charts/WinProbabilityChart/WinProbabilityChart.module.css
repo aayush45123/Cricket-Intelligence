@@ -1,0 +1,239 @@
+/* ── WinProbabilityChart.module.css ─────────────────────────── */
+
+.wrapper {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-md);
+  padding: var(--ci-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-5);
+  box-shadow: var(--ci-shadow-sm), var(--ci-shadow-inset);
+  transition: border-color var(--ci-duration-md) var(--ci-ease);
+}
+
+.wrapper:hover {
+  border-color: rgba(61, 142, 255, 0.28);
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--ci-space-4);
+}
+
+.headerLeft {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-1);
+}
+
+.teamChasing {
+  font-family: var(--ci-font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+}
+
+.finalProb {
+  display: flex;
+  align-items: baseline;
+  gap: var(--ci-space-2);
+}
+
+.finalProb > span:first-child {
+  font-family: var(--ci-font-display);
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.finalProbSub {
+  font-family: var(--ci-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--ci-text-muted);
+  text-transform: uppercase;
+}
+
+.sampleToggle {
+  padding: var(--ci-space-2) var(--ci-space-4);
+  background: var(--ci-bg-tertiary);
+  border: 1px solid var(--ci-border-medium);
+  border-radius: var(--ci-radius-sm);
+  font-family: var(--ci-font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  color: var(--ci-text-muted);
+  flex-shrink: 0;
+  transition: all var(--ci-duration-sm) var(--ci-ease);
+}
+
+.sampleToggle:hover {
+  color: var(--ci-blue);
+  border-color: var(--ci-blue-glow);
+  background: var(--ci-blue-glow);
+}
+
+/* ── Chart ──────────────────────────────────────────────────── */
+.chart {
+  height: 280px;
+}
+
+/* ── Tooltip ────────────────────────────────────────────────── */
+.tooltip {
+  background: var(--ci-bg-primary);
+  border: 1px solid var(--ci-border-medium);
+  border-radius: var(--ci-radius-sm);
+  padding: var(--ci-space-3) var(--ci-space-4);
+  box-shadow: var(--ci-shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-2);
+  min-width: 160px;
+}
+
+.tooltipBall {
+  font-family: var(--ci-font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+  padding-bottom: var(--ci-space-1);
+  border-bottom: 1px solid var(--ci-border-subtle);
+}
+
+.tooltipProbRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ci-space-3);
+}
+
+.tooltipTeam {
+  font-family: var(--ci-font-mono);
+  font-size: 0.66rem;
+  color: var(--ci-text-secondary);
+  letter-spacing: 0.04em;
+  flex: 1;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tooltipProb {
+  font-family: var(--ci-font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.tooltipMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-2);
+  font-family: var(--ci-font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.04em;
+  color: var(--ci-text-muted);
+}
+
+.tooltipDot {
+  color: var(--ci-text-disabled);
+}
+
+/* ── Zone Legend ────────────────────────────────────────────── */
+.zoneLegend {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-5);
+  flex-wrap: wrap;
+  padding: var(--ci-space-3) 0;
+  border-top: 1px solid var(--ci-border-subtle);
+}
+
+.zoneItem {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-2);
+  font-family: var(--ci-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: var(--ci-text-muted);
+}
+
+.zoneDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+/* ── Swings ─────────────────────────────────────────────────── */
+.swingsBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-3);
+  padding: var(--ci-space-4);
+  background: var(--ci-bg-tertiary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-sm);
+}
+
+.swingsTitle {
+  font-family: var(--ci-font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+}
+
+.swingsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-2);
+}
+
+.swingItem {
+  display: grid;
+  grid-template-columns: 64px 44px 1fr 40px;
+  align-items: center;
+  gap: var(--ci-space-3);
+}
+
+.swingBall {
+  font-family: var(--ci-font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  color: var(--ci-text-secondary);
+}
+
+.swingDelta {
+  font-family: var(--ci-font-mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--ci-accent);
+}
+
+.swingBar {
+  height: 4px;
+  background: var(--ci-bg-quaternary);
+  border-radius: var(--ci-radius-full);
+  overflow: hidden;
+}
+
+.swingFill {
+  height: 100%;
+  border-radius: var(--ci-radius-full);
+  transition: width 0.8s var(--ci-ease);
+}
+
+.swingProb {
+  font-family: var(--ci-font-mono);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-align: right;
+}
