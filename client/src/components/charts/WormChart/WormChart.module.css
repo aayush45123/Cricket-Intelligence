@@ -1,0 +1,165 @@
+/* ── WormChart.module.css ───────────────────────────────────── */
+
+.wrapper {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-md);
+  padding: var(--ci-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-5);
+  box-shadow: var(--ci-shadow-sm), var(--ci-shadow-inset);
+  transition: border-color var(--ci-duration-md) var(--ci-ease);
+}
+
+.wrapper:hover {
+  border-color: var(--ci-border-medium);
+}
+
+/* ── Legend ─────────────────────────────────────────────────── */
+.legend {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-6);
+  flex-wrap: wrap;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-2);
+}
+
+.legendLine {
+  display: inline-block;
+  width: 24px;
+  height: 2px;
+  border-radius: 1px;
+  flex-shrink: 0;
+}
+
+.legendLabel {
+  font-family: var(--ci-font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+}
+
+/* ── Chart ──────────────────────────────────────────────────── */
+.chart {
+  height: 300px;
+}
+
+/* ── Tooltip ────────────────────────────────────────────────── */
+.tooltip {
+  background: var(--ci-bg-primary);
+  border: 1px solid var(--ci-border-medium);
+  border-radius: var(--ci-radius-sm);
+  padding: var(--ci-space-3) var(--ci-space-4);
+  box-shadow: var(--ci-shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-2);
+  min-width: 160px;
+}
+
+.tooltipOver {
+  font-family: var(--ci-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+  padding-bottom: var(--ci-space-2);
+  border-bottom: 1px solid var(--ci-border-subtle);
+}
+
+.tooltipRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-2);
+}
+
+.tooltipDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.tooltipTeam {
+  flex: 1;
+  font-family: var(--ci-font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  color: var(--ci-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tooltipVal {
+  font-family: var(--ci-font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ci-text-primary);
+}
+
+/* ── Over Grid ──────────────────────────────────────────────── */
+.overGrid {
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-sm);
+  overflow: hidden;
+  font-family: var(--ci-font-mono);
+  font-size: 0.7rem;
+}
+
+.overGridHeader {
+  display: grid;
+  grid-template-columns: 56px 1fr 1fr;
+  padding: var(--ci-space-2) var(--ci-space-4);
+  background: var(--ci-bg-tertiary);
+  border-bottom: 1px solid var(--ci-border);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+  font-size: 0.62rem;
+}
+
+.overGridBody {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  max-height: 100px;
+  overflow-y: auto;
+}
+
+.overRow {
+  display: grid;
+  grid-template-columns: 56px 1fr 1fr;
+  align-items: center;
+  padding: var(--ci-space-2) var(--ci-space-4);
+  border-bottom: 1px solid var(--ci-border-subtle);
+  border-right: 1px solid var(--ci-border-subtle);
+  transition: background var(--ci-duration-sm) var(--ci-ease);
+  width: 33.33%;
+}
+
+.overRow:hover {
+  background: var(--ci-bg-tertiary);
+}
+
+.overNum {
+  color: var(--ci-text-muted);
+  font-size: 0.62rem;
+}
+
+.overRuns {
+  color: var(--ci-text-secondary);
+  font-size: 0.72rem;
+}
+
+.bigOver {
+  color: var(--ci-brand) !important;
+  font-weight: 600;
+}
