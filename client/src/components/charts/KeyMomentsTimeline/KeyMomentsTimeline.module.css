@@ -1,0 +1,236 @@
+/* ── KeyMomentsTimeline.module.css ──────────────────────────── */
+
+.wrapper {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-md);
+  padding: var(--ci-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-5);
+  box-shadow: var(--ci-shadow-sm), var(--ci-shadow-inset);
+}
+
+/* ── Filters ────────────────────────────────────────────────── */
+.filters {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-4);
+  flex-wrap: wrap;
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-1);
+  background: var(--ci-bg-tertiary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-sm);
+  padding: var(--ci-space-1);
+}
+
+.filterBtn {
+  padding: var(--ci-space-2) var(--ci-space-3);
+  border-radius: 5px;
+  font-family: var(--ci-font-mono);
+  font-size: 0.66rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all var(--ci-duration-sm) var(--ci-ease);
+  white-space: nowrap;
+}
+
+.filterBtn:hover {
+  color: var(--ci-text-secondary);
+  background: var(--ci-bg-quaternary);
+}
+
+.filterActive {
+  color: var(--ci-text-primary) !important;
+  border-color: var(--ci-border-medium) !important;
+  background: var(--ci-bg-secondary) !important;
+}
+
+.filterCount {
+  margin-left: auto;
+  font-family: var(--ci-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-text-disabled);
+}
+
+/* ── Summary Pills ──────────────────────────────────────────── */
+.summaryPills {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-3);
+  flex-wrap: wrap;
+}
+
+.pill {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-2);
+  padding: 4px 12px;
+  border: 1px solid;
+  border-radius: var(--ci-radius-full);
+  font-family: var(--ci-font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+.pillLabel {
+  color: var(--ci-text-muted);
+  font-weight: 400;
+}
+
+/* ── Timeline ───────────────────────────────────────────────── */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-6);
+}
+
+/* ── Innings Group ──────────────────────────────────────────── */
+.inningsGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-3);
+}
+
+.inningsGroupHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-3);
+  padding-bottom: var(--ci-space-3);
+  border-bottom: 1px solid var(--ci-border);
+}
+
+.inningsPip {
+  width: 3px;
+  height: 18px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+
+.inningsGroupLabel {
+  font-family: var(--ci-font-display);
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ci-text-secondary);
+}
+
+/* ── Events grid ────────────────────────────────────────────── */
+.events {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--ci-space-3);
+}
+
+/* ── Moment Card ────────────────────────────────────────────── */
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-2);
+  padding: var(--ci-space-4) var(--ci-space-4) var(--ci-space-4)
+    var(--ci-space-5);
+  background: var(--ci-bg-tertiary);
+  border: 1px solid;
+  border-radius: var(--ci-radius-md);
+  position: relative;
+  overflow: hidden;
+  transition:
+    transform var(--ci-duration-md) var(--ci-ease),
+    box-shadow var(--ci-duration-md) var(--ci-ease);
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--ci-shadow-md);
+}
+
+.cardHigh {
+  box-shadow: var(--ci-shadow-sm);
+}
+
+.cardAccent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 3px;
+  border-radius: 0;
+}
+
+/* ── Card Meta ──────────────────────────────────────────────── */
+.cardMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-2);
+}
+
+.cardIcon {
+  font-size: 0.9rem;
+  line-height: 1;
+}
+
+.cardType {
+  font-family: var(--ci-font-mono);
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.cardOver {
+  margin-left: auto;
+  font-family: var(--ci-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  color: var(--ci-text-muted);
+  padding: 2px 8px;
+  background: var(--ci-bg-quaternary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-full);
+}
+
+/* ── Card Desc ──────────────────────────────────────────────── */
+.cardDesc {
+  font-size: 0.8rem;
+  color: var(--ci-text-secondary);
+  line-height: 1.5;
+}
+
+.cardRuns {
+  font-family: var(--ci-font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  align-self: flex-start;
+}
+
+/* ── Empty ──────────────────────────────────────────────────── */
+.empty {
+  padding: var(--ci-space-8);
+  text-align: center;
+  font-family: var(--ci-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+}
+
+.emptyInnings {
+  font-family: var(--ci-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  color: var(--ci-text-disabled);
+  padding: var(--ci-space-3);
+}
