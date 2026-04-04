@@ -1,8 +1,6 @@
 import Delivery from "../models/Deliveries.js";
 
-/* ─────────────────────────────────────────────────────────────
-   HELPER — build worm (cumulative runs per over) for one innings
-   ───────────────────────────────────────────────────────────── */
+
 const buildWorm = (deliveries) => {
   const overMap = {};
   deliveries.forEach((d) => {
