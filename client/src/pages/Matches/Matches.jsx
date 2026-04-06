@@ -58,6 +58,14 @@ const Matches = () => {
                 >
                   View Insight
                 </button>
+                <button
+                  className={styles.insightBtn}
+                  onClick={() =>
+                    navigate(`/matches/${match.matchId}/deep-analytics`)
+                  }
+                >
+                  View Deep Analytics
+                </button>
               </div>
             ))
           )}

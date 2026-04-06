@@ -13,6 +13,7 @@ import BattingStats from "./pages/BattingStats/BattingStats";
 import Footer from "./components/Footer/Footer";
 import Players from "./pages/Players/Players";
 import PlayerDetail from "./pages/PlayerDetail/PlayerDetail";
+import MatchDeepAnalytics from "./pages/MatchDeepAnalytics/MatchDeepAnalytics";
 
 const App = () => {
   return (
@@ -36,6 +37,10 @@ const App = () => {
         />
         <Route path="/players" element={<Players />} />
         <Route path="/players/:playerName" element={<PlayerDetail />} />
+        <Route
+          path="/matches/:matchId/deep-analytics"
+          element={<MatchDeepAnalytics deepAnalytics />}
+        />
       </Routes>
       <Footer></Footer>
     </>
