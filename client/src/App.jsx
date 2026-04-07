@@ -44,7 +44,7 @@ const App = () => {
           element={<MatchDeepAnalytics deepAnalytics />}
         />
         <Route path="/venues" element={<Venues />} />
-        <Route path="/venues/:venueid" element={<VenueDetail />} />
+        <Route path="/venues/:venue" element={<VenueDetail />} />
       </Routes>
       <Footer></Footer>
     </>

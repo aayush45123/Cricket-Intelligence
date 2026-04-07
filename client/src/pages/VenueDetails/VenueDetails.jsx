@@ -61,14 +61,20 @@ const VenueDetail = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
+    if (!venue) {
+      setError("Venue not found.");
+      setLoading(false);
+      return;
+    }
+
     (async () => {
       try {
-        const res = await fetch(`/api/venues/${venue}`);
+        const res = await fetch(`/api/venues/${encodeURIComponent(venue)}`);
         const result = await res.json();
         if (!res.ok) throw new Error(result.message);
         setData(result.data);
       } catch (err) {
-        setError(err.message);
+        setError(err.message || "Failed to load venue analytics.");
       } finally {
         setLoading(false);
       }
