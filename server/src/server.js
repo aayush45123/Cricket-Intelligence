@@ -1,9 +1,10 @@
-import express from "express";
+import express, { application } from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
 import playerRoutes from "./routes/playerRoutes.js";
 import iplMatchRoutes from "./routes/iplMatchRoutes.js";
 import matches from "./routes/matchRoutes.js";
+import venueRoutes from "./routes/venueRoutes.js";
 
 dotenv.config();
 
@@ -19,6 +20,7 @@ app.get("/", (req, res) => {
 app.use("/api/matches", iplMatchRoutes);
 app.use("/api/players", playerRoutes);
 app.use("/api/matches", matches);
+app.use("/api/venues", venueRoutes);
 
 connectDB();
 

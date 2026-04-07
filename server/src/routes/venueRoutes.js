@@ -2,7 +2,7 @@ import express from "express";
 import {
   getAllVenues,
   getVenueDetails,
-} from "../controllers/venue.controller.js";
+} from "../controllers/venueController.js";
 
 const router = express.Router();
 
