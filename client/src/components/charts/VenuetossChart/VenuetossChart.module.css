@@ -1,0 +1,125 @@
+/* ── VenueTossChart.module.css ──────────────────────────────── */
+
+.wrapper {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-md);
+  padding: var(--ci-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-5);
+  box-shadow: var(--ci-shadow-sm), var(--ci-shadow-inset);
+  transition: border-color var(--ci-duration-md) var(--ci-ease);
+}
+.wrapper:hover {
+  border-color: rgba(61, 142, 255, 0.25);
+}
+
+.gaugeRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-5);
+}
+.gauge {
+  position: relative;
+  width: 160px;
+  height: 90px;
+  flex-shrink: 0;
+}
+.gaugeCenter {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.gaugePct {
+  font-family: var(--ci-font-display);
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.gaugeSub {
+  font-family: var(--ci-font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.06em;
+  color: var(--ci-text-muted);
+  text-align: center;
+  line-height: 1.3;
+}
+
+.gaugeRight {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-3);
+}
+.impactBadge {
+  font-family: var(--ci-font-display);
+  font-size: 1.2rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.verdict {
+  font-family: var(--ci-font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: var(--ci-text-secondary);
+  line-height: 1.6;
+}
+
+.decisionsTitle {
+  font-family: var(--ci-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+}
+.decisions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--ci-space-3);
+}
+.decisionCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-1);
+  padding: var(--ci-space-3);
+  background: var(--ci-bg-tertiary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-sm);
+}
+.decisionLabel {
+  font-family: var(--ci-font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+}
+.decisionPct {
+  font-family: var(--ci-font-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.decisionBar {
+  height: 4px;
+  background: var(--ci-bg-quaternary);
+  border-radius: var(--ci-radius-full);
+  overflow: hidden;
+}
+.decisionFill {
+  height: 100%;
+  border-radius: var(--ci-radius-full);
+  transition: width 0.8s var(--ci-ease);
+}
+.decisionCount {
+  font-family: var(--ci-font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  color: var(--ci-text-disabled);
+}

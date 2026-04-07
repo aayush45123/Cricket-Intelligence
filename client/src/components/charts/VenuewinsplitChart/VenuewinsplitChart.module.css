@@ -1,0 +1,151 @@
+/* ── VenueWinSplitChart.module.css ──────────────────────────── */
+
+.wrapper {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-md);
+  padding: var(--ci-space-5);
+  box-shadow: var(--ci-shadow-sm), var(--ci-shadow-inset);
+  transition: border-color var(--ci-duration-md) var(--ci-ease);
+}
+.wrapper:hover {
+  border-color: var(--ci-border-medium);
+}
+
+.chartRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-6);
+}
+
+.donut {
+  position: relative;
+  width: 160px;
+  height: 160px;
+  flex-shrink: 0;
+}
+
+.donutCenter {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  pointer-events: none;
+}
+
+.donutPct {
+  font-family: var(--ci-font-display);
+  font-size: 1.8rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.donutSub {
+  font-family: var(--ci-font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+  text-align: center;
+  max-width: 70px;
+}
+
+.breakdown {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-4);
+}
+
+.breakItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-1);
+}
+.breakTop {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-2);
+}
+.breakDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.breakLabel {
+  flex: 1;
+  font-family: var(--ci-font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ci-text-secondary);
+}
+.breakPct {
+  font-family: var(--ci-font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+.breakBar {
+  height: 5px;
+  background: var(--ci-bg-tertiary);
+  border-radius: var(--ci-radius-full);
+  overflow: hidden;
+}
+.breakFill {
+  height: 100%;
+  border-radius: var(--ci-radius-full);
+  transition: width 0.8s var(--ci-ease);
+}
+.breakWins {
+  font-family: var(--ci-font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.06em;
+  color: var(--ci-text-muted);
+}
+
+.verdict {
+  font-family: var(--ci-font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.04em;
+  color: var(--ci-text-secondary);
+  line-height: 1.5;
+  padding: var(--ci-space-3);
+  background: var(--ci-bg-tertiary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-sm);
+  margin-top: var(--ci-space-2);
+}
+
+/* Tooltip */
+.tooltip {
+  background: var(--ci-bg-primary);
+  border: 1px solid var(--ci-border-medium);
+  border-radius: var(--ci-radius-sm);
+  padding: var(--ci-space-3) var(--ci-space-4);
+  box-shadow: var(--ci-shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.tooltipLabel {
+  font-family: var(--ci-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+}
+.tooltipVal {
+  font-family: var(--ci-font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--ci-text-primary);
+  line-height: 1;
+}
+.tooltipWins {
+  font-family: var(--ci-font-mono);
+  font-size: 0.6rem;
+  color: var(--ci-text-muted);
+}
