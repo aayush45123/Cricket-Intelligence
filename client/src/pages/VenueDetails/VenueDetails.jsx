@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import styles from "./VenueDetail.module.css";
+import styles from "./VenueDetails.module.css";
 import VenueWinSplitChart from "../../components/charts/VenuewinsplitChart/VenuewinsplitChart";
 import VenueTossChart from "../../components/charts/VenuetossChart/VenuetossChart";
 import VenueSeasonTrend from "../../components/charts/VenueseasontrendChart/VenueseasontrendChart";

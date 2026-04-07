@@ -1,6 +1,6 @@
 import React from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
-import styles from "./VenueWinSplitChart.module.css";
+import styles from "./VenuewinsplitChart.module.css";
 
 const CustomTooltip = ({ active, payload }) => {
   if (!active || !payload?.length) return null;

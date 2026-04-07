@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
   ReferenceLine,
 } from "recharts";
-import styles from "./VenueSeasonTrend.module.css";
+import styles from "./VenueseasontrendChart.module.css";
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;

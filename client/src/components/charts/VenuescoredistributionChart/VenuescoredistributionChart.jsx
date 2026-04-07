@@ -9,7 +9,7 @@ import {
   ResponsiveContainer,
   Cell,
 } from "recharts";
-import styles from "./VenueScoreDistribution.module.css";
+import styles from "./VenuescoredistributionChart.module.css";
 
 const CustomTooltip = ({ active, payload, label }) => {
   if (!active || !payload?.length) return null;

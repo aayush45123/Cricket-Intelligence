@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./VenueTopTeams.module.css";
+import styles from "./VenuetopteamsChart.module.css";
 
 const COLORS = [
   "var(--ci-accent)",
