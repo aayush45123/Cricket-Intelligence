@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "./VenueDetail.module.css";
-import VenueWinSplitChart from "../../components/charts/VenueWinSplitChart/VenueWinSplitChart";
-import VenueTossChart from "../../components/charts/VenueTossChart/VenueTossChart";
-import VenueSeasonTrend from "../../components/charts/VenueSeasonTrend/VenueSeasonTrend";
-import VenueScoreDistribution from "../../components/charts/VenueScoreDistribution/VenueScoreDistribution";
-import VenueTopTeams from "../../components/charts/VenueTopTeams/VenueTopTeams";
+import VenueWinSplitChart from "../../components/charts/VenuewinsplitChart/VenuewinsplitChart";
+import VenueTossChart from "../../components/charts/VenuetossChart/VenuetossChart";
+import VenueSeasonTrend from "../../components/charts/VenueseasontrendChart/VenueseasontrendChart";
+import VenueScoreDistribution from "../../components/charts/VenuescoredistributionChart/VenuescoredistributionChart";
+import VenueTopTeams from "../../components/charts/VenuetopteamsChart/VenuetopteamsChart";
 
 const PITCH_META = {
   batting: {

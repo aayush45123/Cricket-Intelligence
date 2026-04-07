@@ -14,6 +14,8 @@ import Footer from "./components/Footer/Footer";
 import Players from "./pages/Players/Players";
 import PlayerDetail from "./pages/PlayerDetail/PlayerDetail";
 import MatchDeepAnalytics from "./pages/MatchDeepAnalytics/MatchDeepAnalytics";
+import Venues from "./pages/Venues/Venues";
+import VenueDetail from "./pages/VenueDetails/VenueDetails";
 
 const App = () => {
   return (
@@ -41,6 +43,8 @@ const App = () => {
           path="/matches/:matchId/deep-analytics"
           element={<MatchDeepAnalytics deepAnalytics />}
         />
+        <Route path="/venues" element={<Venues />} />
+        <Route path="/venues/:venueid" element={<VenueDetail />} />
       </Routes>
       <Footer></Footer>
     </>
