@@ -1,0 +1,75 @@
+/* ── MatchupRunDistribution.module.css ──────────────────────── */
+.wrapper {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-md);
+  padding: var(--ci-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-4);
+  box-shadow: var(--ci-shadow-sm), var(--ci-shadow-inset);
+}
+.chart {
+  height: 220px;
+}
+.pills {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-3);
+  flex-wrap: wrap;
+  padding-top: var(--ci-space-2);
+  border-top: 1px solid var(--ci-border-subtle);
+}
+.pill {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-2);
+}
+.pillDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.pillRun {
+  font-family: var(--ci-font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+}
+.pillPct {
+  font-family: var(--ci-font-display);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ci-text-primary);
+}
+.tooltip {
+  background: var(--ci-bg-primary);
+  border: 1px solid var(--ci-border-medium);
+  border-radius: var(--ci-radius-sm);
+  padding: var(--ci-space-3) var(--ci-space-4);
+  box-shadow: var(--ci-shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.tooltipRun {
+  font-family: var(--ci-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+}
+.tooltipCount {
+  font-family: var(--ci-font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--ci-text-primary);
+  line-height: 1;
+}
+.tooltipPct {
+  font-family: var(--ci-font-mono);
+  font-size: 0.6rem;
+  color: var(--ci-text-muted);
+}

@@ -1,0 +1,64 @@
+/* ── MatchupPhaseChart.module.css ───────────────────────────── */
+.wrapper {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-md);
+  padding: var(--ci-space-5);
+  box-shadow: var(--ci-shadow-sm), var(--ci-shadow-inset);
+}
+.inner {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-4);
+}
+.radar {
+  width: 200px;
+  height: 200px;
+  flex-shrink: 0;
+}
+.phaseList {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-4);
+}
+.phaseItem {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.phaseTop {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-2);
+}
+.phaseDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.phaseLabel {
+  flex: 1;
+  font-family: var(--ci-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+}
+.phaseSR {
+  font-family: var(--ci-font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  line-height: 1;
+}
+.phaseMeta {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-2);
+  font-family: var(--ci-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.04em;
+  color: var(--ci-text-muted);
+  padding-left: var(--ci-space-4);
+}
