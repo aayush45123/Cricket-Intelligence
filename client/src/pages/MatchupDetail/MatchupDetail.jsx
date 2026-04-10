@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "./MatchupDetail.module.css";
 import MatchupRunDistribution from "../../components/charts/MatchupRunDistribution/MatchupRunDistribution";
-import MatchupPhaseChart from "../../components/charts/MatchupPhaseChart/MatchupPhaseChart";
+import MatchupPhaseChart from "../../components/charts/MatchupPhase/MatchupPhase";
 import MatchupSeasonTrend from "../../components/charts/MatchupSeasonTrend/MatchupSeasonTrend";
 import MatchupOverByOver from "../../components/charts/MatchupOverByOver/MatchupOverByOver";
-import MatchupPerMatch from "../../components/charts/MatchupPerMatch/MatchupPerMatch";
+import MatchupPerMatch from "../../components/charts/MatchupPreMatch/MatchupPreMatch";
 
 /* ── Helpers ──────────────────────────────────────────────────── */
 const verdict = (sr, dismissals, balls) => {

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styles from "./MatchupPerMatch.module.css";
+import styles from "./MatchupPreMatch.module.css";
 
 const MatchupPerMatch = ({ data, batter, bowler }) => {
   const [sortCol, setSortCol] = useState("date");

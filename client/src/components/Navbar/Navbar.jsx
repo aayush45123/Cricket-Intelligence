@@ -13,6 +13,7 @@ const Navbar = () => {
     { to: "/batsmen", label: "Batsmen" },
     { to: "/players", label: "Players" },
     { to: "/venues", label: "Venues" },
+    { to: "/matchups", label: "Matchups" },
   ];
 
   return (
