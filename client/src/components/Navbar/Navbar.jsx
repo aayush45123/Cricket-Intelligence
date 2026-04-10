@@ -26,7 +26,7 @@ const Navbar = () => {
 
       <ul className={styles.navList}>
         {links.map(({ to, label }) => (
-          <li key={to} className={styles.navItem}>
+          <li key={`${to}-${label}`} className={styles.navItem}>
             <Link
               to={to}
               className={`${styles.navLink} ${

@@ -51,12 +51,23 @@ const MatchupDetail = () => {
   useEffect(() => {
     const fetch_ = async () => {
       try {
-        const res = await fetch(`/api/matchups/${batter}/${bowler}`);
-        const result = await res.json();
-        if (!res.ok) throw new Error(result.message);
-        setData(result.data);
+        const res = await fetch(
+          `/api/matchups/${encodeURIComponent(batter)}/${encodeURIComponent(bowler)}`,
+        );
+        const contentType = res.headers.get("content-type") || "";
+        const result = contentType.includes("application/json")
+          ? await res.json()
+          : null;
+
+        if (!res.ok) {
+          throw new Error(
+            result?.message || `Failed to fetch matchup (${res.status})`,
+          );
+        }
+
+        setData(result?.data || null);
       } catch (err) {
-        setError(err.message);
+        setError(err?.message || "Error fetching matchup");
       } finally {
         setLoading(false);
       }

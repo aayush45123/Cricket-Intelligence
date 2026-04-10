@@ -1,5 +1,9 @@
 import Delivery from "../models/Deliveries.js";
 
+const asNumber = (value) =>
+  typeof value === "number" && Number.isFinite(value) ? value : 0;
+const asText = (value) => (value == null ? "" : String(value));
+
 /* ─────────────────────────────────────────────────────────────
    GET /api/matchups/batters
    Distinct batter names (for search dropdown)
@@ -9,7 +13,9 @@ export const getAllBatters = async (req, res) => {
     const batters = await Delivery.distinct("batter");
     res.json({ status: "success", data: batters.filter(Boolean).sort() });
   } catch (err) {
-    res.status(500).json({ message: "Error fetching batters", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching batters", error: err.message });
   }
 };
 
@@ -22,7 +28,9 @@ export const getAllBowlers = async (req, res) => {
     const bowlers = await Delivery.distinct("bowler");
     res.json({ status: "success", data: bowlers.filter(Boolean).sort() });
   } catch (err) {
-    res.status(500).json({ message: "Error fetching bowlers", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching bowlers", error: err.message });
   }
 };
 
@@ -46,21 +54,32 @@ export const getMatchup = async (req, res) => {
     }
 
     /* ── Core totals ──────────────────────────────────────────── */
-    const totalBalls      = deliveries.filter((d) => (d.valid_ball ?? 0) === 1).length;
-    const totalRuns       = deliveries.reduce((s, d) => s + (d.runs_batter ?? 0), 0);
-    const totalDismissals = deliveries.filter((d) => (d.bowler_wicket ?? 0) === 1).length;
-    const strikeRate      = totalBalls > 0 ? (totalRuns / totalBalls) * 100 : 0;
-    const dotBalls        = deliveries.filter(
-      (d) => (d.valid_ball ?? 0) === 1 && (d.runs_batter ?? 0) === 0
+    const totalBalls = deliveries.filter(
+      (d) => asNumber(d.valid_ball) === 1,
     ).length;
-    const fours = deliveries.filter((d) => (d.runs_batter ?? 0) === 4).length;
-    const sixes = deliveries.filter((d) => (d.runs_batter ?? 0) === 6).length;
+    const totalRuns = deliveries.reduce(
+      (s, d) => s + asNumber(d.runs_batter),
+      0,
+    );
+    const totalDismissals = deliveries.filter(
+      (d) => asNumber(d.bowler_wicket) === 1,
+    ).length;
+    const strikeRate = totalBalls > 0 ? (totalRuns / totalBalls) * 100 : 0;
+    const dotBalls = deliveries.filter(
+      (d) => asNumber(d.valid_ball) === 1 && asNumber(d.runs_batter) === 0,
+    ).length;
+    const fours = deliveries.filter(
+      (d) => asNumber(d.runs_batter) === 4,
+    ).length;
+    const sixes = deliveries.filter(
+      (d) => asNumber(d.runs_batter) === 6,
+    ).length;
 
     /* ── Run distribution (0,1,2,3,4,6) ──────────────────────── */
     const runBuckets = { 0: 0, 1: 0, 2: 0, 3: 0, 4: 0, 6: 0 };
     deliveries.forEach((d) => {
-      if ((d.valid_ball ?? 0) !== 1) return;
-      const r = d.runs_batter ?? 0;
+      if (asNumber(d.valid_ball) !== 1) return;
+      const r = asNumber(d.runs_batter);
       const key = r >= 6 ? 6 : r >= 4 ? 4 : r;
       runBuckets[key] = (runBuckets[key] || 0) + 1;
     });
@@ -68,7 +87,10 @@ export const getMatchup = async (req, res) => {
     const runDistribution = Object.entries(runBuckets).map(([run, count]) => ({
       run: run === "6" ? "6+" : run,
       count,
-      pct: totalBalls > 0 ? parseFloat(((count / totalBalls) * 100).toFixed(1)) : 0,
+      pct:
+        totalBalls > 0
+          ? parseFloat(((count / totalBalls) * 100).toFixed(1))
+          : 0,
     }));
 
     /* ── Per-match breakdown ──────────────────────────────────── */
@@ -83,32 +105,41 @@ export const getMatchup = async (req, res) => {
           venue: d.venue,
           battingTeam: d.batting_team,
           bowlingTeam: d.bowling_team,
-          runs: 0, balls: 0, fours: 0, sixes: 0, dismissals: 0,
+          runs: 0,
+          balls: 0,
+          fours: 0,
+          sixes: 0,
+          dismissals: 0,
         };
       }
       const m = matchMap[id];
-      if ((d.valid_ball ?? 0) === 1) m.balls++;
-      m.runs += d.runs_batter ?? 0;
-      if ((d.runs_batter ?? 0) === 4) m.fours++;
-      if ((d.runs_batter ?? 0) === 6) m.sixes++;
-      if ((d.bowler_wicket ?? 0) === 1) m.dismissals++;
+      if (asNumber(d.valid_ball) === 1) m.balls++;
+      m.runs += asNumber(d.runs_batter);
+      if (asNumber(d.runs_batter) === 4) m.fours++;
+      if (asNumber(d.runs_batter) === 6) m.sixes++;
+      if (asNumber(d.bowler_wicket) === 1) m.dismissals++;
     });
 
     const perMatch = Object.values(matchMap)
       .map((m) => ({
         ...m,
-        strikeRate: m.balls > 0 ? parseFloat(((m.runs / m.balls) * 100).toFixed(1)) : 0,
+        strikeRate:
+          m.balls > 0 ? parseFloat(((m.runs / m.balls) * 100).toFixed(1)) : 0,
       }))
-      .sort((a, b) => (a.date ?? "").localeCompare(b.date ?? ""));
+      .sort((a, b) => asText(a.date).localeCompare(asText(b.date)));
 
     /* ── Phase breakdown (Powerplay/Middle/Death) ─────────────── */
-    const phases = { Powerplay: { runs: 0, balls: 0, dismissals: 0 }, Middle: { runs: 0, balls: 0, dismissals: 0 }, Death: { runs: 0, balls: 0, dismissals: 0 } };
+    const phases = {
+      Powerplay: { runs: 0, balls: 0, dismissals: 0 },
+      Middle: { runs: 0, balls: 0, dismissals: 0 },
+      Death: { runs: 0, balls: 0, dismissals: 0 },
+    };
     deliveries.forEach((d) => {
-      const ov = d.over ?? 0;
+      const ov = asNumber(d.over);
       const phase = ov <= 5 ? "Powerplay" : ov <= 14 ? "Middle" : "Death";
-      if ((d.valid_ball ?? 0) === 1) phases[phase].balls++;
-      phases[phase].runs += d.runs_batter ?? 0;
-      if ((d.bowler_wicket ?? 0) === 1) phases[phase].dismissals++;
+      if (asNumber(d.valid_ball) === 1) phases[phase].balls++;
+      phases[phase].runs += asNumber(d.runs_batter);
+      if (asNumber(d.bowler_wicket) === 1) phases[phase].dismissals++;
     });
 
     const phaseBreakdown = Object.entries(phases).map(([phase, p]) => ({
@@ -116,23 +147,26 @@ export const getMatchup = async (req, res) => {
       runs: p.runs,
       balls: p.balls,
       dismissals: p.dismissals,
-      strikeRate: p.balls > 0 ? parseFloat(((p.runs / p.balls) * 100).toFixed(1)) : 0,
+      strikeRate:
+        p.balls > 0 ? parseFloat(((p.runs / p.balls) * 100).toFixed(1)) : 0,
     }));
 
     /* ── Over-by-over ─────────────────────────────────────────── */
     const overMap = {};
     deliveries.forEach((d) => {
-      const ov = d.over ?? 0;
-      if (!overMap[ov]) overMap[ov] = { over: ov + 1, runs: 0, balls: 0, dismissals: 0 };
-      if ((d.valid_ball ?? 0) === 1) overMap[ov].balls++;
-      overMap[ov].runs += d.runs_batter ?? 0;
-      if ((d.bowler_wicket ?? 0) === 1) overMap[ov].dismissals++;
+      const ov = asNumber(d.over);
+      if (!overMap[ov])
+        overMap[ov] = { over: ov + 1, runs: 0, balls: 0, dismissals: 0 };
+      if (asNumber(d.valid_ball) === 1) overMap[ov].balls++;
+      overMap[ov].runs += asNumber(d.runs_batter);
+      if (asNumber(d.bowler_wicket) === 1) overMap[ov].dismissals++;
     });
 
     const overByOver = Object.values(overMap)
       .map((o) => ({
         ...o,
-        strikeRate: o.balls > 0 ? parseFloat(((o.runs / o.balls) * 100).toFixed(1)) : 0,
+        strikeRate:
+          o.balls > 0 ? parseFloat(((o.runs / o.balls) * 100).toFixed(1)) : 0,
       }))
       .sort((a, b) => a.over - b.over);
 
@@ -140,31 +174,46 @@ export const getMatchup = async (req, res) => {
     const seasonMap = {};
     perMatch.forEach((m) => {
       const s = m.season || "Unknown";
-      if (!seasonMap[s]) seasonMap[s] = { season: s, runs: 0, balls: 0, dismissals: 0, matches: 0 };
-      seasonMap[s].runs       += m.runs;
-      seasonMap[s].balls      += m.balls;
+      if (!seasonMap[s])
+        seasonMap[s] = {
+          season: s,
+          runs: 0,
+          balls: 0,
+          dismissals: 0,
+          matches: 0,
+        };
+      seasonMap[s].runs += m.runs;
+      seasonMap[s].balls += m.balls;
       seasonMap[s].dismissals += m.dismissals;
-      seasonMap[s].matches    += 1;
+      seasonMap[s].matches += 1;
     });
 
     const seasonTrend = Object.values(seasonMap)
       .map((s) => ({
         ...s,
-        strikeRate: s.balls > 0 ? parseFloat(((s.runs / s.balls) * 100).toFixed(1)) : 0,
-        avgRuns: s.matches > 0 ? parseFloat((s.runs / s.matches).toFixed(1)) : 0,
+        strikeRate:
+          s.balls > 0 ? parseFloat(((s.runs / s.balls) * 100).toFixed(1)) : 0,
+        avgRuns:
+          s.matches > 0 ? parseFloat((s.runs / s.matches).toFixed(1)) : 0,
       }))
-      .sort((a, b) => a.season.localeCompare(b.season));
+      .sort((a, b) =>
+        asText(a.season).localeCompare(asText(b.season), undefined, {
+          numeric: true,
+          sensitivity: "base",
+        }),
+      );
 
     /* ── Dismissal types ──────────────────────────────────────── */
     const dismissalTypes = {};
     deliveries
-      .filter((d) => (d.bowler_wicket ?? 0) === 1)
+      .filter((d) => asNumber(d.bowler_wicket) === 1)
       .forEach((d) => {
         const kind = d.wicket_kind || "Unknown";
         dismissalTypes[kind] = (dismissalTypes[kind] || 0) + 1;
       });
 
-    const dismissals = Object.entries(dismissalTypes).map(([kind, count]) => ({ kind, count }))
+    const dismissals = Object.entries(dismissalTypes)
+      .map(([kind, count]) => ({ kind, count }))
       .sort((a, b) => b.count - a.count);
 
     res.json({
@@ -178,10 +227,16 @@ export const getMatchup = async (req, res) => {
           totalDismissals,
           strikeRate: parseFloat(strikeRate.toFixed(2)),
           dotBalls,
-          dotBallPct: totalBalls > 0 ? parseFloat(((dotBalls / totalBalls) * 100).toFixed(1)) : 0,
+          dotBallPct:
+            totalBalls > 0
+              ? parseFloat(((dotBalls / totalBalls) * 100).toFixed(1))
+              : 0,
           fours,
           sixes,
-          battingAverage: totalDismissals > 0 ? parseFloat((totalRuns / totalDismissals).toFixed(2)) : totalRuns,
+          battingAverage:
+            totalDismissals > 0
+              ? parseFloat((totalRuns / totalDismissals).toFixed(2))
+              : totalRuns,
           totalMatches: perMatch.length,
         },
         runDistribution,
@@ -193,7 +248,9 @@ export const getMatchup = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(500).json({ message: "Error fetching matchup", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching matchup", error: err.message });
   }
 };
 
@@ -211,14 +268,20 @@ export const getTopBoylersForBatter = async (req, res) => {
       {
         $group: {
           _id: "$bowler",
-          totalRuns:       { $sum: "$runs_batter" },
-          totalBalls:      { $sum: { $cond: [{ $eq: ["$valid_ball", 1] }, 1, 0] } },
+          totalRuns: { $sum: "$runs_batter" },
+          totalBalls: { $sum: { $cond: [{ $eq: ["$valid_ball", 1] }, 1, 0] } },
           totalDismissals: { $sum: "$bowler_wicket" },
           dotBalls: {
             $sum: {
               $cond: [
-                { $and: [{ $eq: ["$valid_ball", 1] }, { $eq: ["$runs_batter", 0] }] },
-                1, 0,
+                {
+                  $and: [
+                    { $eq: ["$valid_ball", 1] },
+                    { $eq: ["$runs_batter", 0] },
+                  ],
+                },
+                1,
+                0,
               ],
             },
           },
@@ -255,7 +318,9 @@ export const getTopBoylersForBatter = async (req, res) => {
 
     res.json({ status: "success", data: raw });
   } catch (err) {
-    res.status(500).json({ message: "Error fetching top bowlers", error: err.message });
+    res
+      .status(500)
+      .json({ message: "Error fetching top bowlers", error: err.message });
   }
 };
 
@@ -272,14 +337,20 @@ export const getBattersVsBowler = async (req, res) => {
       {
         $group: {
           _id: "$batter",
-          totalRuns:       { $sum: "$runs_batter" },
-          totalBalls:      { $sum: { $cond: [{ $eq: ["$valid_ball", 1] }, 1, 0] } },
+          totalRuns: { $sum: "$runs_batter" },
+          totalBalls: { $sum: { $cond: [{ $eq: ["$valid_ball", 1] }, 1, 0] } },
           totalDismissals: { $sum: "$bowler_wicket" },
           dotBalls: {
             $sum: {
               $cond: [
-                { $and: [{ $eq: ["$valid_ball", 1] }, { $eq: ["$runs_batter", 0] }] },
-                1, 0,
+                {
+                  $and: [
+                    { $eq: ["$valid_ball", 1] },
+                    { $eq: ["$runs_batter", 0] },
+                  ],
+                },
+                1,
+                0,
               ],
             },
           },
@@ -316,6 +387,11 @@ export const getBattersVsBowler = async (req, res) => {
 
     res.json({ status: "success", data: raw });
   } catch (err) {
-    res.status(500).json({ message: "Error fetching batters vs bowler", error: err.message });
+    res
+      .status(500)
+      .json({
+        message: "Error fetching batters vs bowler",
+        error: err.message,
+      });
   }
 };
