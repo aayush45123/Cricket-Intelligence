@@ -16,6 +16,8 @@ import PlayerDetail from "./pages/PlayerDetail/PlayerDetail";
 import MatchDeepAnalytics from "./pages/MatchDeepAnalytics/MatchDeepAnalytics";
 import Venues from "./pages/Venues/Venues";
 import VenueDetail from "./pages/VenueDetails/VenueDetails";
+import MatchupSearch from "./pages/MatchupSearch/MatchupSearch";
+import MatchupDetail from "./pages/MatchupDetail/MatchupDetail";
 
 const App = () => {
   return (
@@ -45,6 +47,8 @@ const App = () => {
         />
         <Route path="/venues" element={<Venues />} />
         <Route path="/venues/:venue" element={<VenueDetail />} />
+        <Route path="/matchups" element={<MatchupSearch />} />
+        <Route path="/matchups/:batter/:bowler" element={<MatchupDetail />} />
       </Routes>
       <Footer></Footer>
     </>

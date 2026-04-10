@@ -5,6 +5,7 @@ import playerRoutes from "./routes/playerRoutes.js";
 import iplMatchRoutes from "./routes/iplMatchRoutes.js";
 import matches from "./routes/matchRoutes.js";
 import venueRoutes from "./routes/venueRoutes.js";
+import matchupRoutes from "./routes/matchupRoutes.js";
 
 dotenv.config();
 
@@ -21,6 +22,7 @@ app.use("/api/matches", iplMatchRoutes);
 app.use("/api/players", playerRoutes);
 app.use("/api/matches", matches);
 app.use("/api/venues", venueRoutes);
+app.use("/api/matchups", matchupRoutes);
 
 connectDB();
 
