@@ -141,22 +141,37 @@ export const getBowlingStats = async (req, res) => {
   }
 };
 
+// ── UPDATED specificBowlerStats function ─────────────────────
+// Replace this function in your playerAnalytics.js controller.
+// The only change: adds dotBalls + dotBallPercent + category to the response.
+
 export const specificBowlerStats = async (req, res) => {
   try {
     const playerName = decodeURIComponent(req.params.playerName);
 
     const statsByBowler = await Delivery.aggregate([
-      {
-        $match: { bowler: playerName },
-      },
+      { $match: { bowler: playerName } },
       {
         $group: {
           _id: "$bowler",
           totalWickets: { $sum: "$bowler_wicket" },
           totalRunsConceded: { $sum: "$runs_bowler" },
           totalBallsBowled: {
+            $sum: { $cond: [{ $eq: ["$valid_ball", 1] }, 1, 0] },
+          },
+          // ← NEW: count dot balls for BowlingMetricsChart
+          dotBalls: {
             $sum: {
-              $cond: [{ $eq: ["$valid_ball", 1] }, 1, 0],
+              $cond: [
+                {
+                  $and: [
+                    { $eq: ["$valid_ball", 1] },
+                    { $eq: ["$runs_bowler", 0] },
+                  ],
+                },
+                1,
+                0,
+              ],
             },
           },
         },
@@ -168,21 +183,45 @@ export const specificBowlerStats = async (req, res) => {
           totalWickets: 1,
           totalRunsConceded: 1,
           totalBallsBowled: 1,
+          dotBalls: 1,
         },
       },
     ]);
 
     if (!statsByBowler.length) {
-      return res.status(404).json({
-        message: "Bowler not found",
-      });
+      return res.status(404).json({ message: "Bowler not found" });
     }
 
-    const playerStats = buildBowlingStatsFromDeliveries(statsByBowler)[0];
+    const row = statsByBowler[0];
+    const totalWickets = row.totalWickets || 0;
+    const totalBallsBowled = row.totalBallsBowled || 0;
+    const totalRunsConceded = row.totalRunsConceded || 0;
+    const dotBalls = row.dotBalls || 0;
+
+    const bowlingEconomyRate =
+      totalBallsBowled > 0 ? (totalRunsConceded / totalBallsBowled) * 6 : 0;
+    const bowlingAverage =
+      totalWickets > 0 ? totalRunsConceded / totalWickets : totalRunsConceded;
+    const bowlingStrikeRate =
+      totalWickets > 0 ? totalBallsBowled / totalWickets : 0;
+    // ← NEW: percentage of dot balls
+    const dotBallPercent =
+      totalBallsBowled > 0 ? (dotBalls / totalBallsBowled) * 100 : 0;
 
     res.json({
       status: "success",
-      data: playerStats,
+      data: {
+        playerName: row.playerName,
+        category: "Bowling Profile", // ← used by badge in BowlingStats
+        totalWickets,
+        totalRunsConceded,
+        totalBallsBowled,
+        bowlingAverage,
+        bowlingEconomyRate,
+        bowlingStrikeRate,
+        dotBalls,
+        dotBallPercent, // ← NEW field
+      },
     });
   } catch (error) {
     res.status(500).json({
@@ -355,7 +394,6 @@ export const specificBatterStats = async (req, res) => {
   }
 };
 
-
 export const getAllPlayers = async (req, res) => {
   try {
     const players = await Delivery.aggregate([
@@ -387,7 +425,6 @@ export const getAllPlayers = async (req, res) => {
     });
   }
 };
-
 
 export const getPlayerFullStats = async (req, res) => {
   try {
@@ -425,11 +462,7 @@ export const getPlayerFullStats = async (req, res) => {
           },
           boundaryRuns: {
             $sum: {
-              $cond: [
-                { $in: ["$runs_batter", [4, 6]] },
-                "$runs_batter",
-                0,
-              ],
+              $cond: [{ $in: ["$runs_batter", [4, 6]] }, "$runs_batter", 0],
             },
           },
         },
@@ -451,11 +484,7 @@ export const getPlayerFullStats = async (req, res) => {
           },
           boundaryRuns: {
             $sum: {
-              $cond: [
-                { $in: ["$runs_batter", [4, 6]] },
-                "$runs_batter",
-                0,
-              ],
+              $cond: [{ $in: ["$runs_batter", [4, 6]] }, "$runs_batter", 0],
             },
           },
         },
@@ -514,8 +543,7 @@ export const getPlayerFullStats = async (req, res) => {
       bowlingStats = {
         totalWickets: bw.totalWickets,
         economy: (bw.totalRuns / bw.totalBalls) * 6,
-        strikeRate:
-          bw.totalWickets > 0 ? bw.totalBalls / bw.totalWickets : 0,
+        strikeRate: bw.totalWickets > 0 ? bw.totalBalls / bw.totalWickets : 0,
         dotBallPercent: (bw.dotBalls / bw.totalBalls) * 100,
       };
     }
@@ -526,8 +554,7 @@ export const getPlayerFullStats = async (req, res) => {
     let impactScore = 0;
 
     if (battingStats) {
-      impactScore +=
-        battingStats.totalRuns * (battingStats.strikeRate / 100);
+      impactScore += battingStats.totalRuns * (battingStats.strikeRate / 100);
     }
 
     if (bowlingStats) {
@@ -544,10 +571,8 @@ export const getPlayerFullStats = async (req, res) => {
     res.json({
       status: "success",
       playerName,
-      batting:
-        battingStats || "No data available for batting",
-      bowling:
-        bowlingStats || "No data available for bowling",
+      batting: battingStats || "No data available for batting",
+      bowling: bowlingStats || "No data available for bowling",
       impactScore: impactScore.toFixed(2),
     });
   } catch (error) {
