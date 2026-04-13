@@ -18,6 +18,7 @@ import Venues from "./pages/Venues/Venues";
 import VenueDetail from "./pages/VenueDetails/VenueDetails";
 import MatchupSearch from "./pages/MatchupSearch/MatchupSearch";
 import MatchupDetail from "./pages/MatchupDetail/MatchupDetail";
+import PlayerCompareDetail from "./pages/PlayerComparisionDetail/PlayerCompareDetail";
 
 const App = () => {
   return (
@@ -49,6 +50,10 @@ const App = () => {
         <Route path="/venues/:venue" element={<VenueDetail />} />
         <Route path="/matchups" element={<MatchupSearch />} />
         <Route path="/matchups/:batter/:bowler" element={<MatchupDetail />} />
+        <Route
+          path="/compare/:playerA/:playerB"
+          element={<PlayerCompareDetail />}
+        />
       </Routes>
       <Footer></Footer>
     </>
