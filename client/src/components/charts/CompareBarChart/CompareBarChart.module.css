@@ -1,0 +1,110 @@
+/* ── CompareBarChart.module.css ─────────────────────────────── */
+.wrapper {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-md);
+  padding: var(--ci-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-3);
+  box-shadow: var(--ci-shadow-sm);
+}
+
+.header {
+  display: grid;
+  grid-template-columns: 1fr 100px 1fr;
+  align-items: center;
+  padding: 0 0 var(--ci-space-2);
+  border-bottom: 1px solid var(--ci-border-subtle);
+  margin-bottom: var(--ci-space-1);
+}
+.playerLabel {
+  font-family: var(--ci-font-display);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.headerMid {
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 100px 1fr;
+  align-items: center;
+  gap: var(--ci-space-3);
+  padding: var(--ci-space-2) 0;
+  border-bottom: 1px solid var(--ci-border-subtle);
+}
+.row:last-child {
+  border-bottom: none;
+}
+
+.sideA {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-3);
+  flex-direction: row;
+}
+.sideB {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-3);
+  flex-direction: row-reverse;
+}
+
+.val {
+  font-family: var(--ci-font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  min-width: 52px;
+  flex-shrink: 0;
+}
+
+.trackA {
+  flex: 1;
+  height: 8px;
+  background: var(--ci-bg-tertiary);
+  border-radius: var(--ci-radius-full);
+  overflow: hidden;
+  display: flex;
+  justify-content: flex-end;
+}
+.trackB {
+  flex: 1;
+  height: 8px;
+  background: var(--ci-bg-tertiary);
+  border-radius: var(--ci-radius-full);
+  overflow: hidden;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.fillA {
+  height: 100%;
+  border-radius: var(--ci-radius-full);
+  transition: width 0.8s var(--ci-ease);
+}
+.fillB {
+  height: 100%;
+  border-radius: var(--ci-radius-full);
+  transition: width 0.8s var(--ci-ease);
+}
+
+.mid {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+.metricLabel {
+  font-family: var(--ci-font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+  text-align: center;
+}
+.winPip {
+  font-size: 0.55rem;
+}
