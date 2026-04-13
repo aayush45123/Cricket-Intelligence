@@ -13,7 +13,7 @@
   padding: var(--ci-space-12) var(--ci-space-6) var(--ci-space-20);
   display: flex;
   flex-direction: column;
-  gap: var(--ci-space-10);
+  gap: var(--ci-space-8);
 }
 
 /* ── Hero ───────────────────────────────────────────────────── */
@@ -58,12 +58,70 @@
   letter-spacing: 0.12em;
 }
 
+.heroVsCompare {
+  display: inline-block;
+  color: var(--ci-blue);
+  font-size: 1em;
+  vertical-align: middle;
+}
+
 .heroSub {
   font-size: 0.88rem;
   color: var(--ci-text-secondary);
   max-width: 520px;
   line-height: 1.7;
   text-align: center;
+}
+
+/* ── Tabs ───────────────────────────────────────────────────── */
+.tabs {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-2);
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-md);
+  padding: var(--ci-space-2);
+  width: fit-content;
+  margin: 0 auto;
+  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) 60ms both;
+}
+
+.tab {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-2);
+  padding: var(--ci-space-3) var(--ci-space-5);
+  border-radius: var(--ci-radius-sm);
+  font-family: var(--ci-font-mono);
+  font-size: 0.72rem;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+  background: transparent;
+  border: 1px solid transparent;
+  transition: all var(--ci-duration-sm) var(--ci-ease);
+}
+.tab:hover {
+  color: var(--ci-text-secondary);
+  background: var(--ci-bg-tertiary);
+}
+
+.tabIcon {
+  font-size: 0.9rem;
+}
+
+.tabActive {
+  color: var(--ci-brand) !important;
+  background: var(--ci-brand-subtle) !important;
+  border-color: var(--ci-border-brand) !important;
+}
+
+.tabActiveCompare {
+  color: var(--ci-blue) !important;
+  background: var(--ci-blue-glow) !important;
+  border-color: rgba(61, 142, 255, 0.35) !important;
 }
 
 /* ── Search Card ────────────────────────────────────────────── */
@@ -78,9 +136,8 @@
   box-shadow: var(--ci-shadow-lg);
   position: relative;
   overflow: hidden;
-  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) 80ms both;
+  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) 100ms both;
 }
-
 .searchCard::before {
   content: "";
   position: absolute;
@@ -94,6 +151,15 @@
     var(--ci-blue),
     var(--ci-danger)
   );
+}
+
+.searchCardCompare::before {
+  background: linear-gradient(
+    90deg,
+    var(--ci-brand),
+    var(--ci-blue),
+    var(--ci-accent)
+  ) !important;
 }
 
 /* ── Loading ────────────────────────────────────────────────── */
@@ -138,13 +204,12 @@
   }
 }
 
-/* ── VS Divider ─────────────────────────────────────────────── */
 .vsDivider {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--ci-space-2);
-  padding-top: 44px; /* align with input top */
+  padding-top: 44px;
 }
 .vsLine {
   width: 1px;
@@ -158,6 +223,15 @@
   letter-spacing: 0.12em;
   color: var(--ci-text-disabled);
 }
+.vsTextCompare {
+  font-family: var(--ci-font-display);
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  color: var(--ci-blue);
+  opacity: 0.6;
+}
+
 @media (max-width: 640px) {
   .vsDivider {
     flex-direction: row;
@@ -187,7 +261,6 @@
   align-items: center;
   gap: var(--ci-space-2);
 }
-
 .selectRole {
   font-size: 0.9rem;
 }
@@ -203,12 +276,6 @@
   transition:
     border-color var(--ci-duration-sm) var(--ci-ease),
     box-shadow var(--ci-duration-sm) var(--ci-ease);
-}
-.selectInputFocused {
-  border-color: var(--ci-border-medium);
-}
-.selectInputFilled {
-  background: var(--ci-bg-secondary);
 }
 
 .selectField {
@@ -236,12 +303,10 @@
   color: var(--ci-text-muted);
   padding: var(--ci-space-1);
   flex-shrink: 0;
-  transition: color var(--ci-duration-sm) var(--ci-ease);
 }
 .selectClear:hover {
   color: var(--ci-text-secondary);
 }
-
 .selectChevron {
   font-size: 0.7rem;
   color: var(--ci-text-muted);
@@ -290,13 +355,11 @@
 .dropdownItemActive {
   font-weight: 600;
 }
-
 .dropdownEmpty {
   display: block;
   padding: var(--ci-space-5);
   font-family: var(--ci-font-mono);
   font-size: 0.72rem;
-  letter-spacing: 0.08em;
   color: var(--ci-text-muted);
   text-align: center;
 }
@@ -326,17 +389,40 @@
     135deg,
     var(--ci-brand-dim),
     var(--ci-brand-dark)
-  );
-  border-color: var(--ci-brand);
-  color: var(--ci-text-inverse);
-  box-shadow: var(--ci-shadow-brand), var(--ci-shadow-md);
+  ) !important;
+  border-color: var(--ci-brand) !important;
+  color: var(--ci-text-inverse) !important;
+  box-shadow: var(--ci-shadow-brand), var(--ci-shadow-md) !important;
 }
 .searchBtnActive:hover {
   transform: translateY(-2px);
-  box-shadow: var(--ci-shadow-brand), var(--ci-shadow-lg);
+  box-shadow: var(--ci-shadow-brand), var(--ci-shadow-lg) !important;
 }
+
+.searchBtnCompare {
+  background: linear-gradient(
+    135deg,
+    var(--ci-blue-dark),
+    var(--ci-blue)
+  ) !important;
+  border-color: var(--ci-blue) !important;
+  color: #fff !important;
+  box-shadow: var(--ci-blue-glow), var(--ci-shadow-md) !important;
+}
+.searchBtnCompare:hover {
+  transform: translateY(-2px);
+}
+
 .searchArrow {
   font-size: 1.1rem;
+}
+
+.samePlayerWarn {
+  font-family: var(--ci-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--ci-accent);
+  text-align: center;
 }
 
 /* ── Suggestions ────────────────────────────────────────────── */
@@ -347,7 +433,6 @@
   align-items: center;
   animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) 160ms both;
 }
-
 .suggestionsLabel {
   font-family: var(--ci-font-mono);
   font-size: 0.64rem;
@@ -355,7 +440,6 @@
   text-transform: uppercase;
   color: var(--ci-text-muted);
 }
-
 .suggestionsList {
   display: flex;
   align-items: center;
