@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./Navbar.module.css";
 import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
   const location = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   const links = [
     { to: "/dashboard", label: "Dashboard" },
@@ -14,7 +15,12 @@ const Navbar = () => {
     { to: "/players", label: "Players" },
     { to: "/venues", label: "Venues" },
     { to: "/matchups", label: "Matchups" },
+    { to: "/strategy", label: "Strategy" }, // ← NEW
   ];
+
+  const isActive = (to) =>
+    location.pathname === to ||
+    (to !== "/dashboard" && location.pathname.startsWith(to));
 
   return (
     <nav className={styles.navbar}>
@@ -29,9 +35,7 @@ const Navbar = () => {
           <li key={`${to}-${label}`} className={styles.navItem}>
             <Link
               to={to}
-              className={`${styles.navLink} ${
-                location.pathname === to ? styles.active : ""
-              }`}
+              className={`${styles.navLink} ${isActive(to) ? styles.active : ""}`}
             >
               {label}
             </Link>
