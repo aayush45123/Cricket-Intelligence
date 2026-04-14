@@ -1,3 +1,4 @@
+import Match from "../models/Match.js";
 import Delivery from "../models/Deliveries.js";
 
 /* ─────────────────────────────────────────────────────────────
@@ -6,30 +7,47 @@ import Delivery from "../models/Deliveries.js";
    ───────────────────────────────────────────────────────────── */
 export const getAllTeams = async (req, res) => {
   try {
-    const teams = await Delivery.aggregate([
-      {
-        $group: {
-          _id: "$batting_team",
-          matches: { $addToSet: "$match_id" },
-          totalRuns: { $sum: "$runs_total" },
-          totalWins: {
-            $sum: {
-              $cond: [{ $eq: ["$batting_team", "$match_won_by"] }, 1, 0],
+    const [matchStats, runStats] = await Promise.all([
+      Match.aggregate([
+        {
+          $project: {
+            teams: ["$teams.teamA.name", "$teams.teamB.name"],
+            winner: "$result.winner",
+          },
+        },
+        { $unwind: "$teams" },
+        {
+          $group: {
+            _id: "$teams",
+            totalMatches: { $sum: 1 },
+            totalWins: {
+              $sum: { $cond: [{ $eq: ["$winner", "$teams"] }, 1, 0] },
             },
           },
         },
-      },
-      {
-        $project: {
-          _id: 0,
-          teamName: "$_id",
-          totalMatches: { $size: "$matches" },
-          totalRuns: 1,
-          totalWins: 1,
+      ]),
+      Delivery.aggregate([
+        {
+          $group: {
+            _id: "$batting_team",
+            totalRuns: { $sum: "$runs_total" },
+          },
         },
-      },
-      { $sort: { totalWins: -1 } },
+      ]),
     ]);
+
+    const runStatsByTeam = new Map(
+      runStats.map((team) => [team._id, team.totalRuns]),
+    );
+
+    const teams = matchStats
+      .map((team) => ({
+        teamName: team._id,
+        totalMatches: team.totalMatches,
+        totalWins: team.totalWins,
+        totalRuns: runStatsByTeam.get(team._id) || 0,
+      }))
+      .sort((a, b) => b.totalWins - a.totalWins);
 
     res.json({ status: "success", data: teams });
   } catch (err) {
