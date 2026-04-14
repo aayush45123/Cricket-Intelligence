@@ -3,7 +3,7 @@ import express from "express";
 import {
   getAllTeams,
   getTeamStrategy,
-} from "../controllers/teamStrategy.controller.js";
+} from "../controllers/teamStrategyController.js";
 
 const router = express.Router();
 
