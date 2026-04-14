@@ -1,0 +1,128 @@
+/* ── BowlingComboChart.module.css ───────────────────────────── */
+.wrapper {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-md);
+  padding: var(--ci-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-4);
+  box-shadow: var(--ci-shadow-sm), var(--ci-shadow-inset);
+}
+
+.sortRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-3);
+  flex-wrap: wrap;
+}
+.sortLabel {
+  font-family: var(--ci-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+}
+.sortBtn {
+  padding: var(--ci-space-1) var(--ci-space-3);
+  background: transparent;
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-sm);
+  font-family: var(--ci-font-mono);
+  font-size: 0.64rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+  transition: all var(--ci-duration-sm) var(--ci-ease);
+}
+.sortBtn:hover {
+  color: var(--ci-text-secondary);
+  border-color: var(--ci-border-medium);
+}
+.sortActive {
+  background: rgba(255, 77, 109, 0.08) !important;
+  border-color: rgba(255, 77, 109, 0.35) !important;
+  color: var(--ci-danger) !important;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-2);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 28px 1fr auto;
+  align-items: center;
+  gap: var(--ci-space-4);
+  padding: var(--ci-space-3) var(--ci-space-3);
+  border-radius: var(--ci-radius-sm);
+  transition: background var(--ci-duration-sm) var(--ci-ease);
+}
+.row:hover {
+  background: var(--ci-bg-tertiary);
+}
+
+.rank {
+  font-family: var(--ci-font-display);
+  font-size: 1rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.bowlerInfo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-1);
+  min-width: 0;
+}
+.bowlerName {
+  font-family: var(--ci-font-display);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ci-text-primary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.barTrack {
+  height: 4px;
+  background: var(--ci-bg-tertiary);
+  border-radius: var(--ci-radius-full);
+  overflow: hidden;
+}
+.barFill {
+  height: 100%;
+  border-radius: var(--ci-radius-full);
+  transition: width 0.9s var(--ci-ease);
+}
+
+.stats {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-5);
+  flex-shrink: 0;
+}
+.statBlock {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-width: 36px;
+}
+.statLabel {
+  font-family: var(--ci-font-mono);
+  font-size: 0.56rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+}
+.statVal {
+  font-family: var(--ci-font-mono);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ci-text-secondary);
+}

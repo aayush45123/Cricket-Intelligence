@@ -1,0 +1,89 @@
+/* ── RunRateByOverChart.module.css ──────────────────────────── */
+.wrapper {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-md);
+  padding: var(--ci-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-4);
+  box-shadow: var(--ci-shadow-sm), var(--ci-shadow-inset);
+}
+
+.zoneLegend {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-5);
+  flex-wrap: wrap;
+}
+.zoneItem {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-2);
+  font-family: var(--ci-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.06em;
+  color: var(--ci-text-muted);
+}
+.zoneDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.avgLabel {
+  margin-left: auto;
+  font-family: var(--ci-font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  color: var(--ci-accent);
+}
+
+.chart {
+  height: 260px;
+}
+
+.tooltip {
+  background: var(--ci-bg-primary);
+  border: 1px solid var(--ci-border-medium);
+  border-radius: var(--ci-radius-sm);
+  padding: var(--ci-space-3) var(--ci-space-4);
+  box-shadow: var(--ci-shadow-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-2);
+  min-width: 130px;
+}
+.tooltipOver {
+  font-family: var(--ci-font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--ci-border-subtle);
+}
+.tooltipRow {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-2);
+}
+.tooltipDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+  flex-shrink: 0;
+}
+.tooltipKey {
+  flex: 1;
+  font-family: var(--ci-font-mono);
+  font-size: 0.62rem;
+  color: var(--ci-text-muted);
+}
+.tooltipVal {
+  font-family: var(--ci-font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--ci-text-primary);
+}
