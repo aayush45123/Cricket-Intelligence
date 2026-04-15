@@ -6,7 +6,8 @@ import iplMatchRoutes from "./routes/iplMatchRoutes.js";
 import matches from "./routes/matchRoutes.js";
 import venueRoutes from "./routes/venueRoutes.js";
 import matchupRoutes from "./routes/matchupRoutes.js";
-import teamStrategyRoutes from "./routes/teamStrategyRoutes.js"; // ← NEW
+import teamStrategyRoutes from "./routes/teamStrategyRoutes.js";
+import searchRoutes from "./routes/searchRoutes.js";
 
 dotenv.config();
 
@@ -22,10 +23,9 @@ app.use("/api/players", playerRoutes);
 app.use("/api/matches", matches);
 app.use("/api/venues", venueRoutes);
 app.use("/api/matchups", matchupRoutes);
-app.use("/api/strategy", teamStrategyRoutes); // ← NEW
+app.use("/api/strategy", teamStrategyRoutes);
+app.use("/api/search", searchRoutes);
 
 connectDB();
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
