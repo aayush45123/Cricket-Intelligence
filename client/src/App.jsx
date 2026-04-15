@@ -19,8 +19,9 @@ import VenueDetail from "./pages/VenueDetails/VenueDetails";
 import MatchupSearch from "./pages/MatchupSearch/MatchupSearch";
 import MatchupDetail from "./pages/MatchupDetail/MatchupDetail";
 import PlayerCompareDetail from "./pages/PlayerComparisionDetail/PlayerCompareDetail";
-import TeamStrategy from "./pages/TeamStrategy/TeamStrategy"; // ← NEW
-import TeamStrategyDetail from "./pages/TeamStrategyDetail/TeamStrategyDetail"; // ← NEW
+import TeamStrategy from "./pages/TeamStrategy/TeamStrategy";
+import TeamStrategyDetail from "./pages/TeamStrategyDetail/TeamStrategyDetail";
+import SearchPage from "./pages/SearchPage/SearchPage"; // ← NEW
 
 const App = () => {
   return (
@@ -29,16 +30,13 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/dashboard" element={<Dashboard />} />
-
         <Route path="/leaderboard" element={<Leaderboard />} />
-
         <Route path="/matches" element={<Matches />} />
         <Route path="/matches/:matchId" element={<MatchInsight />} />
         <Route
           path="/matches/:matchId/deep-analytics"
           element={<MatchDeepAnalytics />}
         />
-
         <Route path="/bowlers" element={<Bowlers />} />
         <Route
           path="/players/bowling-analytics/:playerName"
@@ -49,23 +47,19 @@ const App = () => {
           path="/players/batting-analytics/:playerName"
           element={<BattingStats />}
         />
-
         <Route path="/players" element={<Players />} />
         <Route path="/players/:playerName" element={<PlayerDetail />} />
-
         <Route path="/venues" element={<Venues />} />
         <Route path="/venues/:venue" element={<VenueDetail />} />
-
         <Route path="/matchups" element={<MatchupSearch />} />
         <Route path="/matchups/:batter/:bowler" element={<MatchupDetail />} />
         <Route
           path="/compare/:playerA/:playerB"
           element={<PlayerCompareDetail />}
         />
-
-        {/* ── Team Strategy ── */}
         <Route path="/strategy" element={<TeamStrategy />} />
         <Route path="/strategy/:team" element={<TeamStrategyDetail />} />
+        <Route path="/search" element={<SearchPage />} /> {/* ← NEW */}
       </Routes>
       <Footer />
     </>
