@@ -5,6 +5,7 @@ import WormChart from "../../components/charts/WormChart/WormChart";
 import WinProbabilityChart from "../../components/charts/WinProbabilityChart/WinProbabilityChart";
 import MomentumChart from "../../components/charts/MomentumChart/MomentumChart";
 import KeyMomentsTimeline from "../../components/charts/KeyMomentsTimeline/KeyMomentsTimeline";
+import MatchStoryCard from "../../components/MatchStoryCard/MatchStoryCard";
 
 const SectionHeader = ({ label, accent = "var(--ci-brand)", tag }) => (
   <div className={styles.sectionHeader}>
@@ -33,7 +34,7 @@ const MatchDeepAnalytics = () => {
   const [activeInnings, setActiveInnings] = useState("both");
 
   useEffect(() => {
-    const fetchData = async () => {
+    (async () => {
       try {
         const res = await fetch(`/api/matches/${matchId}/deep-analytics`);
         const result = await res.json();
@@ -44,8 +45,7 @@ const MatchDeepAnalytics = () => {
       } finally {
         setLoading(false);
       }
-    };
-    fetchData();
+    })();
   }, [matchId]);
 
   if (loading)
@@ -103,7 +103,7 @@ const MatchDeepAnalytics = () => {
           </div>
         </div>
 
-        {/* HERO SCORECARD */}
+        {/* HERO */}
         <section className={styles.hero}>
           <div className={styles.heroTeams}>
             <div className={styles.heroTeamBlock}>
@@ -186,6 +186,16 @@ const MatchDeepAnalytics = () => {
             accent="var(--ci-brand)"
           />
         </div>
+
+        {/* ── MATCH STORY ──────────────────────────────────────── */}
+        <section className={styles.section}>
+          <SectionHeader
+            label="Match Story"
+            accent="var(--ci-accent)"
+            tag="Powered by Claude AI"
+          />
+          <MatchStoryCard data={data} />
+        </section>
 
         {/* WORM GRAPH */}
         <section className={styles.section}>
