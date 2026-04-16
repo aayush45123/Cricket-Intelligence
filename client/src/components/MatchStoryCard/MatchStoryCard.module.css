@@ -1,0 +1,351 @@
+/* ── MatchStoryCard.module.css ──────────────────────────────── */
+
+.card {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border-medium);
+  border-radius: var(--ci-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--ci-shadow-md);
+  position: relative;
+  transition: box-shadow var(--ci-duration-md) var(--ci-ease);
+}
+
+/* Top gradient line — book-open gold */
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(
+    90deg,
+    var(--ci-accent-dark),
+    var(--ci-accent),
+    #ffd97d,
+    var(--ci-accent),
+    var(--ci-accent-dark)
+  );
+}
+
+/* ── Header ─────────────────────────────────────────────────── */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ci-space-4);
+  padding: var(--ci-space-5) var(--ci-space-6);
+  border-bottom: 1px solid var(--ci-border);
+  background: var(--ci-bg-tertiary);
+}
+
+.headerLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-4);
+}
+
+.headerIcon {
+  font-size: 1.6rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.title {
+  font-family: var(--ci-font-display);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ci-text-primary);
+  line-height: 1;
+}
+
+.subtitle {
+  font-family: var(--ci-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--ci-text-muted);
+  margin-top: 4px;
+}
+
+/* ── Generate Button ────────────────────────────────────────── */
+.generateBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--ci-space-2);
+  padding: var(--ci-space-3) var(--ci-space-5);
+  background: linear-gradient(135deg, var(--ci-accent-dark), var(--ci-accent));
+  border: none;
+  border-radius: var(--ci-radius-md);
+  font-family: var(--ci-font-display);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ci-text-inverse);
+  box-shadow: var(--ci-shadow-accent);
+  transition: all var(--ci-duration-sm) var(--ci-ease);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.generateBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 24px rgba(245, 155, 0, 0.3);
+}
+
+.generateBtn:active {
+  transform: translateY(0);
+}
+
+.regenerateBtn {
+  background: var(--ci-bg-quaternary) !important;
+  color: var(--ci-text-secondary) !important;
+  border: 1px solid var(--ci-border-medium) !important;
+  box-shadow: none !important;
+}
+.regenerateBtn:hover {
+  color: var(--ci-accent) !important;
+  border-color: var(--ci-border-accent) !important;
+  background: var(--ci-accent-subtle) !important;
+  box-shadow: none !important;
+}
+
+/* ── Loading State ──────────────────────────────────────────── */
+.loadingState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--ci-space-5);
+  padding: var(--ci-space-12) var(--ci-space-6);
+}
+
+.loadingDots {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-2);
+}
+
+.loadingDots span {
+  width: 8px;
+  height: 8px;
+  background: var(--ci-accent);
+  border-radius: 50%;
+  animation: bounce 1.2s ease-in-out infinite;
+}
+.loadingDots span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.loadingDots span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes bounce {
+  0%,
+  80%,
+  100% {
+    transform: scale(0.7);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.loadingText {
+  font-family: var(--ci-font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+  text-align: center;
+}
+
+/* ── Error State ────────────────────────────────────────────── */
+.errorState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ci-space-3);
+  padding: var(--ci-space-8) var(--ci-space-6);
+}
+
+.errorIcon {
+  font-size: 1.5rem;
+}
+
+.errorText {
+  font-family: var(--ci-font-mono);
+  font-size: 0.76rem;
+  letter-spacing: 0.06em;
+  color: var(--ci-danger);
+  text-align: center;
+}
+
+.retryBtn {
+  padding: var(--ci-space-2) var(--ci-space-5);
+  background: transparent;
+  border: 1px solid rgba(255, 77, 109, 0.4);
+  border-radius: var(--ci-radius-sm);
+  font-family: var(--ci-font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-danger);
+  transition: all var(--ci-duration-sm) var(--ci-ease);
+}
+.retryBtn:hover {
+  background: rgba(255, 77, 109, 0.08);
+}
+
+/* ── Idle / Prompt State ────────────────────────────────────── */
+.idleState {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--ci-space-5);
+  padding: var(--ci-space-10) var(--ci-space-8);
+  text-align: center;
+}
+
+.idleTeams {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-4);
+}
+
+.idleTeam {
+  font-family: var(--ci-font-display);
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.idleVs {
+  font-family: var(--ci-font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ci-text-disabled);
+  padding: 3px 10px;
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-sm);
+}
+
+.idlePrompt {
+  font-size: 0.88rem;
+  color: var(--ci-text-secondary);
+  max-width: 500px;
+  line-height: 1.7;
+}
+
+.idlePrompt strong {
+  color: var(--ci-accent);
+}
+
+.idleFeatures {
+  display: flex;
+  align-items: center;
+  gap: var(--ci-space-4);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.idleFeature {
+  font-family: var(--ci-font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.06em;
+  color: var(--ci-text-muted);
+  padding: var(--ci-space-1) var(--ci-space-3);
+  background: var(--ci-bg-tertiary);
+  border: 1px solid var(--ci-border);
+  border-radius: var(--ci-radius-full);
+}
+
+/* ── Story Body ─────────────────────────────────────────────── */
+.storyBody {
+  padding: var(--ci-space-7) var(--ci-space-7);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-5);
+}
+
+.para {
+  font-size: 0.97rem;
+  color: var(--ci-text-secondary);
+  line-height: 1.85;
+  letter-spacing: 0.01em;
+}
+
+.paraLead {
+  font-size: 1.08rem;
+  color: var(--ci-text-primary);
+  font-weight: 500;
+  line-height: 1.75;
+}
+
+/* Subtle left quote bar on lead paragraph */
+.paraLead::before {
+  content: "";
+  display: inline-block;
+  width: 3px;
+  height: 1.1em;
+  background: var(--ci-accent);
+  border-radius: 2px;
+  margin-right: var(--ci-space-3);
+  vertical-align: middle;
+  flex-shrink: 0;
+}
+
+/* Blinking cursor */
+.cursor {
+  display: inline-block;
+  margin-left: 2px;
+  color: var(--ci-accent);
+  font-weight: 300;
+  animation: blink 0.7s step-start infinite;
+}
+
+@keyframes blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+}
+
+/* ── Story Footer ───────────────────────────────────────────── */
+.storyFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--ci-space-4);
+  padding-top: var(--ci-space-4);
+  border-top: 1px solid var(--ci-border-subtle);
+  flex-wrap: wrap;
+}
+
+.storyFooterBadge {
+  font-family: var(--ci-font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.1em;
+  color: var(--ci-accent);
+  padding: 3px 10px;
+  border: 1px solid var(--ci-border-accent);
+  border-radius: var(--ci-radius-full);
+  background: var(--ci-accent-subtle);
+}
+
+.storyFooterNote {
+  font-family: var(--ci-font-mono);
+  font-size: 0.58rem;
+  letter-spacing: 0.06em;
+  color: var(--ci-text-disabled);
+  font-style: italic;
+}
