@@ -72,7 +72,7 @@ export const getMatchById = async (req, res) => {
           runs: { $sum: "$runs_total" },
           wickets: {
             $sum: {
-              $cond: [{ $ifNull: ["$wicket_kind", false] }, 1, 0],
+              $cond: [{ $eq: [{ $ifNull: ["$bowler_wicket", 0] }, 1] }, 1, 0],
             },
           },
           balls: {
