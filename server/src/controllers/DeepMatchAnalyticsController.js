@@ -212,10 +212,6 @@ const buildKeyMoments = (inn1, inn2) => {
   );
 };
 
-/* ─────────────────────────────────────────────────────────────
-   MAIN CONTROLLER
-   GET /api/matches/:matchId/deep-analytics
-   ───────────────────────────────────────────────────────────── */
 export const getDeepMatchAnalytics = async (req, res) => {
   try {
     const matchId = req.params.matchId;
