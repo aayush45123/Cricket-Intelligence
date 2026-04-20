@@ -1,0 +1,159 @@
+/* ── AuthPage.module.css ────────────────────────────────────── */
+.page {
+  min-height: 100vh;
+  padding-top: var(--ci-nav-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ci-nav-height) var(--ci-space-4) var(--ci-space-16);
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border-medium);
+  border-radius: var(--ci-radius-xl);
+  overflow: hidden;
+  box-shadow: var(--ci-shadow-lg);
+}
+
+.cardTop {
+  padding: var(--ci-space-8) var(--ci-space-8) var(--ci-space-6);
+  background: var(--ci-bg-tertiary);
+  border-bottom: 1px solid var(--ci-border);
+}
+
+.logo {
+  font-family: var(--ci-font-display);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ci-text-secondary);
+  margin-bottom: var(--ci-space-4);
+}
+.logo span {
+  color: var(--ci-brand);
+}
+
+.title {
+  font-family: var(--ci-font-display);
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: var(--ci-text-primary);
+  line-height: 1.1;
+  margin: 0 0 var(--ci-space-2);
+}
+
+.sub {
+  font-family: var(--ci-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--ci-text-muted);
+  line-height: 1.6;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-4);
+  padding: var(--ci-space-7) var(--ci-space-8);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ci-space-1);
+}
+.label {
+  font-family: var(--ci-font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ci-text-muted);
+}
+
+.input {
+  padding: var(--ci-space-3) var(--ci-space-4);
+  background: var(--ci-bg-tertiary);
+  border: 1px solid var(--ci-border-medium);
+  border-radius: var(--ci-radius-md);
+  font-family: var(--ci-font-mono);
+  font-size: 0.88rem;
+  color: var(--ci-text-primary);
+  outline: none;
+  transition:
+    border-color var(--ci-duration-sm) var(--ci-ease),
+    box-shadow var(--ci-duration-sm) var(--ci-ease);
+}
+.input::placeholder {
+  color: var(--ci-text-muted);
+}
+.input:focus {
+  border-color: var(--ci-border-brand);
+  box-shadow: 0 0 0 3px var(--ci-brand-glow);
+}
+
+.error {
+  font-family: var(--ci-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--ci-danger);
+  padding: var(--ci-space-3) var(--ci-space-4);
+  background: rgba(255, 77, 109, 0.08);
+  border: 1px solid rgba(255, 77, 109, 0.3);
+  border-radius: var(--ci-radius-sm);
+}
+
+.submitBtn {
+  padding: var(--ci-space-4);
+  background: linear-gradient(
+    135deg,
+    var(--ci-brand-dim),
+    var(--ci-brand-dark)
+  );
+  border: 1px solid var(--ci-brand);
+  border-radius: var(--ci-radius-md);
+  font-family: var(--ci-font-display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ci-text-inverse);
+  transition: all var(--ci-duration-sm) var(--ci-ease);
+}
+.submitBtn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: var(--ci-shadow-brand);
+}
+.submitBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.switchMode {
+  text-align: center;
+  padding: var(--ci-space-4) var(--ci-space-8) var(--ci-space-6);
+  font-family: var(--ci-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+  color: var(--ci-text-muted);
+}
+.switchBtn {
+  background: none;
+  border: none;
+  color: var(--ci-brand);
+  font-family: inherit;
+  font-size: inherit;
+  letter-spacing: inherit;
+  margin-left: var(--ci-space-2);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.switchBtn:hover {
+  opacity: 0.8;
+}
