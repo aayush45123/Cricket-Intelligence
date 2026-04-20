@@ -1,6 +1,6 @@
 import crypto from "crypto";
-import UserMatch from "../models/UserMatch.model.js";
-import UserDelivery from "../models/UserDelivery.model.js";
+import UserMatch from "../models/UserMatch.js";
+import UserDelivery from "../models/UserDelivery.js";
 
 /* ── Helpers ─────────────────────────────────────────────── */
 const phaseOf = (over) =>

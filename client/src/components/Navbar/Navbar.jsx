@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import styles from "./Navbar.module.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 /* ── Quick Search Modal ───────────────────────────────────────── */
 const QuickSearchModal = ({ onClose }) => {
@@ -10,12 +11,10 @@ const QuickSearchModal = ({ onClose }) => {
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
-  /* Auto-focus on open */
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
 
-  /* Close on Escape */
   useEffect(() => {
     const h = (e) => {
       if (e.key === "Escape") onClose();
@@ -24,7 +23,6 @@ const QuickSearchModal = ({ onClose }) => {
     return () => document.removeEventListener("keydown", h);
   }, [onClose]);
 
-  /* Debounced search */
   useEffect(() => {
     if (query.length < 2) {
       setResults([]);
@@ -60,7 +58,6 @@ const QuickSearchModal = ({ onClose }) => {
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
       <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        {/* Input */}
         <div className={styles.modalInputRow}>
           <span className={styles.modalSearchIcon}>⌕</span>
           <input
@@ -79,7 +76,6 @@ const QuickSearchModal = ({ onClose }) => {
           </button>
         </div>
 
-        {/* Results */}
         {results.length > 0 && (
           <div className={styles.modalResults}>
             {results.map((name) => (
@@ -101,38 +97,9 @@ const QuickSearchModal = ({ onClose }) => {
               </button>
             ))}
 
-            {/* View all in search page */}
             <button className={styles.modalViewAll} onClick={goToSearch}>
-              View all results for "{query}" in Advanced Search →
+              View all results →
             </button>
-          </div>
-        )}
-
-        {query.length >= 2 && results.length === 0 && !loading && (
-          <div className={styles.modalEmpty}>
-            <p>No players found for "{query}"</p>
-            <button className={styles.modalViewAll} onClick={goToSearch}>
-              Try Advanced Search →
-            </button>
-          </div>
-        )}
-
-        {/* Shortcuts hint */}
-        {query.length === 0 && (
-          <div className={styles.modalHints}>
-            <span className={styles.modalHintItem}>
-              <kbd>↵</kbd> Advanced Search
-            </span>
-            <span className={styles.modalHintItem}>
-              <kbd>Esc</kbd> Close
-            </span>
-            <Link
-              to="/search"
-              onClick={onClose}
-              className={styles.modalHintLink}
-            >
-              Open Advanced Search with Filters →
-            </Link>
           </div>
         )}
       </div>
@@ -146,6 +113,8 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [searchOpen, setSearchOpen] = useState(false);
 
+  const { isAuthenticated, user, logout } = useAuth();
+
   const links = [
     { to: "/dashboard", label: "Dashboard" },
     { to: "/leaderboard", label: "Leaderboard" },
@@ -156,13 +125,16 @@ const Navbar = () => {
     { to: "/venues", label: "Venues" },
     { to: "/matchups", label: "Matchups" },
     { to: "/strategy", label: "Strategy" },
+
+    // 🔥 Auth-based links
+    ...(isAuthenticated ? [{ to: "/my-matches", label: "My Matches" }] : []),
   ];
 
   const isActive = (to) =>
     location.pathname === to ||
     (to !== "/dashboard" && location.pathname.startsWith(to));
 
-  /* Open modal on Ctrl+K / Cmd+K */
+  /* Ctrl + K Search */
   useEffect(() => {
     const h = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "k") {
@@ -177,6 +149,7 @@ const Navbar = () => {
   return (
     <>
       <nav className={styles.navbar}>
+        {/* LOGO */}
         <div className={styles.brand}>
           <Link to="/dashboard">
             <h2 className={styles.brandName}>
@@ -186,12 +159,15 @@ const Navbar = () => {
           </Link>
         </div>
 
+        {/* LINKS */}
         <ul className={styles.navList}>
           {links.map(({ to, label }) => (
-            <li key={`${to}-${label}`} className={styles.navItem}>
+            <li key={to} className={styles.navItem}>
               <Link
                 to={to}
-                className={`${styles.navLink} ${isActive(to) ? styles.active : ""}`}
+                className={`${styles.navLink} ${
+                  isActive(to) ? styles.active : ""
+                }`}
               >
                 {label}
               </Link>
@@ -199,27 +175,47 @@ const Navbar = () => {
           ))}
         </ul>
 
+        {/* RIGHT SIDE */}
         <div className={styles.navActions}>
-          {/* Search button — now functional */}
+          {/* SEARCH */}
           <button
             className={styles.searchBtn}
-            aria-label="Search"
             onClick={() => setSearchOpen(true)}
             title="Search (Ctrl+K)"
           >
-            <span className={styles.searchBtnIcon}>⌕</span>
-            <span className={styles.searchBtnKbd}>⌘K</span>
+            ⌕
           </button>
 
-          <div className={styles.liveBadge}>
-            <span className={styles.liveDot} />
-            LIVE
-          </div>
-          <div className={styles.avatar}>CK</div>
+          {/* 🔥 START MATCH BUTTON */}
+          {isAuthenticated && (
+            <button
+              className={styles.startBtn}
+              onClick={() => navigate("/my-matches/new")}
+            >
+              + Start Match
+            </button>
+          )}
+
+          {/* AUTH */}
+          {isAuthenticated ? (
+            <>
+              <span className={styles.userName}>{user?.name}</span>
+
+              <button className={styles.logoutBtn} onClick={logout}>
+                Logout
+              </button>
+            </>
+          ) : (
+            <button
+              className={styles.loginBtn}
+              onClick={() => navigate("/login")}
+            >
+              Login
+            </button>
+          )}
         </div>
       </nav>
 
-      {/* Search Modal */}
       {searchOpen && <QuickSearchModal onClose={() => setSearchOpen(false)} />}
     </>
   );
