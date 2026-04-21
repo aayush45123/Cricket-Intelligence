@@ -1,5 +1,4 @@
 /* ── Navbar.module.css ──────────────────────────────────────── */
-
 .navbar {
   position: fixed;
   top: 0;
@@ -19,7 +18,6 @@
     0 1px 0 var(--ci-border-subtle),
     var(--ci-shadow-sm);
 }
-
 .navbar::before {
   content: "";
   position: absolute;
@@ -38,7 +36,6 @@
   opacity: 0.6;
 }
 
-/* ── Brand ──────────────────────────────────────────────────── */
 .brand a {
   text-decoration: none;
 }
@@ -55,7 +52,6 @@
   color: var(--ci-brand);
 }
 
-/* ── Nav List ───────────────────────────────────────────────── */
 .navList {
   display: flex;
   align-items: center;
@@ -64,7 +60,6 @@
 .navItem {
   display: flex;
 }
-
 .navLink {
   position: relative;
   display: flex;
@@ -108,7 +103,6 @@
   transform: translateX(-50%) scaleX(1) !important;
 }
 
-/* ── Nav Actions ────────────────────────────────────────────── */
 .navActions {
   display: flex;
   align-items: center;
@@ -116,7 +110,6 @@
   flex-shrink: 0;
 }
 
-/* Search button — now shows keyboard shortcut */
 .searchBtn {
   display: flex;
   align-items: center;
@@ -153,6 +146,31 @@
   border: 1px solid var(--ci-border);
 }
 
+/* My Matches button */
+.myMatchesBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: var(--ci-space-2) var(--ci-space-4);
+  background: var(--ci-accent-subtle);
+  border: 1px solid var(--ci-border-accent);
+  border-radius: var(--ci-radius-sm);
+  font-family: var(--ci-font-mono);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ci-accent);
+  text-decoration: none;
+  transition: all var(--ci-duration-sm) var(--ci-ease);
+}
+.myMatchesBtn:hover,
+.myMatchesBtnActive {
+  background: var(--ci-accent) !important;
+  color: var(--ci-text-inverse) !important;
+  border-color: var(--ci-accent) !important;
+}
+
 .liveBadge {
   display: flex;
   align-items: center;
@@ -175,6 +193,30 @@
   border-radius: 50%;
   animation: ci-livePulse 1.8s ease-in-out infinite;
 }
+
+/* Auth */
+.loginBtn {
+  padding: var(--ci-space-2) var(--ci-space-4);
+  background: transparent;
+  border: 1px solid var(--ci-border-medium);
+  border-radius: var(--ci-radius-sm);
+  font-family: var(--ci-font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ci-text-secondary);
+  text-decoration: none;
+  transition: all var(--ci-duration-sm) var(--ci-ease);
+}
+.loginBtn:hover {
+  color: var(--ci-brand);
+  border-color: var(--ci-border-brand);
+  background: var(--ci-brand-subtle);
+}
+
+.userMenu {
+  position: relative;
+}
 .avatar {
   width: 34px;
   height: 34px;
@@ -193,12 +235,79 @@
   letter-spacing: 0.05em;
   color: var(--ci-text-inverse);
   border: 1px solid var(--ci-border-brand);
+  cursor: pointer;
+  transition: transform var(--ci-duration-sm) var(--ci-ease);
+}
+.avatar:hover {
+  transform: scale(1.05);
 }
 
-/* ═══════════════════════════════════════════════════════════════
-   SEARCH MODAL
-═══════════════════════════════════════════════════════════════ */
+.userDropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 200px;
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border-medium);
+  border-radius: var(--ci-radius-md);
+  box-shadow: var(--ci-shadow-lg);
+  overflow: hidden;
+  z-index: 200;
+}
+.userInfo {
+  padding: var(--ci-space-4);
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+.userName {
+  font-family: var(--ci-font-display);
+  font-size: 0.88rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ci-text-primary);
+}
+.userEmail {
+  font-family: var(--ci-font-mono);
+  font-size: 0.66rem;
+  letter-spacing: 0.03em;
+  color: var(--ci-text-muted);
+}
+.userDivider {
+  height: 1px;
+  background: var(--ci-border-subtle);
+}
+.userMenuItem {
+  display: block;
+  width: 100%;
+  padding: var(--ci-space-3) var(--ci-space-4);
+  background: transparent;
+  border: none;
+  font-family: var(--ci-font-mono);
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ci-text-secondary);
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    background var(--ci-duration-sm) var(--ci-ease),
+    color var(--ci-duration-sm) var(--ci-ease);
+}
+.userMenuItem:hover {
+  background: var(--ci-bg-tertiary);
+  color: var(--ci-text-primary);
+}
+.userMenuLogout {
+  color: var(--ci-danger) !important;
+}
+.userMenuLogout:hover {
+  background: rgba(255, 77, 109, 0.08) !important;
+}
 
+/* ── Search Modal ───────────────────────────────────────────── */
 .modalOverlay {
   position: fixed;
   inset: 0;
@@ -211,7 +320,6 @@
   padding-top: 80px;
   animation: ci-fadeIn var(--ci-duration-md) var(--ci-ease) both;
 }
-
 .modal {
   width: 100%;
   max-width: 580px;
@@ -225,8 +333,6 @@
   overflow: hidden;
   animation: ci-fadeUp var(--ci-duration-md) var(--ci-ease) both;
 }
-
-/* Input row */
 .modalInputRow {
   display: flex;
   align-items: center;
@@ -273,14 +379,11 @@
   color: var(--ci-text-muted);
   padding: var(--ci-space-1) var(--ci-space-2);
   border-radius: var(--ci-radius-xs);
-  transition: color var(--ci-duration-sm) var(--ci-ease);
   flex-shrink: 0;
 }
 .modalClose:hover {
   color: var(--ci-text-secondary);
 }
-
-/* Results list */
 .modalResults {
   max-height: 360px;
   overflow-y: auto;
@@ -301,10 +404,6 @@
 .modalResult:hover {
   background: var(--ci-bg-tertiary);
 }
-.modalResult:last-of-type {
-  border-bottom: none;
-}
-
 .modalResultAvatar {
   width: 36px;
   height: 36px;
@@ -336,7 +435,6 @@
   transform: translateX(4px);
   color: var(--ci-brand);
 }
-
 .modalViewAll {
   display: block;
   width: 100%;
@@ -350,19 +448,12 @@
   color: var(--ci-brand);
   text-align: left;
   cursor: pointer;
-  transition: background var(--ci-duration-sm) var(--ci-ease);
 }
-.modalViewAll:hover {
-  background: var(--ci-bg-tertiary);
-}
-
-/* Empty state */
 .modalEmpty {
   padding: var(--ci-space-8) var(--ci-space-5);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--ci-space-4);
 }
 .modalEmpty p {
   font-family: var(--ci-font-mono);
@@ -370,8 +461,6 @@
   letter-spacing: 0.06em;
   color: var(--ci-text-muted);
 }
-
-/* Hints */
 .modalHints {
   display: flex;
   align-items: center;
@@ -405,8 +494,4 @@
   letter-spacing: 0.06em;
   color: var(--ci-brand);
   text-decoration: none;
-  transition: opacity var(--ci-duration-sm) var(--ci-ease);
-}
-.modalHintLink:hover {
-  opacity: 0.8;
 }
