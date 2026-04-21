@@ -3,7 +3,6 @@ import styles from "./Navbar.module.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
-/* ── Quick Search Modal ───────────────────────────────────────── */
 const QuickSearchModal = ({ onClose }) => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
@@ -14,7 +13,6 @@ const QuickSearchModal = ({ onClose }) => {
   useEffect(() => {
     inputRef.current?.focus();
   }, []);
-
   useEffect(() => {
     const h = (e) => {
       if (e.key === "Escape") onClose();
@@ -34,8 +32,8 @@ const QuickSearchModal = ({ onClose }) => {
         const res = await fetch(
           `/api/search/quick?q=${encodeURIComponent(query)}`,
         );
-        const result = await res.json();
-        setResults(result.data || []);
+        const d = await res.json();
+        setResults(d.data || []);
       } catch {
         setResults([]);
       } finally {
@@ -44,16 +42,6 @@ const QuickSearchModal = ({ onClose }) => {
     }, 220);
     return () => clearTimeout(t);
   }, [query]);
-
-  const goToPlayer = (name) => {
-    navigate(`/players/${encodeURIComponent(name)}`);
-    onClose();
-  };
-
-  const goToSearch = () => {
-    navigate(`/search?q=${encodeURIComponent(query)}`);
-    onClose();
-  };
 
   return (
     <div className={styles.modalOverlay} onClick={onClose}>
@@ -67,7 +55,10 @@ const QuickSearchModal = ({ onClose }) => {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={(e) => {
-              if (e.key === "Enter" && query.length > 1) goToSearch();
+              if (e.key === "Enter" && query.length > 1) {
+                navigate(`/search?q=${encodeURIComponent(query)}`);
+                onClose();
+              }
             }}
           />
           {loading && <div className={styles.modalSpinner} />}
@@ -75,14 +66,16 @@ const QuickSearchModal = ({ onClose }) => {
             ✕
           </button>
         </div>
-
         {results.length > 0 && (
           <div className={styles.modalResults}>
             {results.map((name) => (
               <button
                 key={name}
                 className={styles.modalResult}
-                onClick={() => goToPlayer(name)}
+                onClick={() => {
+                  navigate(`/players/${encodeURIComponent(name)}`);
+                  onClose();
+                }}
               >
                 <span className={styles.modalResultAvatar}>
                   {name
@@ -96,10 +89,37 @@ const QuickSearchModal = ({ onClose }) => {
                 <span className={styles.modalResultArrow}>→</span>
               </button>
             ))}
-
-            <button className={styles.modalViewAll} onClick={goToSearch}>
-              View all results →
+            <button
+              className={styles.modalViewAll}
+              onClick={() => {
+                navigate(`/search?q=${encodeURIComponent(query)}`);
+                onClose();
+              }}
+            >
+              View all results in Advanced Search →
             </button>
+          </div>
+        )}
+        {query.length >= 2 && results.length === 0 && !loading && (
+          <div className={styles.modalEmpty}>
+            <p>No players found for "{query}"</p>
+          </div>
+        )}
+        {query.length === 0 && (
+          <div className={styles.modalHints}>
+            <span className={styles.modalHintItem}>
+              <kbd>↵</kbd> Advanced Search
+            </span>
+            <span className={styles.modalHintItem}>
+              <kbd>Esc</kbd> Close
+            </span>
+            <Link
+              to="/search"
+              onClick={onClose}
+              className={styles.modalHintLink}
+            >
+              Open Advanced Search →
+            </Link>
           </div>
         )}
       </div>
@@ -107,13 +127,13 @@ const QuickSearchModal = ({ onClose }) => {
   );
 };
 
-/* ── Navbar ───────────────────────────────────────────────────── */
 const Navbar = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { user, logout, isAuthenticated } = useAuth();
   const [searchOpen, setSearchOpen] = useState(false);
-
-  const { isAuthenticated, user, logout } = useAuth();
+  const [menuOpen, setMenuOpen] = useState(false);
+  const menuRef = useRef(null);
 
   const links = [
     { to: "/dashboard", label: "Dashboard" },
@@ -125,16 +145,12 @@ const Navbar = () => {
     { to: "/venues", label: "Venues" },
     { to: "/matchups", label: "Matchups" },
     { to: "/strategy", label: "Strategy" },
-
-    // 🔥 Auth-based links
-    ...(isAuthenticated ? [{ to: "/my-matches", label: "My Matches" }] : []),
   ];
 
   const isActive = (to) =>
     location.pathname === to ||
     (to !== "/dashboard" && location.pathname.startsWith(to));
 
-  /* Ctrl + K Search */
   useEffect(() => {
     const h = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "k") {
@@ -146,10 +162,18 @@ const Navbar = () => {
     return () => document.removeEventListener("keydown", h);
   }, []);
 
+  useEffect(() => {
+    const h = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target))
+        setMenuOpen(false);
+    };
+    document.addEventListener("mousedown", h);
+    return () => document.removeEventListener("mousedown", h);
+  }, []);
+
   return (
     <>
       <nav className={styles.navbar}>
-        {/* LOGO */}
         <div className={styles.brand}>
           <Link to="/dashboard">
             <h2 className={styles.brandName}>
@@ -159,15 +183,12 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* LINKS */}
         <ul className={styles.navList}>
           {links.map(({ to, label }) => (
             <li key={to} className={styles.navItem}>
               <Link
                 to={to}
-                className={`${styles.navLink} ${
-                  isActive(to) ? styles.active : ""
-                }`}
+                className={`${styles.navLink} ${isActive(to) ? styles.active : ""}`}
               >
                 {label}
               </Link>
@@ -175,43 +196,78 @@ const Navbar = () => {
           ))}
         </ul>
 
-        {/* RIGHT SIDE */}
         <div className={styles.navActions}>
-          {/* SEARCH */}
           <button
             className={styles.searchBtn}
             onClick={() => setSearchOpen(true)}
             title="Search (Ctrl+K)"
           >
-            ⌕
+            <span className={styles.searchBtnIcon}>⌕</span>
+            <span className={styles.searchBtnKbd}>⌘K</span>
           </button>
 
-          {/* 🔥 START MATCH BUTTON */}
           {isAuthenticated && (
-            <button
-              className={styles.startBtn}
-              onClick={() => navigate("/my-matches/new")}
+            <Link
+              to="/my-matches"
+              className={`${styles.myMatchesBtn} ${isActive("/my-matches") ? styles.myMatchesBtnActive : ""}`}
             >
-              + Start Match
-            </button>
+              My Matches
+            </Link>
           )}
 
-          {/* AUTH */}
-          {isAuthenticated ? (
-            <>
-              <span className={styles.userName}>{user?.name}</span>
+          <div className={styles.liveBadge}>
+            <span className={styles.liveDot} />
+            LIVE
+          </div>
 
-              <button className={styles.logoutBtn} onClick={logout}>
-                Logout
+          {isAuthenticated ? (
+            <div className={styles.userMenu} ref={menuRef}>
+              <button
+                className={styles.avatar}
+                onClick={() => setMenuOpen((v) => !v)}
+                title={user?.name}
+              >
+                {user?.name?.slice(0, 2).toUpperCase() || "ME"}
               </button>
-            </>
+              {menuOpen && (
+                <div className={styles.userDropdown}>
+                  <div className={styles.userInfo}>
+                    <span className={styles.userName}>{user?.name}</span>
+                    <span className={styles.userEmail}>{user?.email}</span>
+                  </div>
+                  <div className={styles.userDivider} />
+                  <Link
+                    to="/my-matches"
+                    className={styles.userMenuItem}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    My Matches
+                  </Link>
+                  <Link
+                    to="/my-matches/new"
+                    className={styles.userMenuItem}
+                    onClick={() => setMenuOpen(false)}
+                  >
+                    Start New Match
+                  </Link>
+                  <div className={styles.userDivider} />
+                  <button
+                    className={`${styles.userMenuItem} ${styles.userMenuLogout}`}
+                    onClick={() => {
+                      logout();
+                      navigate("/dashboard");
+                      setMenuOpen(false);
+                    }}
+                  >
+                    Sign out
+                  </button>
+                </div>
+              )}
+            </div>
           ) : (
-            <button
-              className={styles.loginBtn}
-              onClick={() => navigate("/login")}
-            >
-              Login
-            </button>
+            <Link to="/login" className={styles.loginBtn}>
+              Sign in
+            </Link>
           )}
         </div>
       </nav>
