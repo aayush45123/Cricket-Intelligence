@@ -24,7 +24,7 @@ export const AuthProvider = ({ children }) => {
         const res = await fetch("/api/auth/me", {
           headers: { Authorization: `Bearer ${token}` },
         });
-        const result = await res.json();
+        const result = await parseResponseBody(res);
         if (res.ok) setUser(result.data.user);
         else logout();
       } catch {
@@ -37,31 +37,43 @@ export const AuthProvider = ({ children }) => {
   }, [token]);
 
   const login = useCallback(async (email, password) => {
-    const res = await fetch("/api/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password }),
-    });
-    const result = await res.json();
-    if (!res.ok) throw new Error(result.message || "Login failed");
-    localStorage.setItem("ci_token", result.token);
-    setToken(result.token);
-    setUser(result.data.user);
-    return result.data.user;
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const result = await parseResponseBody(res);
+      if (!res.ok)
+        throw new Error(getErrorMessage(res, result, "Login failed"));
+      localStorage.setItem("ci_token", result.token);
+      setToken(result.token);
+      setUser(result.data.user);
+      return result.data.user;
+    } catch (error) {
+      if (error instanceof Error) throw error;
+      throw new Error("Unable to connect to API server. Please try again.");
+    }
   }, []);
 
   const register = useCallback(async (name, email, password) => {
-    const res = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email, password }),
-    });
-    const result = await res.json();
-    if (!res.ok) throw new Error(result.message || "Registration failed");
-    localStorage.setItem("ci_token", result.token);
-    setToken(result.token);
-    setUser(result.data.user);
-    return result.data.user;
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, password }),
+      });
+      const result = await parseResponseBody(res);
+      if (!res.ok)
+        throw new Error(getErrorMessage(res, result, "Registration failed"));
+      localStorage.setItem("ci_token", result.token);
+      setToken(result.token);
+      setUser(result.data.user);
+      return result.data.user;
+    } catch (error) {
+      if (error instanceof Error) throw error;
+      throw new Error("Unable to connect to API server. Please try again.");
+    }
   }, []);
 
   const logout = useCallback(() => {
@@ -81,7 +93,7 @@ export const AuthProvider = ({ children }) => {
           ...(token ? { Authorization: `Bearer ${token}` } : {}),
         },
       });
-      const data = await res.json();
+      const data = await parseResponseBody(res);
       if (res.status === 401) logout();
       return { ok: res.ok, status: res.status, data };
     },
