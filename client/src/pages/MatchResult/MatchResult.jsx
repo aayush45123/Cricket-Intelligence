@@ -4,7 +4,7 @@ import { useAuth } from "../../context/AuthContext";
 import styles from "./MatchResult.module.css";
 import WormChart from "../../components/charts/WormChart/WormChart";
 import MomentumChart from "../../components/charts/MomentumChart/MomentumChart";
-import MatchStoryCard from "../../components/charts/MatchStoryCard/MatchStoryCard";
+// import MatchStoryCard from "../../components/charts/MatchStoryCard/MatchStoryCard";
 
 const SectionHeader = ({ label, accent }) => (
   <div className={styles.sectionHeader}>
