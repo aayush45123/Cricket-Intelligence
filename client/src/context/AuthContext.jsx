@@ -8,6 +8,39 @@ import React, {
 
 const AuthContext = createContext(null);
 
+const parseResponseBody = async (res) => {
+  const contentType = res.headers.get("content-type") || "";
+
+  if (contentType.includes("application/json")) {
+    try {
+      return await res.json();
+    } catch {
+      return null;
+    }
+  }
+
+  try {
+    const text = await res.text();
+    return text ? { message: text } : null;
+  } catch {
+    return null;
+  }
+};
+
+const getErrorMessage = (res, result, fallback) => {
+  if (result && typeof result === "object") {
+    if (typeof result.message === "string" && result.message.trim()) {
+      return result.message;
+    }
+    if (typeof result.error === "string" && result.error.trim()) {
+      return result.error;
+    }
+  }
+
+  if (res.status >= 500) return "Server error. Please try again.";
+  return fallback;
+};
+
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(() => localStorage.getItem("ci_token"));
