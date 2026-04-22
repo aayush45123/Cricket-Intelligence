@@ -187,7 +187,7 @@ const MatchSetup = () => {
                   value={totalOvers}
                   onChange={(e) => setTotalOvers(e.target.value)}
                 >
-                  {[5, 10, 15, 20, 25, 30, 40, 50].map((o) => (
+                  {[2, 5, 10, 15, 20, 25, 30, 40, 50].map((o) => (
                     <option key={o} value={o}>
                       {o} overs
                     </option>
