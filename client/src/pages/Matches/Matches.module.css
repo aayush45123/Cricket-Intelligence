@@ -1,30 +1,22 @@
-/* ── Matches.module.css ─────────────────────────────────────── */
+/* ── Matches.module.css — Sharp & Professional ──────────────── */
 
 .page {
-  min-height: 100vh;
-  padding-top: var(--ci-nav-height);
-  position: relative;
-  z-index: 1;
+  width: 100%;
 }
 
 .main {
-  max-width: var(--ci-max-width);
+  max-width: 1400px;
   margin: 0 auto;
-  padding: var(--ci-space-10) var(--ci-space-6) var(--ci-space-16);
 }
 
 .heading {
-  font-family: var(--ci-font-display);
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: 1.75rem;
   font-weight: 800;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
   color: var(--ci-text-primary);
-  line-height: 1;
-  margin-bottom: var(--ci-space-8);
-  padding-bottom: var(--ci-space-6);
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
   border-bottom: 1px solid var(--ci-border);
-  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) both;
 }
 
 .heading::after {
@@ -35,129 +27,79 @@
 /* ── Grid ───────────────────────────────────────────────────── */
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: var(--ci-space-5);
-  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) 80ms both;
+  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  gap: 24px;
 }
 
 /* ── Card ───────────────────────────────────────────────────── */
 .card {
   background: var(--ci-bg-secondary);
   border: 1px solid var(--ci-border);
-  border-radius: var(--ci-radius-md);
-  padding: var(--ci-space-5) var(--ci-space-5);
+  border-radius: 4px; /* Sharp 4px */
+  padding: 20px 24px;
   display: flex;
   flex-direction: column;
-  gap: var(--ci-space-2);
+  gap: 12px;
   box-shadow: var(--ci-shadow-sm);
-  transition:
-    border-color var(--ci-duration-md) var(--ci-ease),
-    transform var(--ci-duration-md) var(--ci-ease),
-    box-shadow var(--ci-duration-md) var(--ci-ease);
-  position: relative;
-  overflow: hidden;
-}
-
-.card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 3px;
-  height: 100%;
-  background: linear-gradient(
-    180deg,
-    var(--ci-brand) 0%,
-    var(--ci-brand-dark) 100%
-  );
-  opacity: 0;
-  border-radius: 0 0 0 var(--ci-radius-md);
-  transition: opacity var(--ci-duration-md) var(--ci-ease);
+  transition: border-color var(--ci-duration-sm) var(--ci-ease), box-shadow var(--ci-duration-sm) var(--ci-ease);
 }
 
 .card:hover {
   border-color: var(--ci-border-medium);
-  transform: translateY(-3px);
   box-shadow: var(--ci-shadow-md);
 }
 
-.card:hover::before {
-  opacity: 1;
-}
-
 .cardTitle {
-  font-family: var(--ci-font-display);
-  font-size: 1.15rem;
+  font-size: 1.05rem;
   font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
   color: var(--ci-text-primary);
-  line-height: 1.2;
+  line-height: 1.3;
 }
 
 .vs {
-  font-family: var(--ci-font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
+  font-size: 0.75rem;
   color: var(--ci-text-muted);
-  text-transform: uppercase;
+  font-weight: 600;
   margin: 0 4px;
 }
 
 .cardMeta {
-  font-family: var(--ci-font-mono);
-  font-size: 0.72rem;
+  font-size: 0.8rem;
   color: var(--ci-text-muted);
-  letter-spacing: 0.04em;
+  line-height: 1.4;
 }
 
 .cardWinner {
-  margin-top: var(--ci-space-2);
-  font-size: 0.8rem;
+  font-size: 0.825rem;
   color: var(--ci-text-secondary);
-  font-family: var(--ci-font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.04em;
 }
 
 .cardWinner span {
-  color: var(--ci-brand);
-  font-weight: 500;
+  color: var(--ci-brand-dark);
+  font-weight: 600;
 }
 
 .insightBtn {
-  margin-top: var(--ci-space-3);
-  padding: var(--ci-space-2) var(--ci-space-4);
-  background: transparent;
+  margin-top: 8px;
+  padding: 6px 12px;
+  background: var(--ci-bg-tertiary);
   border: 1px solid var(--ci-border-brand);
-  border-radius: var(--ci-radius-sm);
-  font-family: var(--ci-font-mono);
-  font-size: 0.72rem;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ci-brand);
+  border-radius: 2px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ci-brand-dark);
   align-self: flex-start;
-  transition:
-    background var(--ci-duration-sm) var(--ci-ease),
-    box-shadow var(--ci-duration-sm) var(--ci-ease),
-    transform var(--ci-duration-sm) var(--ci-ease);
+  transition: all var(--ci-duration-sm) var(--ci-ease);
 }
 
 .insightBtn:hover {
-  background: var(--ci-brand-subtle);
-  box-shadow: var(--ci-shadow-brand);
-  transform: translateX(3px);
+  background: var(--ci-brand-light);
 }
 
 /* ── Status Text ────────────────────────────────────────────── */
 .statusText {
-  font-family: var(--ci-font-mono);
-  font-size: 0.8rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+  font-size: 0.9rem;
   color: var(--ci-text-muted);
-  padding: var(--ci-space-12) 0;
+  padding: 40px 0;
   text-align: center;
-  animation: ci-pulse 1.8s ease-in-out infinite;
 }

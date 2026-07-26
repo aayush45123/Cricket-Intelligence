@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider, useAuth } from "./context/AuthContext";
-import Navbar from "./components/Navbar/Navbar";
+import DashboardLayout from "./components/DashboardLayout/DashboardLayout";
 import Footer from "./components/Footer/Footer";
 import "./App.css";
 
@@ -39,86 +39,87 @@ const Protected = ({ children }) => {
 
 const App = () => (
   <AuthProvider>
-    <Navbar />
-    <Routes>
-      <Route path="/" element={<Dashboard />} />
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/leaderboard" element={<Leaderboard />} />
-      <Route path="/matches" element={<Matches />} />
-      <Route path="/matches/:matchId" element={<MatchInsight />} />
-      <Route
-        path="/matches/:matchId/deep-analytics"
-        element={<MatchDeepAnalytics />}
-      />
-      <Route path="/bowlers" element={<Bowlers />} />
-      <Route
-        path="/players/bowling-analytics/:playerName"
-        element={<BowlingStats />}
-      />
-      <Route path="/batsmen" element={<Batsmen />} />
-      <Route
-        path="/players/batting-analytics/:playerName"
-        element={<BattingStats />}
-      />
-      <Route path="/players" element={<Players />} />
-      <Route path="/players/:playerName" element={<PlayerDetail />} />
-      <Route path="/venues" element={<Venues />} />
-      <Route path="/venues/:venue" element={<VenueDetail />} />
-      <Route path="/matchups" element={<MatchupSearch />} />
-      <Route path="/matchups/:batter/:bowler" element={<MatchupDetail />} />
-      <Route
-        path="/compare/:playerA/:playerB"
-        element={<PlayerCompareDetail />}
-      />
-      <Route path="/strategy" element={<TeamStrategy />} />
-      <Route path="/strategy/:team" element={<TeamStrategyDetail />} />
-      <Route path="/search" element={<SearchPage />} />
+    <DashboardLayout>
+      <Routes>
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
+        <Route path="/matches" element={<Matches />} />
+        <Route path="/matches/:matchId" element={<MatchInsight />} />
+        <Route
+          path="/matches/:matchId/deep-analytics"
+          element={<MatchDeepAnalytics />}
+        />
+        <Route path="/bowlers" element={<Bowlers />} />
+        <Route
+          path="/players/bowling-analytics/:playerName"
+          element={<BowlingStats />}
+        />
+        <Route path="/batsmen" element={<Batsmen />} />
+        <Route
+          path="/players/batting-analytics/:playerName"
+          element={<BattingStats />}
+        />
+        <Route path="/players" element={<Players />} />
+        <Route path="/players/:playerName" element={<PlayerDetail />} />
+        <Route path="/venues" element={<Venues />} />
+        <Route path="/venues/:venue" element={<VenueDetail />} />
+        <Route path="/matchups" element={<MatchupSearch />} />
+        <Route path="/matchups/:batter/:bowler" element={<MatchupDetail />} />
+        <Route
+          path="/compare/:playerA/:playerB"
+          element={<PlayerCompareDetail />}
+        />
+        <Route path="/strategy" element={<TeamStrategy />} />
+        <Route path="/strategy/:team" element={<TeamStrategyDetail />} />
+        <Route path="/search" element={<SearchPage />} />
 
-      <Route path="/login" element={<AuthPage />} />
-      <Route path="/register" element={<AuthPage />} />
+        <Route path="/login" element={<AuthPage />} />
+        <Route path="/register" element={<AuthPage />} />
 
-      <Route
-        path="/my-matches"
-        element={
-          <Protected>
-            <MyMatches />
-          </Protected>
-        }
-      />
-      <Route
-        path="/my-matches/new"
-        element={
-          <Protected>
-            <MatchSetup />
-          </Protected>
-        }
-      />
-      <Route
-        path="/my-matches/:matchId/score"
-        element={
-          <Protected>
-            <LiveScorer />
-          </Protected>
-        }
-      />
-      <Route
-        path="/my-matches/:matchId/innings-break"
-        element={
-          <Protected>
-            <InningsBreak />
-          </Protected>
-        }
-      />
-      <Route
-        path="/my-matches/:matchId/result"
-        element={
-          <Protected>
-            <MatchResult />
-          </Protected>
-        }
-      />
-    </Routes>
-    <Footer />
+        <Route
+          path="/my-matches"
+          element={
+            <Protected>
+              <MyMatches />
+            </Protected>
+          }
+        />
+        <Route
+          path="/my-matches/new"
+          element={
+            <Protected>
+              <MatchSetup />
+            </Protected>
+          }
+        />
+        <Route
+          path="/my-matches/:matchId/score"
+          element={
+            <Protected>
+              <LiveScorer />
+            </Protected>
+          }
+        />
+        <Route
+          path="/my-matches/:matchId/innings-break"
+          element={
+            <Protected>
+              <InningsBreak />
+            </Protected>
+          }
+        />
+        <Route
+          path="/my-matches/:matchId/result"
+          element={
+            <Protected>
+              <MatchResult />
+            </Protected>
+          }
+        />
+      </Routes>
+      <Footer />
+    </DashboardLayout>
   </AuthProvider>
 );
 
