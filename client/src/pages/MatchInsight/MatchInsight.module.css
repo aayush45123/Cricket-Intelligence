@@ -1,334 +1,312 @@
-/* ── MatchInsight.module.css ────────────────────────────────── */
+/* ============================================================
+   MATCH INSIGHT — Sharp & Professional
+   ============================================================ */
 
 .page {
-  min-height: 100vh;
-  padding-top: var(--ci-nav-height);
-  position: relative;
-  z-index: 1;
+  width: 100%;
 }
 
 .main {
-  max-width: 1060px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: var(--ci-space-10) var(--ci-space-6) var(--ci-space-16);
   display: flex;
   flex-direction: column;
-  gap: var(--ci-space-10);
-}
-
-/* ── Loading / Error State ──────────────────────────────────── */
-.loadingWrapper {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--ci-space-5);
-}
-
-.loadingText {
-  font-family: var(--ci-font-mono);
-  font-size: 0.8rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ci-text-muted);
-  animation: ci-pulse 1.8s ease-in-out infinite;
-}
-
-.errorText {
-  font-family: var(--ci-font-mono);
-  font-size: 0.85rem;
-  letter-spacing: 0.06em;
-  color: var(--ci-danger);
-  text-align: center;
-}
-
-.backBtn {
-  padding: var(--ci-space-2) var(--ci-space-5);
-  background: transparent;
-  border: 1px solid var(--ci-border-medium);
-  border-radius: var(--ci-radius-sm);
-  font-family: var(--ci-font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-  color: var(--ci-text-secondary);
-  transition: all var(--ci-duration-sm) var(--ci-ease);
-}
-
-.backBtn:hover {
-  border-color: var(--ci-border-brand);
-  color: var(--ci-brand);
-  background: var(--ci-brand-subtle);
+  gap: 28px;
 }
 
 /* ── Hero ───────────────────────────────────────────────────── */
 .hero {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: 4px;
+  padding: 28px 32px;
+  box-shadow: var(--ci-shadow-sm);
   display: flex;
   flex-direction: column;
-  gap: var(--ci-space-2);
-  padding-bottom: var(--ci-space-8);
-  border-bottom: 1px solid var(--ci-border);
-  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) both;
+  gap: 8px;
 }
 
 .heroTitle {
-  font-family: var(--ci-font-display);
-  font-size: clamp(1.8rem, 4vw, 3rem);
+  font-size: 1.6rem;
   font-weight: 800;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
   color: var(--ci-text-primary);
-  line-height: 1.05;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
 .heroSubtitle {
-  font-family: var(--ci-font-mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--ci-brand);
+  font-size: 0.875rem;
+  color: var(--ci-text-muted);
+  font-weight: 500;
+}
+
+/* Match Header (legacy) */
+.matchHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.teamsVs {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--ci-text-primary);
+}
+
+.winnerTag {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--ci-brand-dark);
+  background: var(--ci-brand-light);
+  padding: 4px 12px;
+  border-radius: 2px;
+  border: 1px solid rgba(13, 148, 136, 0.25);
 }
 
 /* ── Section ────────────────────────────────────────────────── */
 .section {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: 4px;
+  padding: 24px 28px;
+  box-shadow: var(--ci-shadow-sm);
   display: flex;
   flex-direction: column;
-  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) 100ms both;
+  gap: 16px;
 }
 
 .sectionTitle {
-  font-family: var(--ci-font-mono);
-  font-size: 0.68rem;
-  font-weight: 500;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: var(--ci-text-muted);
-  margin-bottom: var(--ci-space-4);
-  display: flex;
-  align-items: center;
-  gap: var(--ci-space-3);
-}
-
-.sectionTitle::before {
-  content: "";
-  display: inline-block;
-  width: 16px;
-  height: 1.5px;
-  background: var(--ci-brand);
-  border-radius: 1px;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--ci-text-primary);
+  letter-spacing: -0.01em;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--ci-border-subtle);
 }
 
 /* ── Scorecard ──────────────────────────────────────────────── */
 .scorecard {
-  background: var(--ci-bg-secondary);
+  background: var(--ci-bg-tertiary);
   border: 1px solid var(--ci-border);
-  border-radius: var(--ci-radius-md);
+  border-radius: 4px;
   overflow: hidden;
-  box-shadow: var(--ci-shadow-sm);
 }
 
 .scoreRow {
-  display: grid;
-  grid-template-columns: 1fr auto auto;
+  display: flex;
   align-items: center;
-  gap: var(--ci-space-6);
-  padding: var(--ci-space-5) var(--ci-space-6);
-}
-
-.scoreRow:nth-child(1) {
-  background: var(--ci-brand-subtle);
+  gap: 20px;
+  padding: 14px 20px;
+  font-size: 0.925rem;
 }
 
 .scoreRow span:first-child {
-  font-family: var(--ci-font-display);
-  font-size: 1.1rem;
+  flex: 1;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
   color: var(--ci-text-primary);
 }
 
 .scoreRow span:nth-child(2) {
-  font-family: var(--ci-font-display);
-  font-size: 1.8rem;
+  font-size: 1.25rem;
   font-weight: 800;
-  color: var(--ci-brand);
-  letter-spacing: -0.01em;
+  color: var(--ci-brand-dark);
+  font-family: var(--ci-font-mono);
 }
 
-.scoreRow span:nth-child(3) {
-  font-family: var(--ci-font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
+.scoreRow span:last-child {
+  font-size: 0.8rem;
   color: var(--ci-text-muted);
-  text-transform: uppercase;
-  min-width: 80px;
-  text-align: right;
+  font-weight: 500;
 }
 
 .scoreDivider {
   height: 1px;
   background: var(--ci-border);
-  margin: 0 var(--ci-space-6);
+  margin: 0 20px;
 }
 
 /* ── Analytics Grid ─────────────────────────────────────────── */
 .analyticsGrid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--ci-space-3);
-}
-
-@media (max-width: 640px) {
-  .analyticsGrid {
-    grid-template-columns: repeat(2, 1fr);
-  }
+  gap: 16px;
 }
 
 .statCard {
+  background: var(--ci-bg-tertiary);
+  border: 1px solid var(--ci-border);
+  border-radius: 4px;
+  padding: 16px 18px;
   display: flex;
   flex-direction: column;
-  gap: var(--ci-space-2);
-  padding: var(--ci-space-4) var(--ci-space-4);
-  background: var(--ci-bg-secondary);
-  border: 1px solid var(--ci-border);
-  border-radius: var(--ci-radius-sm);
-  box-shadow: var(--ci-shadow-xs);
-  transition: border-color var(--ci-duration-md) var(--ci-ease);
-}
-
-.statCard:hover {
-  border-color: var(--ci-border-medium);
+  gap: 6px;
 }
 
 .statCard span:first-child {
-  font-family: var(--ci-font-mono);
-  font-size: 0.65rem;
-  letter-spacing: 0.1em;
+  font-size: 0.725rem;
+  font-weight: 600;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--ci-text-muted);
 }
 
 .statCard span:last-child {
-  font-family: var(--ci-font-display);
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: var(--ci-accent);
-  line-height: 1;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--ci-text-primary);
+  letter-spacing: -0.02em;
+}
+
+/* ── Charts Grid ────────────────────────────────────────────── */
+.chartsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.chartCard {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: 4px;
+  padding: 24px 28px;
+  box-shadow: var(--ci-shadow-sm);
 }
 
 /* ── Insight Box ────────────────────────────────────────────── */
 .insightBox {
-  background: var(--ci-bg-secondary);
-  border: 1px solid var(--ci-border-brand);
+  background: var(--ci-bg-tertiary);
+  border: 1px solid var(--ci-border-subtle);
   border-left: 3px solid var(--ci-brand);
-  border-radius: var(--ci-radius-md);
-  padding: var(--ci-space-6) var(--ci-space-6);
-  box-shadow: var(--ci-shadow-brand);
+  border-radius: 0 4px 4px 0;
+  padding: 16px 20px;
 }
 
 .insightText {
-  font-size: 0.92rem;
+  font-size: 0.9rem;
+  line-height: 1.7;
   color: var(--ci-text-secondary);
-  line-height: 1.75;
 }
 
-/* ── Innings Block ──────────────────────────────────────────── */
+/* ── Innings Block / Table ──────────────────────────────────── */
 .inningsBlock {
-  margin-bottom: var(--ci-space-8);
-}
-
-.inningsBlock:last-child {
-  margin-bottom: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .inningsHeading {
-  font-family: var(--ci-font-display);
-  font-size: 1.1rem;
+  font-size: 1rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
   color: var(--ci-text-primary);
-  margin-bottom: var(--ci-space-4);
-  padding-bottom: var(--ci-space-3);
-  border-bottom: 1px solid var(--ci-border);
-  display: flex;
-  align-items: center;
-  gap: var(--ci-space-3);
-}
-
-.inningsHeading::before {
-  content: "";
-  display: inline-block;
-  width: 6px;
-  height: 6px;
-  background: var(--ci-accent);
-  border-radius: 1px;
-  transform: rotate(45deg);
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--ci-border-subtle);
 }
 
 .subHeading {
-  font-family: var(--ci-font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ci-text-muted);
-  margin: var(--ci-space-5) 0 var(--ci-space-3);
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--ci-text-secondary);
+  margin-top: 8px;
 }
 
-/* ── Table ──────────────────────────────────────────────────── */
 .table {
   width: 100%;
   border-collapse: collapse;
-  background: var(--ci-bg-secondary);
-  border: 1px solid var(--ci-border);
-  border-radius: var(--ci-radius-md);
-  overflow: hidden;
-  font-size: 0.82rem;
-}
-
-.table thead tr {
-  background: var(--ci-bg-tertiary);
+  font-size: 0.85rem;
 }
 
 .table th {
-  padding: var(--ci-space-3) var(--ci-space-4);
   text-align: left;
-  font-family: var(--ci-font-mono);
-  font-size: 0.64rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
+  padding: 8px 12px;
+  font-size: 0.7rem;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.04em;
   color: var(--ci-text-muted);
+  background: var(--ci-bg-tertiary);
   border-bottom: 1px solid var(--ci-border);
-  white-space: nowrap;
 }
 
 .table td {
-  padding: var(--ci-space-3) var(--ci-space-4);
-  color: var(--ci-text-secondary);
-  font-family: var(--ci-font-mono);
-  font-size: 0.8rem;
-  letter-spacing: 0.02em;
+  padding: 9px 12px;
+  color: var(--ci-text-primary);
   border-bottom: 1px solid var(--ci-border-subtle);
-  white-space: nowrap;
+  font-weight: 500;
 }
 
 .table tbody tr:hover td {
   background: var(--ci-bg-tertiary);
-  color: var(--ci-text-primary);
-}
-
-.table tbody tr:last-child td {
-  border-bottom: none;
 }
 
 .totalRow td {
-  background: var(--ci-brand-subtle) !important;
-  border-top: 1px solid var(--ci-border-brand) !important;
+  background: var(--ci-bg-tertiary) !important;
+  font-weight: 700;
+  border-top: 1px solid var(--ci-border);
 }
 
-.totalRow td strong {
-  color: var(--ci-brand);
+/* ── Loading / Error ────────────────────────────────────────── */
+.loadingWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 320px;
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: 4px;
+}
+
+.loadingText {
+  font-size: 0.9rem;
+  color: var(--ci-text-muted);
+  font-weight: 500;
+}
+
+.errorText {
+  font-size: 0.9rem;
+  color: var(--ci-danger);
   font-weight: 600;
+}
+
+.backBtn {
+  padding: 8px 18px;
+  background: var(--ci-bg-tertiary);
+  border: 1px solid var(--ci-border);
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ci-text-secondary);
+  cursor: pointer;
+  transition: all var(--ci-duration-sm) var(--ci-ease);
+}
+
+.backBtn:hover {
+  background: var(--ci-bg-quaternary);
+  color: var(--ci-text-primary);
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .analyticsGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .chartsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .analyticsGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .table {
+    font-size: 0.775rem;
+  }
+  .table th,
+  .table td {
+    padding: 7px 8px;
+  }
 }

@@ -1,59 +1,17 @@
-/* ── MatchDeepAnalytics.module.css ──────────────────────────── */
+/* ============================================================
+   MATCH DEEP ANALYTICS — Sharp & Professional
+   ============================================================ */
 
 .page {
-  min-height: 100vh;
-  padding-top: var(--ci-nav-height);
-  position: relative;
-  z-index: 1;
+  width: 100%;
 }
 
 .main {
-  max-width: 1200px;
+  max-width: 1400px;
   margin: 0 auto;
-  padding: var(--ci-space-8) var(--ci-space-6) var(--ci-space-20);
   display: flex;
   flex-direction: column;
-  gap: var(--ci-space-10);
-}
-
-/* ── State ──────────────────────────────────────────────────── */
-.stateWrapper {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--ci-space-5);
-}
-
-.loadingRing {
-  width: 40px;
-  height: 40px;
-  border: 2px solid var(--ci-border);
-  border-top-color: var(--ci-brand);
-  border-radius: 50%;
-  animation: spin 0.9s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.stateText {
-  font-family: var(--ci-font-mono);
-  font-size: 0.78rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ci-text-muted);
-}
-
-.errorText {
-  font-family: var(--ci-font-mono);
-  font-size: 0.8rem;
-  color: var(--ci-danger);
-  text-align: center;
+  gap: 28px;
 }
 
 /* ── Top Nav ────────────────────────────────────────────────── */
@@ -61,97 +19,86 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: var(--ci-space-4);
-  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) both;
+  gap: 16px;
+  flex-wrap: wrap;
 }
 
 .backBtn {
   display: inline-flex;
   align-items: center;
-  gap: var(--ci-space-2);
-  padding: var(--ci-space-2) var(--ci-space-4);
-  background: transparent;
-  border: 1px solid var(--ci-border-medium);
-  border-radius: var(--ci-radius-sm);
-  font-family: var(--ci-font-mono);
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
+  gap: 6px;
+  padding: 7px 14px;
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: 4px;
+  font-size: 0.825rem;
+  font-weight: 600;
   color: var(--ci-text-secondary);
+  cursor: pointer;
   transition: all var(--ci-duration-sm) var(--ci-ease);
 }
 
 .backBtn:hover {
-  border-color: var(--ci-border-brand);
-  color: var(--ci-brand);
-  background: var(--ci-brand-subtle);
+  border-color: var(--ci-border-medium);
+  color: var(--ci-text-primary);
+  background: var(--ci-bg-tertiary);
 }
 
 .topNavRight {
   display: flex;
   align-items: center;
-  gap: var(--ci-space-3);
+  gap: 8px;
 }
 
 .badge {
+  display: inline-flex;
+  align-items: center;
   padding: 3px 10px;
-  background: var(--ci-bg-secondary);
-  border: 1px solid var(--ci-border-medium);
-  border-radius: var(--ci-radius-full);
-  font-family: var(--ci-font-mono);
-  font-size: 0.64rem;
-  letter-spacing: 0.1em;
+  border-radius: 2px;
+  background: var(--ci-brand-light);
+  color: var(--ci-brand-dark);
+  font-size: 0.725rem;
+  font-weight: 700;
+  border: 1px solid var(--ci-border-brand);
   text-transform: uppercase;
-  color: var(--ci-text-muted);
+  letter-spacing: 0.04em;
 }
 
 .venueBadge {
-  font-family: var(--ci-font-mono);
-  font-size: 0.68rem;
-  letter-spacing: 0.04em;
-  color: var(--ci-text-muted);
+  display: inline-flex;
+  align-items: center;
+  padding: 3px 10px;
+  border-radius: 2px;
+  background: var(--ci-bg-tertiary);
+  color: var(--ci-text-secondary);
+  font-size: 0.725rem;
+  font-weight: 600;
+  border: 1px solid var(--ci-border);
 }
 
 /* ── Hero ───────────────────────────────────────────────────── */
 .hero {
-  display: flex;
-  flex-direction: column;
-  gap: 0;
   background: var(--ci-bg-secondary);
   border: 1px solid var(--ci-border);
-  border-radius: var(--ci-radius-lg);
-  overflow: hidden;
-  box-shadow: var(--ci-shadow-md);
-  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) 60ms both;
-  position: relative;
-}
-
-.hero::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(
-    90deg,
-    var(--ci-brand),
-    var(--ci-blue),
-    var(--ci-accent)
-  );
+  border-radius: 4px;
+  padding: 28px 32px;
+  box-shadow: var(--ci-shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
 }
 
 .heroTeams {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: var(--ci-space-6);
-  padding: var(--ci-space-8) var(--ci-space-8);
+  gap: 24px;
 }
 
 .heroTeamBlock {
   display: flex;
   flex-direction: column;
-  gap: var(--ci-space-1);
+  gap: 6px;
 }
 
 .heroTeamBlock.right {
@@ -160,61 +107,54 @@
 }
 
 .inningsPip {
+  display: block;
   width: 24px;
   height: 3px;
-  border-radius: 2px;
-  margin-bottom: var(--ci-space-1);
+  border-radius: 1px;
 }
 
 .heroTeamLabel {
-  font-family: var(--ci-font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.14em;
+  font-size: 0.7rem;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.06em;
   color: var(--ci-text-muted);
 }
 
 .heroTeamName {
-  font-family: var(--ci-font-display);
-  font-size: clamp(1.1rem, 2.5vw, 1.6rem);
+  font-size: 1.4rem;
   font-weight: 800;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
   color: var(--ci-text-primary);
+  letter-spacing: -0.02em;
   line-height: 1.1;
 }
 
 .heroScore {
-  font-family: var(--ci-font-display);
-  font-size: clamp(1.6rem, 4vw, 2.8rem);
+  font-size: 2rem;
   font-weight: 800;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.03em;
   line-height: 1;
 }
 
 .heroOvers {
-  font-family: var(--ci-font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.08em;
+  font-size: 0.825rem;
   color: var(--ci-text-muted);
+  font-weight: 500;
 }
 
 .heroVsBlock {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--ci-space-3);
+  gap: 12px;
 }
 
 .heroVs {
-  font-family: var(--ci-font-mono);
-  font-size: 0.7rem;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  font-size: 0.9rem;
+  font-weight: 700;
   color: var(--ci-text-disabled);
-  padding: var(--ci-space-2) var(--ci-space-4);
-  border: 1px solid var(--ci-border);
-  border-radius: var(--ci-radius-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
 }
 
 .heroTargetBlock {
@@ -222,209 +162,248 @@
   flex-direction: column;
   align-items: center;
   gap: 2px;
-  background: var(--ci-accent-subtle);
-  border: 1px solid var(--ci-border-accent);
-  border-radius: var(--ci-radius-sm);
-  padding: var(--ci-space-2) var(--ci-space-4);
+  background: var(--ci-bg-tertiary);
+  border: 1px solid var(--ci-border);
+  border-radius: 4px;
+  padding: 6px 12px;
 }
 
 .heroTargetLabel {
-  font-family: var(--ci-font-mono);
-  font-size: 0.56rem;
-  letter-spacing: 0.14em;
+  font-size: 0.65rem;
+  font-weight: 700;
   text-transform: uppercase;
-  color: var(--ci-accent);
+  letter-spacing: 0.06em;
+  color: var(--ci-text-muted);
 }
 
 .heroTargetValue {
-  font-family: var(--ci-font-display);
-  font-size: 1.4rem;
+  font-size: 1.5rem;
   font-weight: 800;
-  color: var(--ci-accent);
-  line-height: 1;
+  color: var(--ci-amber);
+  letter-spacing: -0.02em;
 }
 
 .winnerStrip {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: var(--ci-space-3);
-  padding: var(--ci-space-3) var(--ci-space-8);
-  border-top: 1px solid var(--ci-border);
+  gap: 10px;
+  padding: 10px 16px;
   background: var(--ci-brand-subtle);
+  border: 1px solid var(--ci-border-brand);
+  border-radius: 4px;
 }
 
 .winnerLabel {
-  font-family: var(--ci-font-mono);
-  font-size: 0.64rem;
-  letter-spacing: 0.12em;
+  font-size: 0.75rem;
+  font-weight: 700;
   text-transform: uppercase;
-  color: var(--ci-brand);
+  letter-spacing: 0.05em;
+  color: var(--ci-brand-dark);
 }
 
 .winnerValue {
-  font-family: var(--ci-font-display);
-  font-size: 0.95rem;
+  font-size: 0.925rem;
   font-weight: 700;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
   color: var(--ci-text-primary);
 }
 
-/* ── Quick Stats ────────────────────────────────────────────── */
+/* ── Quick Stats Row ────────────────────────────────────────── */
 .quickStats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--ci-space-4);
-  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) 100ms both;
-}
-
-@media (max-width: 800px) {
-  .quickStats {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-@media (max-width: 460px) {
-  .quickStats {
-    grid-template-columns: 1fr;
-  }
+  gap: 16px;
 }
 
 .summaryTile {
-  display: flex;
-  flex-direction: column;
-  gap: var(--ci-space-1);
-  padding: var(--ci-space-5);
   background: var(--ci-bg-secondary);
   border: 1px solid var(--ci-border);
-  border-radius: var(--ci-radius-md);
-  box-shadow: var(--ci-shadow-xs);
-  transition:
-    border-color var(--ci-duration-md) var(--ci-ease),
-    transform var(--ci-duration-md) var(--ci-ease);
-  position: relative;
-  overflow: hidden;
-}
-
-.summaryTile::after {
-  content: "";
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: currentColor;
-  opacity: 0;
-  transition: opacity var(--ci-duration-md) var(--ci-ease);
-}
-
-.summaryTile:hover {
-  transform: translateY(-2px);
-  border-color: var(--ci-border-medium);
+  border-radius: 4px;
+  padding: 16px 20px;
+  box-shadow: var(--ci-shadow-sm);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
 }
 
 .summaryLabel {
-  font-family: var(--ci-font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
+  font-size: 0.725rem;
+  font-weight: 600;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: var(--ci-text-muted);
 }
 
 .summaryValue {
-  font-family: var(--ci-font-display);
   font-size: 2rem;
   font-weight: 800;
+  letter-spacing: -0.03em;
   line-height: 1;
-  letter-spacing: -0.01em;
 }
 
 .summarySub {
-  font-family: var(--ci-font-mono);
-  font-size: 0.6rem;
-  letter-spacing: 0.08em;
-  color: var(--ci-text-disabled);
-  text-transform: uppercase;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  font-size: 0.75rem;
+  color: var(--ci-text-muted);
+  margin-top: 2px;
 }
 
 /* ── Section ────────────────────────────────────────────────── */
 .section {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: 4px;
+  padding: 24px 28px;
+  box-shadow: var(--ci-shadow-sm);
   display: flex;
   flex-direction: column;
-  gap: var(--ci-space-5);
-  animation: ci-fadeUp var(--ci-duration-lg) var(--ci-ease) 140ms both;
+  gap: 20px;
 }
 
 .sectionHeader {
   display: flex;
   align-items: center;
-  gap: var(--ci-space-3);
+  gap: 12px;
 }
 
 .sectionAccent {
+  display: block;
   width: 3px;
-  height: 22px;
-  border-radius: 2px;
+  height: 20px;
+  border-radius: 1px;
   flex-shrink: 0;
 }
 
 .sectionTitle {
-  font-family: var(--ci-font-display);
   font-size: 1.05rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
   color: var(--ci-text-primary);
+  letter-spacing: -0.01em;
 }
 
 .sectionTag {
   margin-left: auto;
-  font-family: var(--ci-font-mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--ci-text-muted);
-  padding: 3px 10px;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 2px;
+  background: var(--ci-bg-tertiary);
   border: 1px solid var(--ci-border);
-  border-radius: var(--ci-radius-full);
+  color: var(--ci-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 /* ── Innings Toggle ─────────────────────────────────────────── */
 .inningsToggle {
   display: flex;
-  align-items: center;
-  gap: var(--ci-space-2);
-  background: var(--ci-bg-secondary);
+  gap: 4px;
+  background: var(--ci-bg-tertiary);
   border: 1px solid var(--ci-border);
-  border-radius: var(--ci-radius-sm);
-  padding: var(--ci-space-1);
-  width: fit-content;
+  border-radius: 4px;
+  padding: 3px;
+  align-self: flex-start;
 }
 
 .toggleBtn {
-  padding: var(--ci-space-2) var(--ci-space-4);
-  border-radius: 5px;
-  font-family: var(--ci-font-mono);
-  font-size: 0.7rem;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  padding: 5px 14px;
+  border-radius: 2px;
+  font-size: 0.8rem;
+  font-weight: 600;
   color: var(--ci-text-muted);
   background: transparent;
   border: none;
+  cursor: pointer;
   transition: all var(--ci-duration-sm) var(--ci-ease);
 }
 
 .toggleBtn:hover {
-  color: var(--ci-text-secondary);
-  background: var(--ci-bg-tertiary);
+  color: var(--ci-text-primary);
+  background: var(--ci-bg-quaternary);
 }
 
 .toggleActive {
-  background: var(--ci-accent-subtle) !important;
-  color: var(--ci-accent) !important;
-  border: 1px solid var(--ci-border-accent) !important;
+  background: var(--ci-bg-secondary) !important;
+  color: var(--ci-text-primary) !important;
+  border: 1px solid var(--ci-border) !important;
+  box-shadow: var(--ci-shadow-sm);
+}
+
+/* ── State Wrappers ─────────────────────────────────────────── */
+.stateWrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  min-height: 320px;
+}
+
+.stateText {
+  font-size: 0.875rem;
+  color: var(--ci-text-muted);
+}
+
+.errorText {
+  font-size: 0.875rem;
+  color: var(--ci-danger);
+  font-weight: 600;
+}
+
+.loadingRing {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--ci-border);
+  border-top-color: var(--ci-brand);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Analytics Grid ─────────────────────────────────────────── */
+.analyticsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+.panel {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: 4px;
+  padding: 24px 28px;
+  box-shadow: var(--ci-shadow-sm);
+}
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 1024px) {
+  .heroTeams {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    text-align: center;
+  }
+  .heroTeamBlock.right {
+    align-items: flex-start;
+    text-align: left;
+  }
+  .heroVsBlock {
+    flex-direction: row;
+    justify-content: center;
+  }
+  .quickStats {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .analyticsGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .quickStats {
+    grid-template-columns: 1fr 1fr;
+  }
+  .section {
+    padding: 16px 18px;
+  }
 }
