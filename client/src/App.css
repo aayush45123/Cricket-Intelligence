@@ -63,6 +63,7 @@ ol {
   /* Brand Accents */
   --ci-brand: #0D9488;          /* Pitch Emerald Teal */
   --ci-brand-dark: #0F766E;
+  --ci-brand-dim: #115E59;
   --ci-brand-light: #CCFBF1;
   --ci-brand-glow: rgba(13, 148, 136, 0.12);
   --ci-brand-subtle: rgba(13, 148, 136, 0.06);
@@ -70,6 +71,10 @@ ol {
   --ci-accent: #2563EB;         /* Deep Royal Blue */
   --ci-accent-dark: #1D4ED8;
   --ci-accent-light: #DBEAFE;
+  --ci-accent-subtle: rgba(37, 99, 235, 0.06);
+
+  --ci-blue: #3D8EFF;
+  --ci-blue-glow: rgba(61, 142, 255, 0.08);
 
   --ci-amber: #D97706;          /* Amber */
   --ci-amber-light: #FEF3C7;
@@ -87,7 +92,7 @@ ol {
   --ci-text-disabled: #94A3B8;   /* Slate 400 */
   --ci-text-inverse: #FFFFFF;
 
-  /* Crisp Sharp Borders & Borders */
+  /* Crisp Sharp Borders */
   --ci-border: #E2E8F0;
   --ci-border-subtle: #F1F5F9;
   --ci-border-medium: #CBD5E1;
@@ -95,17 +100,19 @@ ol {
   --ci-border-brand: rgba(13, 148, 136, 0.3);
   --ci-border-accent: rgba(37, 99, 235, 0.3);
 
-  /* SHARP PROFESSIONAL RADII (NO HEAVY ROUNDED/PILL BORDERS) */
+  /* SHARP PROFESSIONAL RADII — NO HEAVY PILL BORDERS */
   --ci-radius-xs: 2px;
-  --ci-radius-sm: 4px;
+  --ci-radius-sm: 2px;
   --ci-radius-md: 4px;
   --ci-radius-lg: 4px;           /* Sharp 4px borders */
-  --ci-radius-xl: 6px;
+  --ci-radius-xl: 4px;
   --ci-radius-full: 4px;         /* Sharp 4px badges instead of pill */
 
+  /* Shadows */
   --ci-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
-  --ci-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.05); /* Sharp, professional subtle elevation */
+  --ci-shadow-md: 0 2px 8px rgba(0, 0, 0, 0.05);
   --ci-shadow-lg: 0 4px 16px rgba(15, 23, 42, 0.08);
+  --ci-shadow-brand: 0 4px 12px rgba(13, 148, 136, 0.2);
 
   /* Typography */
   --ci-font: "Plus Jakarta Sans", "Inter", system-ui, sans-serif;
@@ -115,6 +122,18 @@ ol {
   /* Layout */
   --ci-sidebar-width: 250px;
   --ci-header-height: 60px;
+  --ci-nav-height: 60px;
+
+  /* Spacing scale (used by LiveScorer / MyMatches legacy classes) */
+  --ci-space-2: 8px;
+  --ci-space-3: 12px;
+  --ci-space-4: 16px;
+  --ci-space-5: 20px;
+  --ci-space-6: 24px;
+  --ci-space-8: 32px;
+  --ci-space-10: 40px;
+  --ci-space-16: 64px;
+  --ci-space-20: 80px;
 
   /* Transitions */
   --ci-ease: cubic-bezier(0.16, 1, 0.3, 1);
@@ -174,7 +193,7 @@ ol {
 .ci-card {
   background: var(--ci-bg-secondary);
   border: 1px solid var(--ci-border);
-  border-radius: 4px; /* Sharp 4px border */
+  border-radius: 4px;
   box-shadow: var(--ci-shadow-sm);
   transition: border-color var(--ci-duration-sm) var(--ci-ease), box-shadow var(--ci-duration-sm) var(--ci-ease);
 }
@@ -190,7 +209,7 @@ ol {
   align-items: center;
   gap: 6px;
   padding: 3px 8px;
-  border-radius: 4px; /* Sharp 4px badge */
+  border-radius: 2px;
   font-size: 0.75rem;
   font-weight: 600;
   letter-spacing: 0.02em;

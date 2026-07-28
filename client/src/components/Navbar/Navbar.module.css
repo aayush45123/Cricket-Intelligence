@@ -295,7 +295,7 @@
   width: 34px;
   height: 34px;
 
-  border-radius: var(--ci-radius-full);
+  border-radius: 4px;
   background: var(--ci-bg-tertiary);
 
   display: flex;

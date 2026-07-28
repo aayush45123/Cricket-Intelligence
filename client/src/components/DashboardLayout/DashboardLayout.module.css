@@ -301,7 +301,7 @@
   margin-top: var(--ci-header-height);
   flex: 1;
   min-height: calc(100vh - var(--ci-header-height));
-  padding: 32px 36px 60px;
+  padding: 40px 44px 100px;
   background-color: var(--ci-bg-primary); /* #F8FAFC */
   display: flex;
   flex-direction: column;
@@ -329,7 +329,7 @@
   }
   .mainViewport {
     margin-left: 0;
-    padding: 24px 18px 40px;
+    padding: 28px 20px 60px;
   }
   .mobileMenuBtn {
     display: block;
