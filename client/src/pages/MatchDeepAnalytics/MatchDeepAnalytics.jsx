@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "./MatchDeepAnalytics.module.css";
+import { MapPin } from "lucide-react";
 import WormChart from "../../components/charts/WormChart/WormChart";
 import WinProbabilityChart from "../../components/charts/WinProbabilityChart/WinProbabilityChart";
 import MomentumChart from "../../components/charts/MomentumChart/MomentumChart";
@@ -99,7 +100,7 @@ const MatchDeepAnalytics = () => {
           </button>
           <div className={styles.topNavRight}>
             {matchType && <span className={styles.badge}>{matchType}</span>}
-            {venue && <span className={styles.venueBadge}>📍 {venue}</span>}
+            {venue && <span className={styles.venueBadge}><MapPin size={12} style={{ display: "inline", verticalAlign: "middle", marginRight: 3 }} /> {venue}</span>}
           </div>
         </div>
 

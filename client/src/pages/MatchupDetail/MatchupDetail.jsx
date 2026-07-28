@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "./MatchupDetail.module.css";
+import { Activity, Zap } from "lucide-react";
 import MatchupRunDistribution from "../../components/charts/MatchupRunDistribution/MatchupRunDistribution";
 import MatchupPhaseChart from "../../components/charts/MatchupPhase/MatchupPhase";
 import MatchupSeasonTrend from "../../components/charts/MatchupSeasonTrend/MatchupSeasonTrend";
@@ -151,7 +152,7 @@ const MatchupDetail = () => {
                   className={styles.heroRole}
                   style={{ color: "var(--ci-brand)" }}
                 >
-                  🏏 Batter
+                  <Activity size={13} style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }} /> Batter
                 </span>
                 <h1 className={styles.heroName}>{decodedBatter}</h1>
               </div>
@@ -183,7 +184,7 @@ const MatchupDetail = () => {
                   className={styles.heroRole}
                   style={{ color: "var(--ci-danger)" }}
                 >
-                  ⚡ Bowler
+                  <Zap size={13} style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }} /> Bowler
                 </span>
                 <h1 className={styles.heroName}>{decodedBowler}</h1>
               </div>

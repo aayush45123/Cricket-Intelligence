@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from "./MatchStoryCard.module.css";
+import { AlertTriangle } from "lucide-react";
 
 /* ── Build a compact prompt from the deep analytics data ─────── */
 const buildPrompt = (data) => {
@@ -188,7 +189,7 @@ const MatchStoryCard = ({ data }) => {
       {/* Error */}
       {error && !loading && (
         <div className={styles.errorState}>
-          <span className={styles.errorIcon}>⚠️</span>
+          <AlertTriangle className={styles.errorIcon} size={20} color="var(--ci-danger)" />
           <p className={styles.errorText}>{error}</p>
           <button className={styles.retryBtn} onClick={generateStory}>
             Try again

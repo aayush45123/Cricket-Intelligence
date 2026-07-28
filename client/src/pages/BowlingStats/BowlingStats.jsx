@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "./BowlingStats.module.css";
+import { Zap } from "lucide-react";
 import BowlingMetricsChart from "../../components/charts/BowlingMetricsChart/BowlingMetricsChart";
 
 /* ── Helpers ─────────────────────────────────────────────────── */
@@ -125,7 +126,7 @@ const BowlingStats = () => {
             </div>
             <div className={styles.heroText}>
               <div className={styles.heroBadgeRow}>
-                <span className={styles.categoryBadge}>⚡ Bowling Profile</span>
+                <span className={styles.categoryBadge}><Zap size={13} style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }} /> Bowling Profile</span>
                 <span
                   className={styles.verdictBadge}
                   style={{

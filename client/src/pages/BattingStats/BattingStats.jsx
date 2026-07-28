@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "./BattingStats.module.css";
+import { Activity, BarChart2 } from "lucide-react";
 import PhaseStrikeRateChart  from "../../components/charts/PhaseStrikeRateChart/PhaseStrikeRateChart";
 import BattingBreakdownChart from "../../components/charts/BattingBreakdownChart/BattingBreakdownChart";
 
@@ -114,7 +115,7 @@ const BattingStats = () => {
             </div>
             <div className={styles.heroText}>
               <div className={styles.heroBadgeRow}>
-                <span className={styles.categoryBadge}>🏏 {category}</span>
+                <span className={styles.categoryBadge}><Activity size={13} style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }} /> {category}</span>
                 <span
                   className={styles.verdictBadge}
                   style={{ color: verdict.color, borderColor: verdict.color + "44", background: verdict.color + "10" }}
@@ -227,7 +228,7 @@ const BattingStats = () => {
         {/* No detailed data fallback */}
         {phases.length === 0 && dotBallPct === null && (
           <div className={styles.noDetailBanner}>
-            <span>📊</span>
+            <BarChart2 size={20} color="var(--ci-text-muted)" />
             <span>Full phase and breakdown analytics not available for this player.</span>
           </div>
         )}

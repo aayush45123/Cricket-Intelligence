@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "./MatchupSearch.module.css";
+import { Swords, Users, BarChart2, Target, TrendingUp, Zap, Calendar, Crosshair, Activity, Trophy, AlertTriangle, Wifi } from "lucide-react";
 
 /* ── Reusable searchable dropdown ────────────────────────────── */
 const PlayerSelect = ({ label, role, players, value, onChange, accent }) => {
@@ -185,14 +186,14 @@ const MatchupSearch = () => {
             className={`${styles.tab} ${tab === "h2h" ? styles.tabActive : ""}`}
             onClick={() => setTab("h2h")}
           >
-            <span className={styles.tabIcon}>🏏⚡</span>
+            <span className={styles.tabIcon}><Swords size={15} /></span>
             Batter vs Bowler
           </button>
           <button
             className={`${styles.tab} ${tab === "compare" ? styles.tabActiveCompare : ""}`}
             onClick={() => setTab("compare")}
           >
-            <span className={styles.tabIcon}>👤👤</span>
+            <span className={styles.tabIcon}><Users size={15} /></span>
             Player Comparison
           </button>
         </div>
@@ -211,7 +212,7 @@ const MatchupSearch = () => {
                   <div className={styles.selectors}>
                     <PlayerSelect
                       label="Batter"
-                      role="🏏"
+                      role={<Activity size={13} color="var(--ci-brand)" />}
                       players={batters}
                       value={batter}
                       onChange={setBatter}
@@ -224,7 +225,7 @@ const MatchupSearch = () => {
                     </div>
                     <PlayerSelect
                       label="Bowler"
-                      role="⚡"
+                      role={<Zap size={13} color="var(--ci-danger)" />}
                       players={bowlers}
                       value={bowler}
                       onChange={setBowler}
@@ -275,36 +276,12 @@ const MatchupSearch = () => {
 
             <section className={styles.features}>
               {[
-                {
-                  icon: "📊",
-                  label: "Run Distribution",
-                  desc: "Dots, singles, fours, sixes",
-                },
-                {
-                  icon: "🎯",
-                  label: "Phase Breakdown",
-                  desc: "Powerplay, middle & death",
-                },
-                {
-                  icon: "📈",
-                  label: "Season Trend",
-                  desc: "Battle across seasons",
-                },
-                {
-                  icon: "💥",
-                  label: "Dismissal Analysis",
-                  desc: "How the batter got out",
-                },
-                {
-                  icon: "🗓️",
-                  label: "Match-by-Match",
-                  desc: "Every encounter logged",
-                },
-                {
-                  icon: "⚡",
-                  label: "Over-by-Over",
-                  desc: "Over-level dominance map",
-                },
+                { icon: <BarChart2 size={18} />, label: "Run Distribution", desc: "Dots, singles, fours, sixes" },
+                { icon: <Target size={18} />, label: "Phase Breakdown", desc: "Powerplay, middle & death" },
+                { icon: <TrendingUp size={18} />, label: "Season Trend", desc: "Battle across seasons" },
+                { icon: <Crosshair size={18} />, label: "Dismissal Analysis", desc: "How the batter got out" },
+                { icon: <Calendar size={18} />, label: "Match-by-Match", desc: "Every encounter logged" },
+                { icon: <Zap size={18} />, label: "Over-by-Over", desc: "Over-level dominance map" },
               ].map((f) => (
                 <div key={f.label} className={styles.featureCard}>
                   <span className={styles.featureIcon}>{f.icon}</span>
@@ -339,7 +316,7 @@ const MatchupSearch = () => {
                   <div className={styles.selectors}>
                     <PlayerSelect
                       label="Player A"
-                      role="🔵"
+                      role={<Users size={13} color="var(--ci-brand)" />}
                       players={allPlayers}
                       value={playerA}
                       onChange={setPlayerA}
@@ -352,7 +329,7 @@ const MatchupSearch = () => {
                     </div>
                     <PlayerSelect
                       label="Player B"
-                      role="🟠"
+                      role={<Users size={13} color="var(--ci-accent)" />}
                       players={allPlayers}
                       value={playerB}
                       onChange={setPlayerB}
@@ -361,7 +338,7 @@ const MatchupSearch = () => {
                   </div>
                   {playerA && playerB && playerA === playerB && (
                     <p className={styles.samePlayerWarn}>
-                      ⚠️ Please select two different players
+                      <AlertTriangle size={14} style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }} /> Please select two different players
                     </p>
                   )}
                   <button
@@ -408,36 +385,12 @@ const MatchupSearch = () => {
 
             <section className={styles.features}>
               {[
-                {
-                  icon: "📡",
-                  label: "Skill Radar",
-                  desc: "Normalised across 6 metrics",
-                },
-                {
-                  icon: "🏏",
-                  label: "Batting Stats",
-                  desc: "Runs, SR, avg, boundary %",
-                },
-                {
-                  icon: "⚡",
-                  label: "Bowling Stats",
-                  desc: "Wickets, economy, dot ball %",
-                },
-                {
-                  icon: "🎯",
-                  label: "Phase Performance",
-                  desc: "Powerplay, Middle & Death SR",
-                },
-                {
-                  icon: "📊",
-                  label: "Stat Bars",
-                  desc: "Visual side-by-side comparison",
-                },
-                {
-                  icon: "🏆",
-                  label: "Verdict",
-                  desc: "Category-by-category winner",
-                },
+                { icon: <Wifi size={18} />, label: "Skill Radar", desc: "Normalised across 6 metrics" },
+                { icon: <Activity size={18} />, label: "Batting Stats", desc: "Runs, SR, avg, boundary %" },
+                { icon: <Zap size={18} />, label: "Bowling Stats", desc: "Wickets, economy, dot ball %" },
+                { icon: <Target size={18} />, label: "Phase Performance", desc: "Powerplay, Middle & Death SR" },
+                { icon: <BarChart2 size={18} />, label: "Stat Bars", desc: "Visual side-by-side comparison" },
+                { icon: <Trophy size={18} />, label: "Verdict", desc: "Category-by-category winner" },
               ].map((f) => (
                 <div key={f.label} className={styles.featureCard}>
                   <span className={styles.featureIcon}>{f.icon}</span>

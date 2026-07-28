@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "./TeamStrategyDetail.module.css";
+import { Activity, Zap } from "lucide-react";
 import BattingOrderChart from "../../components/charts/BattingOrderChart/BattingOrderChart";
 import PhaseCompareChart from "../../components/charts/PhaseCompareChart/PhaseCompareChart";
 import BowlingComboChart from "../../components/charts/BowlingComboChart/BowlingComboChart";
@@ -127,7 +128,7 @@ const TeamStrategyDetail = () => {
                   background: "var(--ci-brand-subtle)",
                 }}
               >
-                🏏 Prefers Batting First
+                <Activity size={13} style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }} /> Prefers Batting First
               </span>
             )}
             {!toss.preferBatFirst && (
@@ -139,7 +140,7 @@ const TeamStrategyDetail = () => {
                   background: "var(--ci-accent-subtle)",
                 }}
               >
-                ⚡ Prefers Fielding First
+                <Zap size={13} style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }} /> Prefers Fielding First
               </span>
             )}
             {pp && pp.runRate > 8 && (
