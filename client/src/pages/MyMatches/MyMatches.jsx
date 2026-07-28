@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import styles from "./MyMatches.module.css";
+import { Trophy } from "lucide-react";
 
 const STATUS_COLORS = {
   live: "var(--ci-brand)",
@@ -73,7 +74,7 @@ const MyMatches = () => {
         {/* Empty */}
         {!loading && matches.length === 0 && (
           <div className={styles.empty}>
-            <div className={styles.emptyIcon}>🏏</div>
+            <div className={styles.emptyIcon}><Trophy size={32} color="var(--ci-brand)" /></div>
             <h3 className={styles.emptyTitle}>No matches yet</h3>
             <p className={styles.emptySub}>
               Start your first match to score it live and unlock post-match

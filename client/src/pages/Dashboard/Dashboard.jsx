@@ -6,6 +6,17 @@ import TeamWins from "../../components/charts/TeamWins/TeamWins";
 import RunRateChart from "../../components/charts/RunRateChart/RunRateChart";
 import TopRunScorer from "../../components/charts/TopRunScorer/TopRunScorer";
 import HighestWicketTaker from "../../components/charts/HighestWicketTaker/HighestWicketTaker";
+import {
+  Trophy,
+  Zap,
+  Target,
+  TrendingUp,
+  BarChart3,
+  Shield,
+  Star,
+  Landmark,
+  ClipboardList,
+} from "lucide-react";
 
 const RECENT_SAMPLE_MATCHES = [
   { id: "ipl-1", teamA: "Chennai Super Kings", teamB: "Gujarat Titans", venue: "Narendra Modi Stadium", result: "CSK won by 5 wickets" },
@@ -32,7 +43,7 @@ const Dashboard = () => {
   if (!data) {
     return (
       <div className={styles.loadingWrapper}>
-        <p className={styles.loadingText}>⚡ Loading Intelligence Dashboard...</p>
+        <p className={styles.loadingText}>Loading Intelligence Dashboard...</p>
       </div>
     );
   }
@@ -54,12 +65,16 @@ const Dashboard = () => {
 
       {/* ── 1. Match Summary Cards ─────────────────────────────── */}
       <section>
-        <h2 className={styles.sectionTitle}>📊 Match Summary Cards</h2>
+        <h2 className={styles.sectionTitle}>
+          <BarChart3 size={18} color="var(--ci-brand)" /> Match Summary Cards
+        </h2>
         <div className={styles.summaryGrid}>
           <div className={styles.summaryCard}>
             <div className={styles.cardHeader}>
               <span className={styles.cardLabel}>Total Matches</span>
-              <span className={styles.cardIcon}>🏏</span>
+              <span className={styles.cardIcon}>
+                <Trophy size={16} color="var(--ci-brand)" />
+              </span>
             </div>
             <div className={styles.cardValue}>{data?.totalMatches || 0}</div>
             <div className={styles.cardMeta}>↑ IPL Historic Dataset</div>
@@ -68,7 +83,9 @@ const Dashboard = () => {
           <div className={styles.summaryCard}>
             <div className={styles.cardHeader}>
               <span className={styles.cardLabel}>Avg Run Rate (1st Innings)</span>
-              <span className={styles.cardIcon}>⚡</span>
+              <span className={styles.cardIcon}>
+                <Zap size={16} color="var(--ci-brand)" />
+              </span>
             </div>
             <div className={styles.cardValue}>
               {data?.averageRunRateTeamA?.toFixed(2) || "8.42"}
@@ -79,7 +96,9 @@ const Dashboard = () => {
           <div className={styles.summaryCard}>
             <div className={styles.cardHeader}>
               <span className={styles.cardLabel}>Avg Run Rate (2nd Innings)</span>
-              <span className={styles.cardIcon}>🎯</span>
+              <span className={styles.cardIcon}>
+                <Target size={16} color="var(--ci-accent)" />
+              </span>
             </div>
             <div className={styles.cardValue}>
               {data?.averageRunRateTeamB?.toFixed(2) || "8.26"}
@@ -90,7 +109,9 @@ const Dashboard = () => {
           <div className={styles.summaryCard}>
             <div className={styles.cardHeader}>
               <span className={styles.cardLabel}>Avg Pressure Index</span>
-              <span className={styles.cardIcon}>📈</span>
+              <span className={styles.cardIcon}>
+                <TrendingUp size={16} color="var(--ci-amber)" />
+              </span>
             </div>
             <div className={styles.cardValue}>
               {data?.averagePressureIndex?.toFixed(2) || "64.8"}
@@ -101,7 +122,9 @@ const Dashboard = () => {
           <div className={styles.summaryCard}>
             <div className={styles.cardHeader}>
               <span className={styles.cardLabel}>Most Dominant Match</span>
-              <span className={styles.cardIcon}>🏆</span>
+              <span className={styles.cardIcon}>
+                <Trophy size={16} color="var(--ci-brand)" />
+              </span>
             </div>
             <div className={styles.cardValue} style={{ fontSize: "1.1rem", fontWeight: 700 }}>
               {data?.mostDominantMatch?.teams?.teamA?.name || "MI"} vs{" "}
@@ -114,7 +137,9 @@ const Dashboard = () => {
 
       {/* ── 2. Win Trend / Run Rate Timeline ───────────────────── */}
       <section className={styles.timelineSection}>
-        <h2 className={styles.sectionTitle}>📈 Win Trend / Run Rate Timeline</h2>
+        <h2 className={styles.sectionTitle}>
+          <TrendingUp size={18} color="var(--ci-brand)" /> Win Trend / Run Rate Timeline
+        </h2>
         <div className={styles.timelineGrid}>
           <TeamWins />
           <RunRateChart />
@@ -124,7 +149,9 @@ const Dashboard = () => {
       {/* ── 3. Team Comparison & Player Impact ─────────────────── */}
       <section className={styles.splitGrid}>
         <div className={styles.cardPanel}>
-          <h2 className={styles.sectionTitle}>🛡️ Team Comparison</h2>
+          <h2 className={styles.sectionTitle}>
+            <Shield size={18} color="var(--ci-accent)" /> Team Comparison
+          </h2>
           <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
             <TossImpactChart />
             <MatchIntensityChart />
@@ -132,7 +159,9 @@ const Dashboard = () => {
         </div>
 
         <div className={styles.cardPanel}>
-          <h2 className={styles.sectionTitle}>⭐ Player Impact</h2>
+          <h2 className={styles.sectionTitle}>
+            <Star size={18} color="var(--ci-amber)" /> Player Impact
+          </h2>
           <div className={styles.playerImpactGrid}>
             <TopRunScorer />
             <HighestWicketTaker />
@@ -143,7 +172,9 @@ const Dashboard = () => {
       {/* ── 4. Venue Stats & Recent Matches ─────────────────────── */}
       <section className={styles.splitGrid}>
         <div className={styles.cardPanel}>
-          <h2 className={styles.sectionTitle}>🏟️ Venue Stats</h2>
+          <h2 className={styles.sectionTitle}>
+            <Landmark size={18} color="var(--ci-brand)" /> Venue Stats
+          </h2>
           <p style={{ color: "var(--ci-text-secondary)", fontSize: "0.9rem", marginBottom: "16px" }}>
             Pitch conditions, boundary dimensions, and win split metrics across top Indian venues.
           </p>
@@ -173,7 +204,9 @@ const Dashboard = () => {
         </div>
 
         <div className={styles.cardPanel}>
-          <h2 className={styles.sectionTitle}>📋 Recent Matches</h2>
+          <h2 className={styles.sectionTitle}>
+            <ClipboardList size={18} color="var(--ci-accent)" /> Recent Matches
+          </h2>
           <div className={styles.recentMatchFeed}>
             {RECENT_SAMPLE_MATCHES.map((match) => (
               <div key={match.id} className={styles.recentMatchItem}>

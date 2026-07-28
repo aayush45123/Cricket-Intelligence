@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Venues.module.css";
+import { MapPin, Flame, Zap, Scale, Search, X } from "lucide-react";
 
 const PITCH_META = {
   batting: {
@@ -8,21 +9,21 @@ const PITCH_META = {
     color: "var(--ci-brand)",
     bg: "var(--ci-brand-subtle)",
     border: "var(--ci-border-brand)",
-    icon: "🏏",
+    icon: Flame,
   },
   bowling: {
     label: "Bowling Friendly",
     color: "var(--ci-danger)",
     bg: "rgba(255,77,109,0.07)",
     border: "rgba(255,77,109,0.28)",
-    icon: "⚡",
+    icon: Zap,
   },
   balanced: {
     label: "Balanced",
     color: "var(--ci-accent)",
     bg: "var(--ci-accent-subtle)",
     border: "var(--ci-border-accent)",
-    icon: "⚖️",
+    icon: Scale,
   },
 };
 
@@ -85,6 +86,7 @@ const Venues = () => {
             <div className={styles.heroCounts}>
               {["batting", "bowling", "balanced"].map((code) => {
                 const m = PITCH_META[code];
+                const Icon = m.icon;
                 const n = venues.filter((v) => v.pitchCode === code).length;
                 return (
                   <div
@@ -92,7 +94,7 @@ const Venues = () => {
                     className={styles.heroCountPill}
                     style={{ borderColor: m.border, background: m.bg }}
                   >
-                    <span>{m.icon}</span>
+                    <Icon size={14} color={m.color} />
                     <span style={{ color: m.color, fontWeight: 700 }}>{n}</span>
                     <span className={styles.heroCountLabel}>{m.label}</span>
                   </div>
@@ -106,7 +108,7 @@ const Venues = () => {
         <div className={styles.controls}>
           {/* Search */}
           <div className={styles.searchWrapper}>
-            <span className={styles.searchIcon}>⌕</span>
+            <Search size={15} className={styles.searchIcon} />
             <input
               className={styles.searchInput}
               placeholder="Search venue or city..."
@@ -115,7 +117,7 @@ const Venues = () => {
             />
             {search && (
               <button className={styles.clearBtn} onClick={() => setSearch("")}>
-                ✕
+                <X size={14} />
               </button>
             )}
           </div>
@@ -124,6 +126,7 @@ const Venues = () => {
           <div className={styles.filterGroup}>
             {["all", "batting", "bowling", "balanced"].map((p) => {
               const m = PITCH_META[p];
+              const Icon = m ? m.icon : null;
               return (
                 <button
                   key={p}
@@ -139,7 +142,13 @@ const Venues = () => {
                   }
                   onClick={() => setPitch(p)}
                 >
-                  {m ? `${m.icon} ${m.label}` : "All Pitches"}
+                  {m ? (
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+                      <Icon size={13} /> {m.label}
+                    </span>
+                  ) : (
+                    "All Pitches"
+                  )}
                 </button>
               );
             })}
@@ -175,6 +184,7 @@ const Venues = () => {
           <section className={styles.grid}>
             {displayed.map((v) => {
               const pm = PITCH_META[v.pitchCode] ?? PITCH_META.balanced;
+              const PitchIcon = pm.icon;
               return (
                 <div
                   key={v.venue}
@@ -194,7 +204,9 @@ const Venues = () => {
                     <div className={styles.cardTitles}>
                       <h3 className={styles.cardVenue}>{v.venue}</h3>
                       {v.city && (
-                        <span className={styles.cardCity}>📍 {v.city}</span>
+                        <span className={styles.cardCity}>
+                          <MapPin size={12} style={{ display: "inline", verticalAlign: "middle" }} /> {v.city}
+                        </span>
                       )}
                     </div>
                     <span
@@ -205,7 +217,7 @@ const Venues = () => {
                         background: pm.bg,
                       }}
                     >
-                      {pm.icon} {pm.label}
+                      <PitchIcon size={12} /> {pm.label}
                     </span>
                   </div>
 

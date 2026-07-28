@@ -6,6 +6,7 @@ import VenueTossChart from "../../components/charts/VenuetossChart/VenuetossChar
 import VenueSeasonTrend from "../../components/charts/VenueseasontrendChart/VenueseasontrendChart";
 import VenueScoreDistribution from "../../components/charts/VenuescoredistributionChart/VenuescoredistributionChart";
 import VenueTopTeams from "../../components/charts/VenuetopteamsChart/VenuetopteamsChart";
+import { MapPin, Flame, Zap, Scale } from "lucide-react";
 
 const PITCH_META = {
   batting: {
@@ -13,7 +14,7 @@ const PITCH_META = {
     color: "var(--ci-brand)",
     bg: "var(--ci-brand-subtle)",
     border: "var(--ci-border-brand)",
-    icon: "🏏",
+    icon: Flame,
     desc: "High-scoring ground. Batsmen dominate. Expect big first-innings totals and chasing sides to be competitive.",
   },
   bowling: {
@@ -21,7 +22,7 @@ const PITCH_META = {
     color: "var(--ci-danger)",
     bg: "rgba(255,77,109,0.07)",
     border: "rgba(255,77,109,0.28)",
-    icon: "⚡",
+    icon: Zap,
     desc: "Bowlers enjoy extra movement. Low totals are common. Taking wickets early is the key to winning here.",
   },
   balanced: {
@@ -29,7 +30,7 @@ const PITCH_META = {
     color: "var(--ci-accent)",
     bg: "var(--ci-accent-subtle)",
     border: "var(--ci-border-accent)",
-    icon: "⚖️",
+    icon: Scale,
     desc: "Neither side has a clear advantage. Strategy and execution determine outcomes more than conditions.",
   },
 };
@@ -102,6 +103,7 @@ const VenueDetail = () => {
   if (!data) return null;
 
   const pm = PITCH_META[data.pitchCode] ?? PITCH_META.balanced;
+  const PitchIcon = pm.icon;
   const tossImpactStrong = data.tossImpact > 58;
   const tossImpactWeak = data.tossImpact < 42;
 
@@ -117,14 +119,18 @@ const VenueDetail = () => {
             ← All Venues
           </button>
           {data.city && (
-            <span className={styles.cityLabel}>📍 {data.city}</span>
+            <span className={styles.cityLabel}>
+              <MapPin size={13} style={{ display: "inline", verticalAlign: "middle" }} /> {data.city}
+            </span>
           )}
         </div>
 
         {/* HERO */}
         <section className={styles.hero}>
           <div className={styles.heroLeft}>
-            <div className={styles.pitchIcon}>{pm.icon}</div>
+            <div className={styles.pitchIcon}>
+              <PitchIcon size={24} color={pm.color} />
+            </div>
             <div>
               <h1 className={styles.heroVenue}>{data.venue}</h1>
               <div className={styles.heroBadgeRow}>
@@ -136,7 +142,7 @@ const VenueDetail = () => {
                     background: pm.bg,
                   }}
                 >
-                  {pm.label}
+                  <PitchIcon size={12} /> {pm.label}
                 </span>
                 <span className={styles.matchCount}>
                   {data.totalMatches} matches

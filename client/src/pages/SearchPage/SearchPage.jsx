@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import styles from "./SearchPage.module.css";
+import { Search } from "lucide-react";
 
 /* ── Constants ───────────────────────────────────────────────── */
 const ROLES = [
@@ -415,7 +416,7 @@ const SearchPage = () => {
         {/* EMPTY */}
         {!loading && searched && results.length === 0 && (
           <div className={styles.stateWrapper}>
-            <p className={styles.emptyIcon}>🔍</p>
+            <Search size={32} color="var(--ci-text-muted)" />
             <p className={styles.emptyTitle}>No players found</p>
             <p className={styles.emptyNote}>
               Try adjusting your filters or search term.

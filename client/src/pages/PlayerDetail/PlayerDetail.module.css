@@ -11,7 +11,7 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: 32px;
 }
 
 /* ── Hero ───────────────────────────────────────────────────── */
@@ -22,12 +22,39 @@
   padding: 28px 32px;
   box-shadow: var(--ci-shadow-sm);
   display: flex;
-  align-items: center;
-  gap: 24px;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 20px;
 }
 
-.avatar {
+.backBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: var(--ci-bg-tertiary);
+  border: 1px solid var(--ci-border);
+  border-radius: 4px;
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: var(--ci-text-secondary);
+  cursor: pointer;
+  width: fit-content;
+  transition: all var(--ci-duration-sm) var(--ci-ease);
+}
+
+.backBtn:hover {
+  background: var(--ci-bg-quaternary);
+  border-color: var(--ci-border-medium);
+  color: var(--ci-text-primary);
+}
+
+.heroBody {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.heroAvatar {
   width: 64px;
   height: 64px;
   border-radius: 4px;
@@ -42,132 +69,162 @@
   flex-shrink: 0;
 }
 
-.playerInfo {
+.heroText {
   display: flex;
   flex-direction: column;
   gap: 6px;
   flex: 1;
 }
 
-.playerName {
-  font-size: 1.6rem;
+.heroMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.roleBadge {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: 2px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  border: 1px solid;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  width: fit-content;
+}
+
+.heroTitle {
+  font-size: 1.85rem;
   font-weight: 800;
   color: var(--ci-text-primary);
   letter-spacing: -0.02em;
   line-height: 1.1;
+  margin: 0;
 }
 
-.playerRole {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.775rem;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 2px;
-  background: var(--ci-brand-subtle);
-  color: var(--ci-brand-dark);
-  border: 1px solid var(--ci-border-brand);
-  width: fit-content;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+.heroSub {
+  font-size: 0.875rem;
+  color: var(--ci-text-muted);
+  margin: 0;
 }
 
-.heroActions {
-  display: flex;
-  gap: 10px;
-  flex-wrap: wrap;
+/* ── Impact Section ─────────────────────────────────────────── */
+.impactSection {
+  width: 100%;
 }
 
-.actionBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 16px;
-  background: var(--ci-bg-tertiary);
-  border: 1px solid var(--ci-border);
-  border-radius: 4px;
-  font-size: 0.825rem;
-  font-weight: 600;
-  color: var(--ci-text-secondary);
-  cursor: pointer;
-  transition: all var(--ci-duration-sm) var(--ci-ease);
-  white-space: nowrap;
-}
-
-.actionBtn:hover {
-  background: var(--ci-bg-quaternary);
-  border-color: var(--ci-border-medium);
-  color: var(--ci-text-primary);
-}
-
-/* ── Stat Tiles Row ─────────────────────────────────────────── */
-.statTilesRow {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 14px;
-}
-
-.statTile {
+.impactCard {
   background: var(--ci-bg-secondary);
   border: 1px solid var(--ci-border);
   border-radius: 4px;
-  padding: 16px 18px;
+  padding: 28px 32px;
   box-shadow: var(--ci-shadow-sm);
+  display: grid;
+  grid-template-columns: 1fr 220px;
+  align-items: center;
+  gap: 32px;
+}
+
+.impactLeft {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  transition: border-color var(--ci-duration-sm) var(--ci-ease);
+  gap: 12px;
 }
 
-.statTile:hover {
-  border-color: var(--ci-border-medium);
+.impactDesc {
+  font-size: 0.875rem;
+  color: var(--ci-text-secondary);
+  line-height: 1.6;
+  max-width: 640px;
 }
 
-.statTileHighlight {
-  border-color: var(--ci-border-brand);
-  background: var(--ci-brand-subtle);
+.impactTierRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 4px;
 }
 
-.statTileLabel {
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  color: var(--ci-text-muted);
-}
-
-.statTileValue {
-  font-size: 1.6rem;
+.impactTierLabel {
+  font-size: 1.1rem;
   font-weight: 800;
-  color: var(--ci-text-primary);
-  letter-spacing: -0.03em;
+  letter-spacing: -0.01em;
+}
+
+.impactTierSub {
+  font-size: 0.775rem;
+  font-weight: 600;
+  color: var(--ci-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding-left: 10px;
+  border-left: 1px solid var(--ci-border-medium);
+}
+
+.impactRight {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.impactMeter {
+  position: relative;
+  width: 160px;
+  height: 95px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.impactArc {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.impactNumber {
+  position: absolute;
+  bottom: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   line-height: 1;
 }
 
-.statTileUnit {
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-left: 2px;
-  opacity: 0.7;
+.impactNumber span:first-child {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
-/* ── Section ────────────────────────────────────────────────── */
+.impactNumberSub {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--ci-text-muted);
+  margin-top: 2px;
+}
+
+/* ── Section & Stat Grid ────────────────────────────────────── */
 .section {
   background: var(--ci-bg-secondary);
   border: 1px solid var(--ci-border);
   border-radius: 4px;
-  padding: 24px 28px;
+  padding: 28px 32px;
   box-shadow: var(--ci-shadow-sm);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .sectionHeader {
   display: flex;
   align-items: center;
   gap: 12px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--ci-border-subtle);
 }
 
 .sectionAccent {
@@ -183,80 +240,128 @@
   font-weight: 700;
   color: var(--ci-text-primary);
   letter-spacing: -0.01em;
+  margin: 0;
 }
 
-.sectionTag {
-  margin-left: auto;
-  font-size: 0.7rem;
-  font-weight: 600;
-  padding: 2px 8px;
-  border-radius: 2px;
+.statGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+}
+
+.statTile {
   background: var(--ci-bg-tertiary);
   border: 1px solid var(--ci-border);
-  color: var(--ci-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
-}
-
-/* ── Legacy styles ─────────────────────────────────────────── */
-.statsGrid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-}
-
-.statCard {
-  background: var(--ci-bg-secondary);
-  border: 1px solid var(--ci-border);
   border-radius: 4px;
-  padding: 20px 22px;
-  box-shadow: var(--ci-shadow-sm);
+  padding: 18px 20px;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
+  transition: border-color var(--ci-duration-sm) var(--ci-ease);
 }
 
-.statLabel {
-  font-size: 0.775rem;
-  font-weight: 600;
+.statTile:hover {
+  border-color: var(--ci-border-medium);
+}
+
+.statTileHighlight {
+  border-color: var(--ci-border-brand);
+  background: var(--ci-brand-subtle);
+}
+
+.statTileLabel {
+  font-size: 0.7rem;
+  font-weight: 700;
   text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: var(--ci-text-muted);
 }
 
-.statValue {
-  font-size: 1.75rem;
+.statTileValue {
+  font-size: 1.8rem;
   font-weight: 800;
   color: var(--ci-text-primary);
-  line-height: 1.1;
+  letter-spacing: -0.03em;
+  line-height: 1;
 }
 
-/* ── Charts ─────────────────────────────────────────────────── */
-.chartsGrid {
+.statTileUnit {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-left: 2px;
+  opacity: 0.7;
+}
+
+/* ── Charts Row ─────────────────────────────────────────────── */
+.chartsRow {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
   gap: 24px;
 }
 
-.chartPanel {
+/* ── Phase Tiles ────────────────────────────────────────────── */
+.phaseTiles {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  padding-top: 8px;
+}
+
+.phaseTile {
   background: var(--ci-bg-secondary);
   border: 1px solid var(--ci-border);
   border-radius: 4px;
-  padding: 24px 28px;
-  box-shadow: var(--ci-shadow-sm);
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 }
 
-/* ── Impact Tier ────────────────────────────────────────────── */
-.impactTierBadge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 4px 12px;
+.phaseDot {
+  width: 8px;
+  height: 8px;
   border-radius: 2px;
-  font-size: 0.725rem;
+  flex-shrink: 0;
+}
+
+.phaseLabel {
+  font-size: 0.825rem;
   font-weight: 700;
-  border: 1px solid;
-  text-transform: uppercase;
-  letter-spacing: 0.04em;
+  color: var(--ci-text-secondary);
+}
+
+.phaseValue {
+  margin-left: auto;
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+
+.phaseUnit {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--ci-text-muted);
+}
+
+/* ── No Data Banners ────────────────────────────────────────── */
+.noDataBanner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 18px 24px;
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: 4px;
+  color: var(--ci-text-muted);
+}
+
+.noDataIcon {
+  font-size: 1.2rem;
+}
+
+.noDataText {
+  font-size: 0.875rem;
+  font-weight: 500;
 }
 
 /* ── State Wrappers ─────────────────────────────────────────── */
@@ -266,12 +371,16 @@
   align-items: center;
   justify-content: center;
   gap: 16px;
-  min-height: 320px;
+  min-height: 360px;
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: 4px;
 }
 
 .stateText {
   font-size: 0.875rem;
   color: var(--ci-text-muted);
+  font-weight: 500;
 }
 
 .errorText {
@@ -280,39 +389,22 @@
   font-weight: 600;
 }
 
-.backBtn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
-  background: var(--ci-bg-secondary);
-  border: 1px solid var(--ci-border);
-  border-radius: 4px;
-  font-size: 0.825rem;
-  font-weight: 600;
-  color: var(--ci-text-secondary);
-  cursor: pointer;
-  transition: all var(--ci-duration-sm) var(--ci-ease);
-}
-
-.backBtn:hover {
-  background: var(--ci-bg-tertiary);
-  color: var(--ci-text-primary);
-}
-
 /* ── Responsive ─────────────────────────────────────────────── */
 @media (max-width: 1024px) {
-  .chartsGrid {
+  .impactCard {
+    grid-template-columns: 1fr;
+  }
+  .phaseTiles {
     grid-template-columns: 1fr;
   }
 }
 
 @media (max-width: 640px) {
-  .hero {
+  .heroBody {
     flex-direction: column;
     align-items: flex-start;
   }
-  .heroActions {
-    width: 100%;
+  .statGrid {
+    grid-template-columns: repeat(2, 1fr);
   }
 }

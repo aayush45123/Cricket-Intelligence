@@ -2,6 +2,16 @@ import React, { useState, useEffect, useRef } from "react";
 import styles from "./Navbar.module.css";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import {
+  BarChart2,
+  Trophy,
+  Search,
+  Plus,
+  List,
+  ChevronDown,
+  X,
+  ArrowRight,
+} from "lucide-react";
 
 /* ── Analytics menu sections ─────────────────────────────────── */
 const ANALYTICS_MENU = [
@@ -58,13 +68,13 @@ const MATCHES_MENU = [
     to: "/my-matches/new",
     label: "Start New Match",
     desc: "Begin ball-by-ball scoring",
-    icon: "+",
+    icon: Plus,
   },
   {
     to: "/my-matches",
     label: "My Match History",
     desc: "View & resume past matches",
-    icon: "≡",
+    icon: List,
   },
 ];
 
@@ -118,7 +128,7 @@ const QuickSearchModal = ({ onClose }) => {
     <div className={styles.searchOverlay} onClick={onClose}>
       <div className={styles.searchModal} onClick={(e) => e.stopPropagation()}>
         <div className={styles.searchInputRow}>
-          <span className={styles.searchIcon}>⌕</span>
+          <Search size={16} className={styles.searchIcon} />
           <input
             ref={inputRef}
             className={styles.searchInput}
@@ -132,7 +142,7 @@ const QuickSearchModal = ({ onClose }) => {
           />
           {loading && <div className={styles.searchSpinner} />}
           <button className={styles.searchClose} onClick={onClose}>
-            ✕
+            <X size={16} />
           </button>
         </div>
 
@@ -153,7 +163,7 @@ const QuickSearchModal = ({ onClose }) => {
                     .toUpperCase()}
                 </span>
                 <span className={styles.searchName}>{name}</span>
-                <span className={styles.searchArrow}>→</span>
+                <ArrowRight size={14} className={styles.searchArrow} />
               </button>
             ))}
             <button
@@ -268,13 +278,12 @@ const Navbar = () => {
                 setUserOpen(false);
               }}
             >
-              <span className={styles.navBtnIcon}>📊</span>
+              <BarChart2 size={16} className={styles.navBtnIcon} />
               Sample Analytics
-              <span
+              <ChevronDown
+                size={14}
                 className={`${styles.chevron} ${analyticsOpen ? styles.chevronOpen : ""}`}
-              >
-                ▾
-              </span>
+              />
             </button>
 
             {analyticsOpen && (
@@ -322,7 +331,7 @@ const Navbar = () => {
                       setSearchOpen(true);
                     }}
                   >
-                    <span>⌕</span>
+                    <Search size={15} />
                     <span>Search players & filter by stats</span>
                     <kbd>⌘K</kbd>
                   </button>
@@ -335,7 +344,7 @@ const Navbar = () => {
           {!isAuthenticated ? (
             /* Not logged in → single CTA button that goes to login */
             <button className={styles.startMatchBtn} onClick={handleStartMatch}>
-              <span className={styles.navBtnIcon}>🏏</span>
+              <Trophy size={16} className={styles.navBtnIcon} />
               Start a Match
             </button>
           ) : (
@@ -349,13 +358,12 @@ const Navbar = () => {
                   setUserOpen(false);
                 }}
               >
-                <span className={styles.navBtnIcon}>🏏</span>
+                <Trophy size={16} className={styles.navBtnIcon} />
                 My Matches
-                <span
+                <ChevronDown
+                  size={14}
                   className={`${styles.chevron} ${matchesOpen ? styles.chevronOpen : ""}`}
-                >
-                  ▾
-                </span>
+                />
               </button>
 
               {matchesOpen && (
@@ -367,25 +375,28 @@ const Navbar = () => {
                     </span>
                   </div>
 
-                  {MATCHES_MENU.map((item) => (
-                    <Link
-                      key={item.to}
-                      to={item.to}
-                      className={`${styles.matchMenuItem} ${location.pathname === item.to ? styles.matchMenuItemActive : ""}`}
-                      onClick={() => setMatchesOpen(false)}
-                    >
-                      <span className={styles.matchMenuIcon}>{item.icon}</span>
-                      <div className={styles.matchMenuText}>
-                        <span className={styles.matchMenuLabel}>
-                          {item.label}
-                        </span>
-                        <span className={styles.matchMenuDesc}>
-                          {item.desc}
-                        </span>
-                      </div>
-                      <span className={styles.matchMenuArrow}>→</span>
-                    </Link>
-                  ))}
+                  {MATCHES_MENU.map((item) => {
+                    const IconComp = item.icon;
+                    return (
+                      <Link
+                        key={item.to}
+                        to={item.to}
+                        className={`${styles.matchMenuItem} ${location.pathname === item.to ? styles.matchMenuItemActive : ""}`}
+                        onClick={() => setMatchesOpen(false)}
+                      >
+                        <IconComp size={16} className={styles.matchMenuIcon} />
+                        <div className={styles.matchMenuText}>
+                          <span className={styles.matchMenuLabel}>
+                            {item.label}
+                          </span>
+                          <span className={styles.matchMenuDesc}>
+                            {item.desc}
+                          </span>
+                        </div>
+                        <ArrowRight size={14} className={styles.matchMenuArrow} />
+                      </Link>
+                    );
+                  })}
 
                   <div className={styles.matchMenuFooter}>
                     <span className={styles.matchMenuNote}>
@@ -406,7 +417,7 @@ const Navbar = () => {
             onClick={() => setSearchOpen(true)}
             title="Search (Ctrl+K)"
           >
-            <span className={styles.iconBtnLabel}>⌕</span>
+            <Search size={15} />
             <span className={styles.iconBtnKbd}>⌘K</span>
           </button>
 

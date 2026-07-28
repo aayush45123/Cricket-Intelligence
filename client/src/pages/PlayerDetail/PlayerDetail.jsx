@@ -4,6 +4,7 @@ import styles from "./PlayerDetail.module.css";
 import PhaseStrikeRateChart from "../../components/charts/PhaseStrikeRateChart/PhaseStrikeRateChart";
 import BattingBreakdownChart from "../../components/charts/BattingBreakdownChart/BattingBreakdownChart";
 import BowlingMetricsChart from "../../components/charts/BowlingMetricsChart/BowlingMetricsChart";
+import { Activity, Zap } from "lucide-react";
 
 /* ── Helpers ──────────────────────────────────────────────── */
 const deriveRole = (batting, bowling) => {
@@ -320,7 +321,7 @@ const PlayerDetail = () => {
         {/* ── NO DATA STATES ────────────────────────────────── */}
         {!hasBatting && (
           <div className={styles.noDataBanner}>
-            <span className={styles.noDataIcon}>🏏</span>
+            <Activity className={styles.noDataIcon} size={18} color="var(--ci-brand)" />
             <span className={styles.noDataText}>
               No batting data recorded for this player
             </span>
@@ -329,7 +330,7 @@ const PlayerDetail = () => {
 
         {!hasBowling && (
           <div className={styles.noDataBanner}>
-            <span className={styles.noDataIcon}>⚡</span>
+            <Zap className={styles.noDataIcon} size={18} color="var(--ci-danger)" />
             <span className={styles.noDataText}>
               No bowling data recorded for this player
             </span>

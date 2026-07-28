@@ -2,31 +2,47 @@ import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import styles from "./DashboardLayout.module.css";
+import {
+  LayoutDashboard,
+  Trophy,
+  Shield,
+  Users,
+  Landmark,
+  LineChart,
+  Sparkles,
+  Swords,
+  FileText,
+  Settings,
+  Search,
+  Activity,
+  Plus,
+  Menu,
+} from "lucide-react";
 
 const SIDEBAR_ITEMS = [
   {
     group: "Core Dashboard",
     items: [
-      { to: "/dashboard", label: "Dashboard", icon: "📊" },
-      { to: "/matches", label: "Matches", icon: "🏏", badge: "IPL" },
-      { to: "/leaderboard", label: "Teams", icon: "🛡️" },
-      { to: "/players", label: "Players", icon: "👤" },
-      { to: "/venues", label: "Venues", icon: "🏟️" },
+      { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+      { to: "/matches", label: "Matches", icon: Trophy, badge: "IPL" },
+      { to: "/leaderboard", label: "Teams", icon: Shield },
+      { to: "/players", label: "Players", icon: Users },
+      { to: "/venues", label: "Venues", icon: Landmark },
     ],
   },
   {
     group: "Analytics & Intelligence",
     items: [
-      { to: "/search", label: "Analytics", icon: "📈" },
-      { to: "/strategy", label: "Predictions", icon: "🔮" },
-      { to: "/matchups", label: "Batter vs Bowler", icon: "⚔️" },
+      { to: "/search", label: "Analytics", icon: LineChart },
+      { to: "/strategy", label: "Predictions", icon: Sparkles },
+      { to: "/matchups", label: "Batter vs Bowler", icon: Swords },
     ],
   },
   {
     group: "Account & Custom",
     items: [
-      { to: "/my-matches", label: "My Matches", icon: "📝" },
-      { to: "/my-matches/new", label: "Settings", icon: "⚙️" },
+      { to: "/my-matches", label: "My Matches", icon: FileText },
+      { to: "/my-matches/new", label: "Settings", icon: Settings },
     ],
   },
 ];
@@ -36,7 +52,6 @@ const DashboardLayout = ({ children }) => {
   const navigate = useNavigate();
   const { user, isAuthenticated, logout } = useAuth();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [searchModalOpen, setSearchModalOpen] = useState(false);
 
   // Close mobile sidebar on route change
   useEffect(() => {
@@ -48,7 +63,6 @@ const DashboardLayout = ({ children }) => {
     const handleKeyDown = (e) => {
       if ((e.ctrlKey || e.metaKey) && e.key === "k") {
         e.preventDefault();
-        // Trigger quick search navigation
         navigate("/search");
       }
     };
@@ -70,7 +84,7 @@ const DashboardLayout = ({ children }) => {
       >
         <div className={styles.sidebarHeader}>
           <Link to="/" className={styles.logoText}>
-            <span className={styles.logoIcon}>🏏</span>
+            <Activity className={styles.logoIcon} size={20} color="var(--ci-brand)" />
             Cricket <span className={styles.logoHighlight}>Intelligence</span>
           </Link>
           <span className={styles.badgeEnterprise}>v2.6</span>
@@ -81,6 +95,7 @@ const DashboardLayout = ({ children }) => {
             <div key={group.group}>
               <div className={styles.navGroupTitle}>{group.group}</div>
               {group.items.map((item) => {
+                const IconComponent = item.icon;
                 const isActive =
                   location.pathname === item.to ||
                   (item.to !== "/" &&
@@ -92,7 +107,9 @@ const DashboardLayout = ({ children }) => {
                     to={item.to}
                     className={`${styles.navItem} ${isActive ? styles.navItemActive : ""}`}
                   >
-                    <span className={styles.navIcon}>{item.icon}</span>
+                    <span className={styles.navIcon}>
+                      <IconComponent size={16} />
+                    </span>
                     <span>{item.label}</span>
                     {item.badge && (
                       <span className={styles.navBadge}>{item.badge}</span>
@@ -134,13 +151,13 @@ const DashboardLayout = ({ children }) => {
             onClick={() => setMobileOpen((v) => !v)}
             aria-label="Toggle Navigation"
           >
-            ☰
+            <Menu size={20} />
           </button>
           <button
             className={styles.searchBarTrigger}
             onClick={() => navigate("/search")}
           >
-            <span>🔍</span>
+            <Search size={15} />
             <span>Search players, teams, venues...</span>
             <kbd className={styles.searchKbd}>⌘K</kbd>
           </button>
@@ -156,7 +173,7 @@ const DashboardLayout = ({ children }) => {
             className={styles.primaryCta}
             onClick={() => navigate("/my-matches/new")}
           >
-            <span>+</span> Start Match
+            <Plus size={15} /> Start Match
           </button>
         </div>
       </header>

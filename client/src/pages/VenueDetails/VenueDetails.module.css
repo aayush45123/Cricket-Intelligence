@@ -16,7 +16,8 @@
 .topNav {
   display: flex;
   align-items: center;
-  gap: 12px;
+  justify-content: space-between;
+  gap: 16px;
 }
 
 .backBtn {
@@ -40,6 +41,12 @@
   color: var(--ci-text-primary);
 }
 
+.cityLabel {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: var(--ci-text-muted);
+}
+
 /* ── Hero ───────────────────────────────────────────────────── */
 .hero {
   background: var(--ci-bg-secondary);
@@ -47,92 +54,154 @@
   border-radius: 4px;
   padding: 28px 32px;
   box-shadow: var(--ci-shadow-sm);
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 24px;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  align-items: center;
+  gap: 28px;
 }
 
 .heroLeft {
   display: flex;
-  flex-direction: column;
-  gap: 6px;
+  align-items: flex-start;
+  gap: 20px;
 }
 
-.venueTitle {
-  font-size: 1.75rem;
+.pitchIcon {
+  font-size: 2.2rem;
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--ci-bg-tertiary);
+  border: 1px solid var(--ci-border);
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.heroVenue {
+  font-size: 1.85rem;
   font-weight: 800;
   color: var(--ci-text-primary);
   letter-spacing: -0.02em;
   line-height: 1.1;
+  margin-bottom: 8px;
 }
 
-.venueCity {
-  font-size: 0.875rem;
-  color: var(--ci-text-muted);
-}
-
-.heroBadges {
+.heroBadgeRow {
   display: flex;
   align-items: center;
-  gap: 8px;
-  flex-wrap: wrap;
+  gap: 12px;
 }
 
 .pitchBadge {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 4px 10px;
+  gap: 6px;
+  padding: 4px 12px;
   border-radius: 2px;
-  font-size: 0.75rem;
-  font-weight: 600;
+  font-size: 0.775rem;
+  font-weight: 700;
   border: 1px solid;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.matchCount {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: var(--ci-text-muted);
+}
+
+/* Verdict Card */
+.verdictCard {
+  border: 1px solid;
+  border-radius: 4px;
+  padding: 18px 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.verdictTitle {
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.verdictDesc {
+  font-size: 0.825rem;
+  color: var(--ci-text-secondary);
+  line-height: 1.5;
+}
+
+.verdictAvg {
+  font-size: 0.8rem;
+  color: var(--ci-text-muted);
+  font-weight: 600;
+  padding-top: 6px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
 /* ── Stats Grid ─────────────────────────────────────────────── */
 .statsGrid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  grid-template-columns: repeat(6, 1fr);
   gap: 16px;
 }
 
-.statCard {
+.statTile {
   background: var(--ci-bg-secondary);
   border: 1px solid var(--ci-border);
   border-radius: 4px;
-  padding: 20px 22px;
+  padding: 20px 18px;
   box-shadow: var(--ci-shadow-sm);
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 6px;
   transition: border-color var(--ci-duration-sm) var(--ci-ease);
 }
 
-.statCard:hover {
+.statTile:hover {
   border-color: var(--ci-border-medium);
 }
 
 .statLabel {
-  font-size: 0.725rem;
-  font-weight: 600;
+  font-size: 0.7rem;
+  font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
   color: var(--ci-text-muted);
 }
 
 .statValue {
-  font-size: 2rem;
+  font-size: 1.85rem;
   font-weight: 800;
-  color: var(--ci-text-primary);
   line-height: 1;
   letter-spacing: -0.03em;
+  display: flex;
+  align-items: baseline;
+  gap: 2px;
+}
+
+.statUnit {
+  font-size: 0.9rem;
+  font-weight: 700;
 }
 
 .statSub {
-  font-size: 0.775rem;
+  font-size: 0.75rem;
   color: var(--ci-text-muted);
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+/* ── Two Col Layout ─────────────────────────────────────────── */
+.twoCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
 }
 
 /* ── Section ────────────────────────────────────────────────── */
@@ -140,11 +209,11 @@
   background: var(--ci-bg-secondary);
   border: 1px solid var(--ci-border);
   border-radius: 4px;
-  padding: 24px 28px;
+  padding: 28px 32px;
   box-shadow: var(--ci-shadow-sm);
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .sectionHeader {
@@ -161,7 +230,6 @@
   height: 20px;
   border-radius: 1px;
   flex-shrink: 0;
-  background: var(--ci-brand);
 }
 
 .sectionTitle {
@@ -171,27 +239,17 @@
   letter-spacing: -0.01em;
 }
 
-/* ── Charts Grid ────────────────────────────────────────────── */
-.chartsGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-}
-
-.chartPanel {
-  background: var(--ci-bg-secondary);
+.sectionTag {
+  margin-left: auto;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 2px;
+  background: var(--ci-bg-tertiary);
   border: 1px solid var(--ci-border);
-  border-radius: 4px;
-  padding: 24px 28px;
-  box-shadow: var(--ci-shadow-sm);
-}
-
-.chartTitle {
-  font-size: 0.925rem;
-  font-weight: 700;
-  color: var(--ci-text-primary);
-  margin-bottom: 16px;
-  letter-spacing: -0.01em;
+  color: var(--ci-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
 }
 
 /* ── State / Loading ────────────────────────────────────────── */
@@ -201,12 +259,16 @@
   align-items: center;
   justify-content: center;
   gap: 16px;
-  min-height: 320px;
+  min-height: 360px;
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: 4px;
 }
 
 .stateText {
   font-size: 0.875rem;
   color: var(--ci-text-muted);
+  font-weight: 500;
 }
 
 .errorText {
@@ -216,8 +278,8 @@
 }
 
 .loadingRing {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   border: 2px solid var(--ci-border);
   border-top-color: var(--ci-brand);
   border-radius: 50%;
@@ -229,8 +291,17 @@
 }
 
 /* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 1200px) {
+  .statsGrid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 @media (max-width: 1024px) {
-  .chartsGrid {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+  .twoCol {
     grid-template-columns: 1fr;
   }
 }
@@ -239,7 +310,7 @@
   .statsGrid {
     grid-template-columns: repeat(2, 1fr);
   }
-  .hero {
+  .heroLeft {
     flex-direction: column;
   }
 }
