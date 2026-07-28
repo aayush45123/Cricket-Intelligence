@@ -38,7 +38,7 @@ const HighestWicketTaker = () => {
     <div className={styles.wrapper}>
       <h3 className={styles.title}>Top Wicket Takers</h3>
       <div className={styles.chart}>
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height={240}>
           <BarChart
             data={chartData}
             barCategoryGap="35%"

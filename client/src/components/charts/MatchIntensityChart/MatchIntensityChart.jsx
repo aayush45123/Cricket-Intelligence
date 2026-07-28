@@ -34,7 +34,7 @@ const MatchIntensityChart = () => {
     <div className={styles.wrapper}>
       <h3 className={styles.title}>Match Intensity</h3>
       <div className={styles.chart}>
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height={240}>
           <PieChart>
             <Pie
               data={chartData}
