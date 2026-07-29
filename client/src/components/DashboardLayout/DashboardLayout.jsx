@@ -12,37 +12,35 @@ import {
   Sparkles,
   Swords,
   FileText,
-  Settings,
   Search,
   Activity,
   Plus,
+  PlusCircle,
   Menu,
+  Award,
 } from "lucide-react";
 
 const SIDEBAR_ITEMS = [
   {
-    group: "Core Dashboard",
+    group: "User Workspace",
     items: [
-      { to: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-      { to: "/matches", label: "Matches", icon: Trophy, badge: "IPL" },
-      { to: "/leaderboard", label: "Teams", icon: Shield },
-      { to: "/players", label: "Players", icon: Users },
-      { to: "/venues", label: "Venues", icon: Landmark },
+      { to: "/my-matches/new", label: "New Match", icon: PlusCircle, badge: "Live" },
+      { to: "/my-matches", label: "My Matches", icon: FileText },
+      { to: "/my-matches/analytics", label: "Analyze Matches", icon: LineChart },
+      { to: "/tournaments", label: "Create Tournament", icon: Award, badge: "New" },
     ],
   },
   {
-    group: "Analytics & Intelligence",
+    group: "Sample Analysis (IPL)",
     items: [
-      { to: "/search", label: "Analytics", icon: LineChart },
+      { to: "/dashboard", label: "Sample Dashboard", icon: LayoutDashboard },
+      { to: "/matches", label: "Sample Matches", icon: Trophy, badge: "IPL" },
+      { to: "/leaderboard", label: "IPL Teams", icon: Shield },
+      { to: "/players", label: "IPL Players", icon: Users },
+      { to: "/venues", label: "Venues", icon: Landmark },
+      { to: "/search", label: "Analytics Search", icon: Search },
       { to: "/strategy", label: "Predictions", icon: Sparkles },
       { to: "/matchups", label: "Batter vs Bowler", icon: Swords },
-    ],
-  },
-  {
-    group: "Account & Custom",
-    items: [
-      { to: "/my-matches", label: "My Matches", icon: FileText },
-      { to: "/my-matches/new", label: "Settings", icon: Settings },
     ],
   },
 ];
@@ -122,23 +120,48 @@ const DashboardLayout = ({ children }) => {
         </nav>
 
         <div className={styles.sidebarFooter}>
-          <div
-            className={styles.userCard}
-            onClick={() =>
-              isAuthenticated ? navigate("/my-matches") : navigate("/login")
-            }
-          >
-            <div className={styles.userAvatar}>
-              {user?.name?.slice(0, 2).toUpperCase() || "SA"}
+          <div className={styles.userCard}>
+            <div
+              className={styles.userCardMain}
+              onClick={() =>
+                isAuthenticated ? navigate("/my-matches/analytics") : navigate("/login")
+              }
+            >
+              <div className={styles.userAvatar}>
+                {user?.name?.slice(0, 2).toUpperCase() || "G"}
+              </div>
+              <div className={styles.userInfo}>
+                <span className={styles.userName}>
+                  {user?.name || "Guest Analyst"}
+                </span>
+                <span className={styles.userRole}>
+                  {isAuthenticated ? "Logged In User" : "Guest Mode"}
+                </span>
+              </div>
             </div>
-            <div className={styles.userInfo}>
-              <span className={styles.userName}>
-                {user?.name || "Analyst Account"}
-              </span>
-              <span className={styles.userRole}>
-                {isAuthenticated ? "Enterprise User" : "Guest Mode"}
-              </span>
-            </div>
+            {isAuthenticated ? (
+              <button
+                className={styles.authBtn}
+                title="Logout"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  logout();
+                  navigate("/login");
+                }}
+              >
+                Logout
+              </button>
+            ) : (
+              <button
+                className={styles.authBtn}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  navigate("/login");
+                }}
+              >
+                Sign In
+              </button>
+            )}
           </div>
         </div>
       </aside>

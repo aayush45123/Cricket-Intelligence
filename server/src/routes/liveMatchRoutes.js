@@ -9,6 +9,7 @@ import {
   getMatchState,
   getMatchAnalytics,
   getMyMatches,
+  getUserMatchAnalytics,
   getSharedMatch,
 } from "../controllers/liveMatchController.js";
 import { protect } from "../middleware/authMiddleware.js";
@@ -22,6 +23,7 @@ router.get("/share/:shareToken", getSharedMatch);
 router.use(protect);
 
 router.get("/my-matches", getMyMatches);
+router.get("/user-analytics", getUserMatchAnalytics);
 router.post("/setup", setupMatch);
 router.patch("/:matchId/start", startMatch);
 router.post("/:matchId/ball", recordBall);
@@ -32,3 +34,4 @@ router.get("/:matchId/state", getMatchState);
 router.get("/:matchId/analytics", getMatchAnalytics);
 
 export default router;
+

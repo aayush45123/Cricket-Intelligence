@@ -13,6 +13,7 @@ import teamStrategyRoutes from "./routes/teamStrategyRoutes.js";
 import searchRoutes from "./routes/searchRoutes.js";
 import authRoutes from "./routes/authRoutes.js"; // NEW
 import liveMatchRoutes from "./routes/liveMatchRoutes.js"; // NEW
+import tournamentRoutes from "./routes/tournamentRoutes.js"; // NEW
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -41,6 +42,7 @@ app.use("/api/search", searchRoutes);
 /* User match engine (new) */
 app.use("/api/auth", authRoutes);
 app.use("/api/live", liveMatchRoutes);
+app.use("/api/tournaments", tournamentRoutes);
 
 app.use((_req, res) => res.status(404).json({ message: "Route not found" }));
 

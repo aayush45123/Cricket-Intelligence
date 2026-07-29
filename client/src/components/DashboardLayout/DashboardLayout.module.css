@@ -137,18 +137,40 @@
 .userCard {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
+  gap: 8px;
   padding: 8px 10px;
   border-radius: 4px;
   background-color: var(--ci-bg-tertiary);
   border: 1px solid var(--ci-border-subtle);
-  cursor: pointer;
   transition: background-color var(--ci-duration-sm) var(--ci-ease);
 }
 
-.userCard:hover {
-  background-color: var(--ci-bg-quaternary);
-  border-color: var(--ci-border-medium);
+.userCardMain {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.authBtn {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--ci-border-subtle);
+  color: var(--ci-text-secondary);
+  font-size: 0.72rem;
+  padding: 4px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.authBtn:hover {
+  background: var(--ci-brand);
+  color: #fff;
+  border-color: var(--ci-brand);
 }
 
 .userAvatar {

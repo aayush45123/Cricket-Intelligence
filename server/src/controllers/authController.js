@@ -161,3 +161,31 @@ export const getMe = async (req, res) => {
     },
   });
 };
+
+/* ───────────────────────────────────────────── */
+/* 🟣 SEARCH USERS */
+/* ───────────────────────────────────────────── */
+export const searchUsers = async (req, res) => {
+  try {
+    const { query } = req.query;
+    if (!query || query.trim().length < 2) {
+      return res.json({ status: "success", data: { users: [] } });
+    }
+
+    const regex = new RegExp(query.trim(), "i");
+    const users = await User.find({
+      $or: [{ name: regex }, { email: regex }],
+    })
+      .select("_id name email")
+      .limit(10);
+
+    res.json({
+      status: "success",
+      data: { users },
+    });
+  } catch (err) {
+    console.error("🔥 SEARCH USERS ERROR:", err);
+    res.status(500).json({ message: "Failed to search users" });
+  }
+};
+

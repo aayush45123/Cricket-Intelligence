@@ -723,16 +723,187 @@ export const getMyMatches = async (req, res) => {
 };
 
 /* ─────────────────────────────────────────────────────────────
-   GET /api/live/share/:shareToken  — public read
+   GET /api/live/user-analytics  — User's Custom Matches Analytics
    ───────────────────────────────────────────────────────────── */
-export const getSharedMatch = async (req, res) => {
+export const getUserMatchAnalytics = async (req, res) => {
   try {
-    const match = await UserMatch.findOne({
-      shareToken: req.params.shareToken,
-    }).lean();
-    if (!match) return res.status(404).json({ message: "Match not found" });
-    res.json({ status: "success", data: { match } });
+    const userId = req.user._id;
+
+    // 1. Matches summary
+    const matches = await UserMatch.find({ userId }).lean();
+    const totalMatches = matches.length;
+    const completedMatches = matches.filter((m) => m.status === "completed").length;
+
+    // 2. Deliveries aggregation
+    const userDeliveries = await UserDelivery.find({ userId }).lean();
+
+    // Aggregating Batting
+    const batterMap = {};
+    // Aggregating Bowling
+    const bowlerMap = {};
+    // Aggregating Matchups
+    const matchupMap = {};
+
+    let totalRuns = 0;
+    let totalWickets = 0;
+
+    userDeliveries.forEach((d) => {
+      const runsBatter = d.runsBatter || 0;
+      const extraRuns = d.extraRuns || 0;
+      const isExtra = d.extraType && d.extraType !== "none";
+      const isValidBall = !["wide", "noball"].includes(d.extraType);
+
+      totalRuns += runsBatter + extraRuns;
+      if (d.isWicket) totalWickets += 1;
+
+      // Batting Stats
+      if (d.striker) {
+        if (!batterMap[d.striker]) {
+          batterMap[d.striker] = {
+            name: d.striker,
+            runs: 0,
+            balls: 0,
+            fours: 0,
+            sixes: 0,
+            outs: 0,
+            matchIds: new Set(),
+          };
+        }
+        batterMap[d.striker].runs += runsBatter;
+        if (isValidBall || d.extraType === "noball") batterMap[d.striker].balls += 1;
+        if (runsBatter === 4) batterMap[d.striker].fours += 1;
+        if (runsBatter === 6) batterMap[d.striker].sixes += 1;
+        if (d.matchId) batterMap[d.striker].matchIds.add(d.matchId.toString());
+        if (d.isWicket && d.dismissedPlayer === d.striker) {
+          batterMap[d.striker].outs += 1;
+        }
+      }
+
+      // Bowling Stats
+      if (d.bowler) {
+        if (!bowlerMap[d.bowler]) {
+          bowlerMap[d.bowler] = {
+            name: d.bowler,
+            wickets: 0,
+            runsConceded: 0,
+            validBalls: 0,
+            matchIds: new Set(),
+          };
+        }
+        // Wicket count (excluding run outs for bowler stats)
+        if (d.isWicket && d.wicketType !== "run out") {
+          bowlerMap[d.bowler].wickets += 1;
+        }
+        // Runs conceded: batter runs + wides/noballs (byes/legbyes don't count against bowler)
+        let runsAgainstBowler = runsBatter;
+        if (["wide", "noball"].includes(d.extraType)) {
+          runsAgainstBowler += extraRuns;
+        }
+        bowlerMap[d.bowler].runsConceded += runsAgainstBowler;
+        if (isValidBall) bowlerMap[d.bowler].validBalls += 1;
+        if (d.matchId) bowlerMap[d.bowler].matchIds.add(d.matchId.toString());
+      }
+
+      // Batter vs Bowler Matchup
+      if (d.striker && d.bowler) {
+        const pairKey = `${d.striker} vs ${d.bowler}`;
+        if (!matchupMap[pairKey]) {
+          matchupMap[pairKey] = {
+            batter: d.striker,
+            bowler: d.bowler,
+            runs: 0,
+            balls: 0,
+            outs: 0,
+          };
+        }
+        matchupMap[pairKey].runs += runsBatter;
+        if (isValidBall) matchupMap[pairKey].balls += 1;
+        if (d.isWicket && d.dismissedPlayer === d.striker && d.wicketType !== "run out") {
+          matchupMap[pairKey].outs += 1;
+        }
+      }
+    });
+
+    // Formatting Top Batters
+    const topBatters = Object.values(batterMap)
+      .map((b) => {
+        const innings = b.matchIds.size;
+        const sr = b.balls > 0 ? ((b.runs / b.balls) * 100).toFixed(1) : "0.0";
+        const avg = b.outs > 0 ? (b.runs / b.outs).toFixed(1) : b.runs.toFixed(1);
+        return {
+          name: b.name,
+          runs: b.runs,
+          balls: b.balls,
+          innings,
+          fours: b.fours,
+          sixes: b.sixes,
+          outs: b.outs,
+          strikeRate: parseFloat(sr),
+          average: parseFloat(avg),
+        };
+      })
+      .sort((a, b) => b.runs - a.runs);
+
+    // Formatting Top Bowlers
+    const topBowlers = Object.values(bowlerMap)
+      .map((b) => {
+        const overs = (b.validBalls / 6).toFixed(1);
+        const oversNum = b.validBalls / 6;
+        const econ = oversNum > 0 ? (b.runsConceded / oversNum).toFixed(2) : "0.00";
+        const avg = b.wickets > 0 ? (b.runsConceded / b.wickets).toFixed(1) : "0.0";
+        return {
+          name: b.name,
+          wickets: b.wickets,
+          runsConceded: b.runsConceded,
+          overs,
+          economy: parseFloat(econ),
+          average: parseFloat(avg),
+          matches: b.matchIds.size,
+        };
+      })
+      .sort((a, b) => b.wickets - a.wickets);
+
+    // Formatting Teams
+    const teamMap = {};
+    matches.forEach((m) => {
+      [m.teamA, m.teamB].forEach((tName) => {
+        if (!tName) return;
+        if (!teamMap[tName]) teamMap[tName] = { team: tName, played: 0, won: 0, lost: 0 };
+        teamMap[tName].played += 1;
+        if (m.status === "completed") {
+          if (m.winner === tName) teamMap[tName].won += 1;
+          else if (m.winner && m.winner !== tName) teamMap[tName].lost += 1;
+        }
+      });
+    });
+    const teamStats = Object.values(teamMap).sort((a, b) => b.won - a.won);
+
+    // Formatting Matchups
+    const matchups = Object.values(matchupMap)
+      .map((m) => ({
+        ...m,
+        sr: m.balls > 0 ? ((m.runs / m.balls) * 100).toFixed(1) : "0.0",
+      }))
+      .sort((a, b) => b.runs - a.runs);
+
+    res.json({
+      status: "success",
+      data: {
+        summary: {
+          totalMatches,
+          completedMatches,
+          totalRuns,
+          totalWickets,
+        },
+        topBatters,
+        topBowlers,
+        teamStats,
+        matchups,
+      },
+    });
   } catch (err) {
-    res.status(500).json({ message: "Share fetch failed", error: err.message });
+    console.error("🔥 USER ANALYTICS ERROR:", err);
+    res.status(500).json({ message: "Failed to generate user analytics", error: err.message });
   }
 };
+
