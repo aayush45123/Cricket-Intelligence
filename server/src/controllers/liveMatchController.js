@@ -907,3 +907,17 @@ export const getUserMatchAnalytics = async (req, res) => {
   }
 };
 
+/* ─────────────────────────────────────────────────────────────
+   GET /api/live/share/:shareToken  — public read
+   ───────────────────────────────────────────────────────────── */
+export const getSharedMatch = async (req, res) => {
+  try {
+    const match = await UserMatch.findOne({
+      shareToken: req.params.shareToken,
+    }).lean();
+    if (!match) return res.status(404).json({ message: "Match not found" });
+    res.json({ status: "success", data: { match } });
+  } catch (err) {
+    res.status(500).json({ message: "Share fetch failed", error: err.message });
+  }
+};

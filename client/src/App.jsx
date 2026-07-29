@@ -30,6 +30,9 @@ import MatchSetup from "./pages/MatchSetup/MatchSetup";
 import LiveScorer from "./pages/LiveScorer/LiveScorer";
 import InningsBreak from "./pages/InningsBreak/InningsBreak";
 import MatchResult from "./pages/MatchResult/MatchResult";
+import UserAnalytics from "./pages/UserAnalytics/UserAnalytics";
+import Tournaments from "./pages/Tournaments/Tournaments";
+import JoinTournament from "./pages/Tournaments/JoinTournament";
 
 const Protected = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -94,6 +97,14 @@ const App = () => (
           }
         />
         <Route
+          path="/my-matches/analytics"
+          element={
+            <Protected>
+              <UserAnalytics />
+            </Protected>
+          }
+        />
+        <Route
           path="/my-matches/:matchId/score"
           element={
             <Protected>
@@ -116,6 +127,18 @@ const App = () => (
               <MatchResult />
             </Protected>
           }
+        />
+        <Route
+          path="/tournaments"
+          element={
+            <Protected>
+              <Tournaments />
+            </Protected>
+          }
+        />
+        <Route
+          path="/tournaments/join/:inviteCode"
+          element={<JoinTournament />}
         />
       </Routes>
       <Footer />
