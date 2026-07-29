@@ -11,7 +11,9 @@ const MatchIntensityChart = () => {
   useEffect(() => {
     const fetchMatchIntensity = async () => {
       try {
-        const res = await fetch(`${API_BASE}/api/matches/analytics/match-intensity`);
+        const res = await fetch(
+          `${API_BASE}/api/matches/analytics/match-intensity`,
+        );
         const result = await res.json();
 
         const counts = result.data || {};

@@ -11,7 +11,9 @@ const TossImpactChart = () => {
   useEffect(() => {
     const fetchTossImpact = async () => {
       try {
-        const res = await fetch(`${API_BASE}/api/matches/analytics/toss-impact`);
+        const res = await fetch(
+          `${API_BASE}/api/matches/analytics/toss-impact`,
+        );
         const result = await res.json();
 
         const data = [

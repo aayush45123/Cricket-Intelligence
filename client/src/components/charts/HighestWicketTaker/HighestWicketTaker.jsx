@@ -10,7 +10,7 @@ import {
   Cell,
 } from "recharts";
 import styles from "./HighestWicketTaker.module.css";
-import { API_BASE } from "../config";
+import { API_BASE } from "../../../config";
 
 const HighestWicketTaker = () => {
   const [chartData, setChartData] = useState([]);

@@ -190,7 +190,11 @@ const MatchStoryCard = ({ data }) => {
       {/* Error */}
       {error && !loading && (
         <div className={styles.errorState}>
-          <AlertTriangle className={styles.errorIcon} size={20} color="var(--ci-danger)" />
+          <AlertTriangle
+            className={styles.errorIcon}
+            size={20}
+            color="var(--ci-danger)"
+          />
           <p className={styles.errorText}>{error}</p>
           <button className={styles.retryBtn} onClick={generateStory}>
             Try again

@@ -26,7 +26,9 @@ const MatchResult = () => {
 
   useEffect(() => {
     (async () => {
-      const { ok, data: d } = await authFetch(`${API_BASE}/api/live/${matchId}/analytics`);
+      const { ok, data: d } = await authFetch(
+        `${API_BASE}/api/live/${matchId}/analytics`,
+      );
       if (ok) setData(d.data);
       else setError(d.message || "Failed to load");
       setLoading(false);
