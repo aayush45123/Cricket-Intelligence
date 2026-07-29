@@ -1,9 +1,9 @@
+import cors from "cors";
 import express from "express";
 import dotenv from "dotenv";
 import path from "path";
 import { fileURLToPath } from "url";
 import connectDB from "./config/db.js";
-
 import iplMatchRoutes from "./routes/iplMatchRoutes.js";
 import matchRoutes from "./routes/matchRoutes.js";
 import playerRoutes from "./routes/playerRoutes.js";
@@ -14,7 +14,6 @@ import searchRoutes from "./routes/searchRoutes.js";
 import authRoutes from "./routes/authRoutes.js"; // NEW
 import liveMatchRoutes from "./routes/liveMatchRoutes.js"; // NEW
 
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -22,6 +21,7 @@ const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const app = express();
+app.use(cors());
 const PORT = process.env.PORT || 5000;
 
 app.use(express.json());
@@ -37,7 +37,6 @@ app.use("/api/venues", venueRoutes);
 app.use("/api/matchups", matchupRoutes);
 app.use("/api/strategy", teamStrategyRoutes);
 app.use("/api/search", searchRoutes);
-
 
 /* User match engine (new) */
 app.use("/api/auth", authRoutes);
