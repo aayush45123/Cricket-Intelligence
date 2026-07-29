@@ -234,3 +234,96 @@
   border: 1px solid var(--ci-border);
   border-radius: 8px;
 }
+
+/* ── Join Tournament Panel ──────────────────────────────────── */
+.joinPanel {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: 8px;
+  padding: 18px 22px;
+  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+.joinPanel::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--ci-brand);
+  border-radius: 4px 0 0 4px;
+}
+
+.joinLeft {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.joinTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--ci-text-primary);
+  margin-bottom: 2px;
+}
+
+.joinSub {
+  font-size: 0.8rem;
+  color: var(--ci-text-muted);
+}
+
+.joinForm {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.joinInput {
+  flex: 1;
+  background: var(--ci-bg-tertiary);
+  border: 1px solid var(--ci-border);
+  border-radius: 6px;
+  padding: 10px 14px;
+  color: var(--ci-text-primary);
+  font-size: 0.9rem;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.joinInput:focus {
+  border-color: var(--ci-brand);
+}
+
+.joinBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: var(--ci-brand);
+  color: #000;
+  font-weight: 700;
+  font-size: 0.9rem;
+  padding: 10px 20px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: opacity 0.2s ease, transform 0.15s ease;
+}
+
+.joinBtn:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.joinError {
+  font-size: 0.82rem;
+  color: #ff7070;
+  padding: 4px 0 0 0;
+}
+

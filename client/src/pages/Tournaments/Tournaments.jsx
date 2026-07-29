@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { API_BASE } from "../../config";
 import styles from "./Tournaments.module.css";
-import { Award, Plus, Copy, Share2, Users, MapPin } from "lucide-react";
+import { Award, Plus, Copy, Users, MapPin, LogIn, ArrowRight } from "lucide-react";
 
 const Tournaments = () => {
   const { authFetch } = useAuth();
@@ -12,6 +12,10 @@ const Tournaments = () => {
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
   const [creating, setCreating] = useState(false);
+
+  // Join Tournament
+  const [joinInput, setJoinInput] = useState("");
+  const [joinError, setJoinError] = useState("");
 
   const [formData, setFormData] = useState({
     title: "",
@@ -70,6 +74,33 @@ const Tournaments = () => {
     alert(`Tournament Registration Link copied to clipboard!\n\n${link}`);
   };
 
+  /**
+   * Parse whatever the user pastes:
+   *   - Full URL:  https://app.com/tournaments/join/TRN-ABCDE
+   *   - Just code: TRN-ABCDE  or  trn-abcde  (case-insensitive)
+   */
+  const extractInviteCode = (raw) => {
+    const cleaned = raw.trim();
+    // Try to extract from a URL path
+    const urlMatch = cleaned.match(/\/tournaments\/join\/([A-Za-z0-9-]+)/i);
+    if (urlMatch) return urlMatch[1].toUpperCase();
+    // Otherwise treat entire string as code
+    const codeMatch = cleaned.match(/^[A-Za-z0-9-]+$/);
+    if (codeMatch) return cleaned.toUpperCase();
+    return null;
+  };
+
+  const handleJoin = (e) => {
+    e.preventDefault();
+    setJoinError("");
+    const code = extractInviteCode(joinInput);
+    if (!code) {
+      setJoinError("Please enter a valid invite link or code (e.g. TRN-ABCDE).");
+      return;
+    }
+    navigate(`/tournaments/join/${code}`);
+  };
+
   return (
     <div className={styles.page}>
       {/* Hero Header */}
@@ -85,6 +116,30 @@ const Tournaments = () => {
           <Plus size={16} /> Create Tournament
         </button>
       </section>
+
+      {/* Join Tournament Panel */}
+      <div className={styles.joinPanel}>
+        <div className={styles.joinLeft}>
+          <LogIn size={18} color="var(--ci-brand)" />
+          <div>
+            <div className={styles.joinTitle}>Join a Tournament</div>
+            <div className={styles.joinSub}>Paste an invite link or enter an invite code to register your team</div>
+          </div>
+        </div>
+        <form className={styles.joinForm} onSubmit={handleJoin}>
+          <input
+            className={styles.joinInput}
+            type="text"
+            placeholder="Paste invite link or enter code (e.g. TRN-AB1234)"
+            value={joinInput}
+            onChange={(e) => { setJoinInput(e.target.value); setJoinError(""); }}
+          />
+          <button type="submit" className={styles.joinBtn}>
+            Join <ArrowRight size={15} />
+          </button>
+        </form>
+        {joinError && <div className={styles.joinError}>{joinError}</div>}
+      </div>
 
       {/* Modal Form */}
       {showModal && (
