@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import styles from "./MatchStoryCard.module.css";
 import { AlertTriangle } from "lucide-react";
+import { API_BASE } from "../../config";
 
 /* ── Build a compact prompt from the deep analytics data ─────── */
 const buildPrompt = (data) => {
@@ -115,7 +116,7 @@ const MatchStoryCard = ({ data }) => {
     setGenerated(false);
 
     try {
-      const response = await fetch("https://api.anthropic.com/v1/messages", {
+      const response = await fetch(`${API_BASE}/api/ai/generate-story`, {
         method: "POST",
         signal: abortRef.current.signal,
         headers: { "Content-Type": "application/json" },

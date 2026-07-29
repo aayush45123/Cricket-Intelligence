@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import styles from "./MatchSetup.module.css";
+import { API_BASE } from "../../config";
 
 const DEFAULT_PLAYERS = 11;
 
@@ -57,7 +58,7 @@ const MatchSetup = () => {
   const handleStep2 = async () => {
     setLoading(true);
     setError(null);
-    const { ok, data } = await authFetch("/api/live/setup", {
+    const { ok, data } = await authFetch(`${API_BASE}/api/live/setup`, {
       method: "POST",
       body: JSON.stringify({
         teamA: teamA.trim(),
@@ -100,10 +101,13 @@ const MatchSetup = () => {
     }
     setLoading(true);
     setError(null);
-    const { ok, data } = await authFetch(`/api/live/${matchId}/start`, {
-      method: "PATCH",
-      body: JSON.stringify({ striker, nonStriker, bowler }),
-    });
+    const { ok, data } = await authFetch(
+      `${API_BASE}/api/live/${matchId}/start`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ striker, nonStriker, bowler }),
+      },
+    );
     setLoading(false);
     if (!ok) {
       setError(data.message || "Start failed");

@@ -7,6 +7,7 @@ import WinProbabilityChart from "../../components/charts/WinProbabilityChart/Win
 import MomentumChart from "../../components/charts/MomentumChart/MomentumChart";
 import KeyMomentsTimeline from "../../components/charts/KeyMomentsTimeline/KeyMomentsTimeline";
 import MatchStoryCard from "../../components/MatchStoryCard/MatchStoryCard";
+import { API_BASE } from "../../config";
 
 const SectionHeader = ({ label, accent = "var(--ci-brand)", tag }) => (
   <div className={styles.sectionHeader}>
@@ -37,7 +38,10 @@ const MatchDeepAnalytics = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`/api/matches/${matchId}/deep-analytics`);
+        const res = await fetch(
+          `${API_BASE}/api/matches/${matchId}/deep-analytics`,
+        );
+
         const result = await res.json();
         if (!res.ok) throw new Error(result.message || "Failed");
         setData(result.data);
@@ -100,7 +104,19 @@ const MatchDeepAnalytics = () => {
           </button>
           <div className={styles.topNavRight}>
             {matchType && <span className={styles.badge}>{matchType}</span>}
-            {venue && <span className={styles.venueBadge}><MapPin size={12} style={{ display: "inline", verticalAlign: "middle", marginRight: 3 }} /> {venue}</span>}
+            {venue && (
+              <span className={styles.venueBadge}>
+                <MapPin
+                  size={12}
+                  style={{
+                    display: "inline",
+                    verticalAlign: "middle",
+                    marginRight: 3,
+                  }}
+                />{" "}
+                {venue}
+              </span>
+            )}
           </div>
         </div>
 

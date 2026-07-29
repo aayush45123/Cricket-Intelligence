@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import styles from "./Bowlers.module.css";
 import { useNavigate } from "react-router-dom";
+import { API_BASE } from "../../config";
 
 const Bowlers = () => {
   const [bowlers, setBowlers] = useState([]);
@@ -12,7 +13,7 @@ const Bowlers = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("/api/players/bowling-stats");
+        const res = await fetch(`${API_BASE}/api/players/bowling-stats`);
 
         if (!res.ok) {
           throw new Error(`Request failed with status ${res.status}`);

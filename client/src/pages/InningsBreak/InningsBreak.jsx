@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import styles from "./InningsBreak.module.css";
+import { API_BASE } from "../../config";
 
 const InningsBreak = () => {
   const { matchId } = useParams();
@@ -19,7 +20,9 @@ const InningsBreak = () => {
 
   useEffect(() => {
     (async () => {
-      const { ok, data } = await authFetch(`/api/live/${matchId}/state`);
+      const { ok, data } = await authFetch(
+        `${API_BASE}/api/live/${matchId}/state`,
+      );
       if (ok) {
         setMatch(data.data.match);
         const chasing = data.data.match.innings2.battingTeam;
@@ -45,10 +48,13 @@ const InningsBreak = () => {
       return;
     }
     setSaving(true);
-    const { ok, data } = await authFetch(`/api/live/${matchId}/innings-break`, {
-      method: "PATCH",
-      body: JSON.stringify({ striker, nonStriker: nonStr, bowler }),
-    });
+    const { ok, data } = await authFetch(
+      `${API_BASE}/api/live/${matchId}/innings-break`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ striker, nonStriker: nonStr, bowler }),
+      },
+    );
     setSaving(false);
     if (!ok) {
       setError(data.message);

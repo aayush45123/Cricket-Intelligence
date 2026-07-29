@@ -5,6 +5,7 @@ import PhaseStrikeRateChart from "../../components/charts/PhaseStrikeRateChart/P
 import BattingBreakdownChart from "../../components/charts/BattingBreakdownChart/BattingBreakdownChart";
 import BowlingMetricsChart from "../../components/charts/BowlingMetricsChart/BowlingMetricsChart";
 import { Activity, Zap } from "lucide-react";
+import { API_BASE } from "../../config";
 
 /* ── Helpers ──────────────────────────────────────────────── */
 const deriveRole = (batting, bowling) => {
@@ -64,7 +65,8 @@ const PlayerDetail = () => {
   useEffect(() => {
     const fetchPlayer = async () => {
       try {
-        const res = await fetch(`/api/players/player/${playerName}`);
+        const res = await fetch(`${API_BASE}/api/players/player/${playerName}`);
+
         const result = await res.json();
         if (!res.ok) throw new Error(result.message || "Failed to load");
         setData(result);
@@ -321,7 +323,11 @@ const PlayerDetail = () => {
         {/* ── NO DATA STATES ────────────────────────────────── */}
         {!hasBatting && (
           <div className={styles.noDataBanner}>
-            <Activity className={styles.noDataIcon} size={18} color="var(--ci-brand)" />
+            <Activity
+              className={styles.noDataIcon}
+              size={18}
+              color="var(--ci-brand)"
+            />
             <span className={styles.noDataText}>
               No batting data recorded for this player
             </span>
@@ -330,7 +336,11 @@ const PlayerDetail = () => {
 
         {!hasBowling && (
           <div className={styles.noDataBanner}>
-            <Zap className={styles.noDataIcon} size={18} color="var(--ci-danger)" />
+            <Zap
+              className={styles.noDataIcon}
+              size={18}
+              color="var(--ci-danger)"
+            />
             <span className={styles.noDataText}>
               No bowling data recorded for this player
             </span>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Matches.module.css";
+import { API_BASE } from "../../config";
 
 const Matches = () => {
   const [matches, setMatches] = useState([]);
@@ -10,7 +11,7 @@ const Matches = () => {
   useEffect(() => {
     const fetchMatches = async () => {
       try {
-        const res = await fetch("/api/matches");
+        const res = await fetch(`${API_BASE}/api/matches`);
         const result = await res.json();
         setMatches(result.data || []);
       } catch (err) {

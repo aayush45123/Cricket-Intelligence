@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Players.module.css";
+import { API_BASE } from "../../config";
 
 const Players = () => {
   const [data, setData] = useState([]);
@@ -12,7 +13,7 @@ const Players = () => {
   useEffect(() => {
     const fetchPlayers = async () => {
       try {
-        const res = await fetch("/api/players/player");
+        const res = await fetch(`${API_BASE}/api/players/player`);
         const result = await res.json();
         setData(result.data || []);
       } catch (err) {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./TeamStrategy.module.css";
+import { API_BASE } from "../../config";
 
 const TeamStrategy = () => {
   const [teams, setTeams] = useState([]);
@@ -11,7 +12,7 @@ const TeamStrategy = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch("/api/strategy");
+        const res = await fetch(`${API_BASE}/api/strategy`);
         const result = await res.json();
         setTeams(result.data || []);
       } catch (err) {

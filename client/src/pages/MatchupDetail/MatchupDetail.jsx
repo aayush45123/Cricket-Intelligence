@@ -7,6 +7,7 @@ import MatchupPhaseChart from "../../components/charts/MatchupPhase/MatchupPhase
 import MatchupSeasonTrend from "../../components/charts/MatchupSeasonTrend/MatchupSeasonTrend";
 import MatchupOverByOver from "../../components/charts/MatchupOverByOver/MatchupOverByOver";
 import MatchupPerMatch from "../../components/charts/MatchupPreMatch/MatchupPreMatch";
+import { API_BASE } from "../../config";
 
 /* ── Helpers ──────────────────────────────────────────────────── */
 const verdict = (sr, dismissals, balls) => {
@@ -53,7 +54,7 @@ const MatchupDetail = () => {
     const fetch_ = async () => {
       try {
         const res = await fetch(
-          `/api/matchups/${encodeURIComponent(batter)}/${encodeURIComponent(bowler)}`,
+          `${API_BASE}/api/matchups/${encodeURIComponent(batter)}/${encodeURIComponent(bowler)}`,
         );
         const contentType = res.headers.get("content-type") || "";
         const result = contentType.includes("application/json")
@@ -152,7 +153,15 @@ const MatchupDetail = () => {
                   className={styles.heroRole}
                   style={{ color: "var(--ci-brand)" }}
                 >
-                  <Activity size={13} style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }} /> Batter
+                  <Activity
+                    size={13}
+                    style={{
+                      display: "inline",
+                      verticalAlign: "middle",
+                      marginRight: 4,
+                    }}
+                  />{" "}
+                  Batter
                 </span>
                 <h1 className={styles.heroName}>{decodedBatter}</h1>
               </div>
@@ -184,7 +193,15 @@ const MatchupDetail = () => {
                   className={styles.heroRole}
                   style={{ color: "var(--ci-danger)" }}
                 >
-                  <Zap size={13} style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }} /> Bowler
+                  <Zap
+                    size={13}
+                    style={{
+                      display: "inline",
+                      verticalAlign: "middle",
+                      marginRight: 4,
+                    }}
+                  />{" "}
+                  Bowler
                 </span>
                 <h1 className={styles.heroName}>{decodedBowler}</h1>
               </div>

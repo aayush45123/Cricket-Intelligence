@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import styles from "./TossImpactChart.module.css";
+import { API_BASE } from "../../../config";
 
 const COLORS = ["#1a6b3c", "#f0a500"];
 
@@ -10,7 +11,7 @@ const TossImpactChart = () => {
   useEffect(() => {
     const fetchTossImpact = async () => {
       try {
-        const res = await fetch("/api/matches/analytics/toss-impact");
+        const res = await fetch(`${API_BASE}/api/matches/analytics/toss-impact`);
         const result = await res.json();
 
         const data = [

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { PieChart, Pie, Cell, Tooltip, ResponsiveContainer } from "recharts";
 import styles from "./MatchIntensityChart.module.css";
+import { API_BASE } from "../../../config";
 
 const COLORS = ["#1a6b3c", "#1976d2", "#f0a500"];
 
@@ -10,7 +11,7 @@ const MatchIntensityChart = () => {
   useEffect(() => {
     const fetchMatchIntensity = async () => {
       try {
-        const res = await fetch("/api/matches/analytics/match-intensity");
+        const res = await fetch(`${API_BASE}/api/matches/analytics/match-intensity`);
         const result = await res.json();
 
         const counts = result.data || {};

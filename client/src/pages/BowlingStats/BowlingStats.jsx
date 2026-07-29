@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import styles from "./BowlingStats.module.css";
 import { Zap } from "lucide-react";
 import BowlingMetricsChart from "../../components/charts/BowlingMetricsChart/BowlingMetricsChart";
+import { API_BASE } from "../../config";
 
 /* ── Helpers ─────────────────────────────────────────────────── */
 const fmt = (v, d = 2) => (typeof v === "number" ? v.toFixed(d) : "—");
@@ -41,7 +42,9 @@ const BowlingStats = () => {
         setLoading(true);
         setError(null);
         // Use the updated endpoint that now returns dotBallPercent
-        const res = await fetch(`/api/players/bowler-stats/${playerName}`);
+        const res = await fetch(
+          `${API_BASE}/api/players/bowler-stats/${playerName}`,
+        );
         if (!res.ok)
           throw new Error(`Request failed with status ${res.status}`);
         const result = await res.json();
@@ -126,7 +129,17 @@ const BowlingStats = () => {
             </div>
             <div className={styles.heroText}>
               <div className={styles.heroBadgeRow}>
-                <span className={styles.categoryBadge}><Zap size={13} style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }} /> Bowling Profile</span>
+                <span className={styles.categoryBadge}>
+                  <Zap
+                    size={13}
+                    style={{
+                      display: "inline",
+                      verticalAlign: "middle",
+                      marginRight: 4,
+                    }}
+                  />{" "}
+                  Bowling Profile
+                </span>
                 <span
                   className={styles.verdictBadge}
                   style={{

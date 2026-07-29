@@ -7,6 +7,7 @@ import VenueSeasonTrend from "../../components/charts/VenueseasontrendChart/Venu
 import VenueScoreDistribution from "../../components/charts/VenuescoredistributionChart/VenuescoredistributionChart";
 import VenueTopTeams from "../../components/charts/VenuetopteamsChart/VenuetopteamsChart";
 import { MapPin, Flame, Zap, Scale } from "lucide-react";
+import { API_BASE } from "../../config";
 
 const PITCH_META = {
   batting: {
@@ -70,7 +71,9 @@ const VenueDetail = () => {
 
     (async () => {
       try {
-        const res = await fetch(`/api/venues/${encodeURIComponent(venue)}`);
+        const res = await fetch(
+          `${API_BASE}/api/venues/${encodeURIComponent(venue)}`,
+        );
         const result = await res.json();
         if (!res.ok) throw new Error(result.message);
         setData(result.data);
@@ -120,7 +123,11 @@ const VenueDetail = () => {
           </button>
           {data.city && (
             <span className={styles.cityLabel}>
-              <MapPin size={13} style={{ display: "inline", verticalAlign: "middle" }} /> {data.city}
+              <MapPin
+                size={13}
+                style={{ display: "inline", verticalAlign: "middle" }}
+              />{" "}
+              {data.city}
             </span>
           )}
         </div>

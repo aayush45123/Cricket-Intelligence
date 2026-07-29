@@ -10,6 +10,7 @@ import {
   Cell,
 } from "recharts";
 import styles from "./RunRateChart.module.css";
+import { API_BASE } from "../../../config";
 
 const RunRateChart = () => {
   const [chartData, setChartData] = useState([]);
@@ -17,7 +18,7 @@ const RunRateChart = () => {
   useEffect(() => {
     const fetchAnalytics = async () => {
       try {
-        const res = await fetch("/api/matches/analytics");
+        const res = await fetch(`${API_BASE}/api/matches/analytics`);
         const result = await res.json();
 
         const data = [

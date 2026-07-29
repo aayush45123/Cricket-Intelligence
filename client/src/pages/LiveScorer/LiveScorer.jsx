@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import styles from "./LiveScorer.module.css";
+import { API_BASE } from "../../config";
 
 /* ── Dot display labels ───────────────────────────────────── */
 const dotLabel = (b) => {
@@ -55,7 +56,9 @@ const LiveScorer = () => {
   const fetchState = useCallback(
     async (silent = false) => {
       if (!silent) setError(null);
-      const { ok, data } = await authFetch(`/api/live/${matchId}/state`);
+      const { ok, data } = await authFetch(
+        `${API_BASE}/api/live/${matchId}/state`,
+      );
       if (ok) {
         setState(data.data);
         /* FIX 3: auto-open bowler change modal if over completed */
@@ -82,10 +85,13 @@ const LiveScorer = () => {
     async (payload) => {
       setPosting(true);
       setError(null);
-      const { ok, data } = await authFetch(`/api/live/${matchId}/ball`, {
-        method: "POST",
-        body: JSON.stringify(payload),
-      });
+      const { ok, data } = await authFetch(
+        `${API_BASE}/api/live/${matchId}/ball`,
+        {
+          method: "POST",
+          body: JSON.stringify(payload),
+        },
+      );
 
       if (ok) {
         setState(
@@ -140,10 +146,13 @@ const LiveScorer = () => {
     }
     setBowlerError(null);
 
-    const { ok, data } = await authFetch(`/api/live/${matchId}/bowler`, {
-      method: "PATCH",
-      body: JSON.stringify({ bowler: newBowler }),
-    });
+    const { ok, data } = await authFetch(
+      `${API_BASE}/api/live/${matchId}/bowler`,
+      {
+        method: "PATCH",
+        body: JSON.stringify({ bowler: newBowler }),
+      },
+    );
 
     if (ok) {
       setBowlerModal(false);
@@ -206,7 +215,7 @@ const LiveScorer = () => {
   /* ── Undo ───────────────────────────────────────────────── */
   const handleUndo = async () => {
     setPosting(true);
-    const { ok } = await authFetch(`/api/live/${matchId}/undo`, {
+    const { ok } = await authFetch(`${API_BASE}/api/live/${matchId}/undo`, {
       method: "DELETE",
     });
     if (ok) await fetchState();

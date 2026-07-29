@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styles from "./Leaderboard.module.css";
+import { API_BASE } from "../../config";
 
 const FORMAT_OPTIONS = ["ALL", "T20", "ODI"];
 
@@ -15,7 +16,7 @@ const Leaderboard = () => {
         setLoading(true);
         setError("");
 
-        const res = await fetch("/api/players/team-leaderboard");
+        const res = await fetch(`${API_BASE}/api/players/team-leaderboard`);
         const result = await res.json();
 
         if (!res.ok) {

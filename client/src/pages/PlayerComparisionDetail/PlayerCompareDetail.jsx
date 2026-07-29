@@ -4,6 +4,7 @@ import styles from "./PlayerCompareDetail.module.css";
 import CompareRadarChart from "../../components/charts/CompareRadarChart/CompareRadarChart";
 import CompareBarChart from "../../components/charts/CompareBarChart/CompareBarChart";
 import ComparePhaseChart from "../../components/charts/ComparePhaseChart/ComparePhaseChart";
+import { API_BASE } from "../../config";
 
 /* ── Helpers ─────────────────────────────────────────────────── */
 const fmt = (v, d = 2) => (typeof v === "number" ? v.toFixed(d) : "—");
@@ -95,7 +96,10 @@ const PlayerCompareDetail = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`/api/matchups/compare/${playerA}/${playerB}`);
+        const res = await fetch(
+          `${API_BASE}/api/matchups/compare/${playerA}/${playerB}`,
+        );
+
         const result = await res.json();
         if (!res.ok) throw new Error(result.message || "Failed");
         setData(result.data);

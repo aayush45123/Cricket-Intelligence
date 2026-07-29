@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import styles from "./MatchInsight.module.css";
+import { API_BASE } from "../../config";
 
 const MatchInsight = () => {
   const { matchId } = useParams();
@@ -16,7 +17,7 @@ const MatchInsight = () => {
 
     const fetchInsights = async () => {
       try {
-        const res = await fetch(`/api/matches/${matchId}`);
+        const res = await fetch(`${API_BASE}/api/matches/${matchId}`);
         const result = await res.json();
 
         console.log("API response:", result); // ← helps debug in browser console

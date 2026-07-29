@@ -10,6 +10,7 @@ import {
   Cell,
 } from "recharts";
 import styles from "./TeamWins.module.css";
+import { API_BASE } from "../../../config";
 
 const TeamWins = () => {
   const [chartData, setChartData] = useState([]);
@@ -17,7 +18,7 @@ const TeamWins = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const res = await fetch("/api/players/team-leaderboard");
+        const res = await fetch(`${API_BASE}/api/players/team-leaderboard`);
         const result = await res.json();
 
         const teams = Array.isArray(result?.data) ? result.data : [];

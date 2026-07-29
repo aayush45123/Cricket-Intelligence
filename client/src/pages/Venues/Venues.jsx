@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Venues.module.css";
 import { MapPin, Flame, Zap, Scale, Search, X } from "lucide-react";
+import { API_BASE } from "../../config";
 
 const PITCH_META = {
   batting: {
@@ -46,7 +47,7 @@ const Venues = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch("/api/venues");
+        const res = await fetch(`${API_BASE}/api/venues`);
         const result = await res.json();
         if (!res.ok) throw new Error(result.message);
         setVenues(result.data);
@@ -143,7 +144,13 @@ const Venues = () => {
                   onClick={() => setPitch(p)}
                 >
                   {m ? (
-                    <span style={{ display: "inline-flex", alignItems: "center", gap: 5 }}>
+                    <span
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 5,
+                      }}
+                    >
                       <Icon size={13} /> {m.label}
                     </span>
                   ) : (
@@ -205,7 +212,14 @@ const Venues = () => {
                       <h3 className={styles.cardVenue}>{v.venue}</h3>
                       {v.city && (
                         <span className={styles.cardCity}>
-                          <MapPin size={12} style={{ display: "inline", verticalAlign: "middle" }} /> {v.city}
+                          <MapPin
+                            size={12}
+                            style={{
+                              display: "inline",
+                              verticalAlign: "middle",
+                            }}
+                          />{" "}
+                          {v.city}
                         </span>
                       )}
                     </div>

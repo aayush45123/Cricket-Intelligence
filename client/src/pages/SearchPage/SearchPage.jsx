@@ -2,6 +2,7 @@ import React, { useEffect, useState, useCallback } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import styles from "./SearchPage.module.css";
 import { Search } from "lucide-react";
+import { API_BASE } from "../../config";
 
 /* ── Constants ───────────────────────────────────────────────── */
 const ROLES = [
@@ -179,7 +180,7 @@ const SearchPage = () => {
 
   /* Load teams for dropdown */
   useEffect(() => {
-    fetch("/api/search/teams")
+    fetch(`${API_BASE}/api/search/teams`)
       .then((r) => r.json())
       .then((d) => setTeams(d.data || []));
   }, []);
@@ -217,7 +218,8 @@ const SearchPage = () => {
     setSearchParams({ q, role: r, ...(t && { team: t }) });
 
     try {
-      const res = await fetch(`/api/search?${params}`);
+      const res = await fetch(`${API_BASE}/api/search?${params}`);
+
       const result = await res.json();
       setResults(result.data || []);
       setTotal(result.total || 0);

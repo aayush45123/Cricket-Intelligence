@@ -6,6 +6,7 @@ import BattingOrderChart from "../../components/charts/BattingOrderChart/Batting
 import PhaseCompareChart from "../../components/charts/PhaseCompareChart/PhaseCompareChart";
 import BowlingComboChart from "../../components/charts/BowlingComboChart/BowlingComboChart";
 import RunRateByOverChart from "../../components/charts/RunRateByOverChart/RunRateByOverChart";
+import { API_BASE } from "../../config";
 
 /* ── Helpers ─────────────────────────────────────────────────── */
 const SectionHeader = ({ label, accent, tag }) => (
@@ -38,7 +39,7 @@ const TeamStrategyDetail = () => {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch(`/api/strategy/${team}`);
+        const res = await fetch(`${API_BASE}/api/strategy/${team}`);
         const result = await res.json();
         if (!res.ok) throw new Error(result.message || "Failed");
         setData(result.data);
@@ -128,7 +129,15 @@ const TeamStrategyDetail = () => {
                   background: "var(--ci-brand-subtle)",
                 }}
               >
-                <Activity size={13} style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }} /> Prefers Batting First
+                <Activity
+                  size={13}
+                  style={{
+                    display: "inline",
+                    verticalAlign: "middle",
+                    marginRight: 4,
+                  }}
+                />{" "}
+                Prefers Batting First
               </span>
             )}
             {!toss.preferBatFirst && (
@@ -140,7 +149,15 @@ const TeamStrategyDetail = () => {
                   background: "var(--ci-accent-subtle)",
                 }}
               >
-                <Zap size={13} style={{ display: "inline", verticalAlign: "middle", marginRight: 4 }} /> Prefers Fielding First
+                <Zap
+                  size={13}
+                  style={{
+                    display: "inline",
+                    verticalAlign: "middle",
+                    marginRight: 4,
+                  }}
+                />{" "}
+                Prefers Fielding First
               </span>
             )}
             {pp && pp.runRate > 8 && (

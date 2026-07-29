@@ -12,6 +12,7 @@ import {
   X,
   ArrowRight,
 } from "lucide-react";
+import { API_BASE } from "../../config";
 
 /* ── Analytics menu sections ─────────────────────────────────── */
 const ANALYTICS_MENU = [
@@ -106,7 +107,7 @@ const QuickSearchModal = ({ onClose }) => {
       setLoading(true);
       try {
         const res = await fetch(
-          `/api/search/quick?q=${encodeURIComponent(query)}`,
+          `${API_BASE}/api/search/quick?q=${encodeURIComponent(query)}`,
         );
         const d = await res.json();
         setResults(d.data || []);
@@ -393,7 +394,10 @@ const Navbar = () => {
                             {item.desc}
                           </span>
                         </div>
-                        <ArrowRight size={14} className={styles.matchMenuArrow} />
+                        <ArrowRight
+                          size={14}
+                          className={styles.matchMenuArrow}
+                        />
                       </Link>
                     );
                   })}

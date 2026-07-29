@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./Batsmen.module.css";
+import { API_BASE } from "../../config";
 
 const Batsmen = () => {
   const [batsmen, setBatsmen] = useState([]);
@@ -10,7 +11,7 @@ const Batsmen = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch("/api/players/batting-analytics");
+        const res = await fetch(`${API_BASE}/api/players/batting-analytics`);
         const result = await res.json();
         setBatsmen(result.data);
       } catch (err) {

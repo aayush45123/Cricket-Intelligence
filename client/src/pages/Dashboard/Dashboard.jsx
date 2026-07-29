@@ -17,11 +17,30 @@ import {
   Landmark,
   ClipboardList,
 } from "lucide-react";
+import { API_BASE } from "../../config";
 
 const RECENT_SAMPLE_MATCHES = [
-  { id: "ipl-1", teamA: "Chennai Super Kings", teamB: "Gujarat Titans", venue: "Narendra Modi Stadium", result: "CSK won by 5 wickets" },
-  { id: "ipl-2", teamA: "Mumbai Indians", teamB: "Royal Challengers Bengaluru", venue: "Wankhede Stadium", result: "MI won by 6 wickets" },
-  { id: "ipl-3", teamA: "Kolkata Knight Riders", teamB: "Sunrisers Hyderabad", venue: "MA Chidambaram Stadium", result: "KKR won by 8 wickets" },
+  {
+    id: "ipl-1",
+    teamA: "Chennai Super Kings",
+    teamB: "Gujarat Titans",
+    venue: "Narendra Modi Stadium",
+    result: "CSK won by 5 wickets",
+  },
+  {
+    id: "ipl-2",
+    teamA: "Mumbai Indians",
+    teamB: "Royal Challengers Bengaluru",
+    venue: "Wankhede Stadium",
+    result: "MI won by 6 wickets",
+  },
+  {
+    id: "ipl-3",
+    teamA: "Kolkata Knight Riders",
+    teamB: "Sunrisers Hyderabad",
+    venue: "MA Chidambaram Stadium",
+    result: "KKR won by 8 wickets",
+  },
 ];
 
 const Dashboard = () => {
@@ -30,7 +49,7 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("/api/matches/analytics");
+        const response = await fetch(`${API_BASE}/api/matches/analytics`);
         const result = await response.json();
         setData(result.data);
       } catch (err) {
@@ -53,9 +72,12 @@ const Dashboard = () => {
       {/* ── Top Banner ────────────────────────────────────────── */}
       <div className={styles.headerBanner}>
         <div className={styles.titleArea}>
-          <h1 className={styles.mainTitle}>Cricket Match Intelligence Dashboard</h1>
+          <h1 className={styles.mainTitle}>
+            Cricket Match Intelligence Dashboard
+          </h1>
           <p className={styles.subTitle}>
-            Enterprise analytics, predictive insights, and deep historical IPL trends.
+            Enterprise analytics, predictive insights, and deep historical IPL
+            trends.
           </p>
         </div>
         <div className={styles.bannerBadge}>
@@ -82,7 +104,9 @@ const Dashboard = () => {
 
           <div className={styles.summaryCard}>
             <div className={styles.cardHeader}>
-              <span className={styles.cardLabel}>Avg Run Rate (1st Innings)</span>
+              <span className={styles.cardLabel}>
+                Avg Run Rate (1st Innings)
+              </span>
               <span className={styles.cardIcon}>
                 <Zap size={16} color="var(--ci-brand)" />
               </span>
@@ -95,7 +119,9 @@ const Dashboard = () => {
 
           <div className={styles.summaryCard}>
             <div className={styles.cardHeader}>
-              <span className={styles.cardLabel}>Avg Run Rate (2nd Innings)</span>
+              <span className={styles.cardLabel}>
+                Avg Run Rate (2nd Innings)
+              </span>
               <span className={styles.cardIcon}>
                 <Target size={16} color="var(--ci-accent)" />
               </span>
@@ -126,7 +152,10 @@ const Dashboard = () => {
                 <Trophy size={16} color="var(--ci-brand)" />
               </span>
             </div>
-            <div className={styles.cardValue} style={{ fontSize: "1.1rem", fontWeight: 700 }}>
+            <div
+              className={styles.cardValue}
+              style={{ fontSize: "1.1rem", fontWeight: 700 }}
+            >
               {data?.mostDominantMatch?.teams?.teamA?.name || "MI"} vs{" "}
               {data?.mostDominantMatch?.teams?.teamB?.name || "CSK"}
             </div>
@@ -138,7 +167,8 @@ const Dashboard = () => {
       {/* ── 2. Win Trend / Run Rate Timeline ───────────────────── */}
       <section className={styles.timelineSection}>
         <h2 className={styles.sectionTitle}>
-          <TrendingUp size={18} color="var(--ci-brand)" /> Win Trend / Run Rate Timeline
+          <TrendingUp size={18} color="var(--ci-brand)" /> Win Trend / Run Rate
+          Timeline
         </h2>
         <div className={styles.timelineGrid}>
           <TeamWins />
@@ -152,7 +182,9 @@ const Dashboard = () => {
           <h2 className={styles.sectionTitle}>
             <Shield size={18} color="var(--ci-accent)" /> Team Comparison
           </h2>
-          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+          <div
+            style={{ display: "flex", flexDirection: "column", gap: "20px" }}
+          >
             <TossImpactChart />
             <MatchIntensityChart />
           </div>
@@ -175,28 +207,47 @@ const Dashboard = () => {
           <h2 className={styles.sectionTitle}>
             <Landmark size={18} color="var(--ci-brand)" /> Venue Stats
           </h2>
-          <p style={{ color: "var(--ci-text-secondary)", fontSize: "0.9rem", marginBottom: "16px" }}>
-            Pitch conditions, boundary dimensions, and win split metrics across top Indian venues.
+          <p
+            style={{
+              color: "var(--ci-text-secondary)",
+              fontSize: "0.9rem",
+              marginBottom: "16px",
+            }}
+          >
+            Pitch conditions, boundary dimensions, and win split metrics across
+            top Indian venues.
           </p>
           <div className={styles.recentMatchFeed}>
             <div className={styles.recentMatchItem}>
               <div>
-                <div className={styles.matchTeams}>Narendra Modi Stadium, Ahmedabad</div>
-                <div className={styles.matchVenue}>Batting 1st Win Rate: 54% | Avg 1st Inn Score: 178</div>
+                <div className={styles.matchTeams}>
+                  Narendra Modi Stadium, Ahmedabad
+                </div>
+                <div className={styles.matchVenue}>
+                  Batting 1st Win Rate: 54% | Avg 1st Inn Score: 178
+                </div>
               </div>
               <span className={styles.matchResultTag}>Pace Friendly</span>
             </div>
             <div className={styles.recentMatchItem}>
               <div>
-                <div className={styles.matchTeams}>Wankhede Stadium, Mumbai</div>
-                <div className={styles.matchVenue}>Batting 2nd Win Rate: 58% | Avg 1st Inn Score: 184</div>
+                <div className={styles.matchTeams}>
+                  Wankhede Stadium, Mumbai
+                </div>
+                <div className={styles.matchVenue}>
+                  Batting 2nd Win Rate: 58% | Avg 1st Inn Score: 184
+                </div>
               </div>
               <span className={styles.matchResultTag}>Chasing Ground</span>
             </div>
             <div className={styles.recentMatchItem}>
               <div>
-                <div className={styles.matchTeams}>M. Chinnaswamy Stadium, Bengaluru</div>
-                <div className={styles.matchVenue}>Avg Sixes per Match: 16.4 | High Scoring</div>
+                <div className={styles.matchTeams}>
+                  M. Chinnaswamy Stadium, Bengaluru
+                </div>
+                <div className={styles.matchVenue}>
+                  Avg Sixes per Match: 16.4 | High Scoring
+                </div>
               </div>
               <span className={styles.matchResultTag}>Batter Paradise</span>
             </div>

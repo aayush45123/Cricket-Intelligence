@@ -5,6 +5,7 @@ import styles from "./MatchResult.module.css";
 import WormChart from "../../components/charts/WormChart/WormChart";
 import MomentumChart from "../../components/charts/MomentumChart/MomentumChart";
 import MatchStoryCard from "../../components/MatchStoryCard/MatchStoryCard";
+import { API_BASE } from "../../config";
 
 const SectionHeader = ({ label, accent }) => (
   <div className={styles.sectionHeader}>
@@ -25,7 +26,7 @@ const MatchResult = () => {
 
   useEffect(() => {
     (async () => {
-      const { ok, data: d } = await authFetch(`/api/live/${matchId}/analytics`);
+      const { ok, data: d } = await authFetch(`${API_BASE}/api/live/${matchId}/analytics`);
       if (ok) setData(d.data);
       else setError(d.message || "Failed to load");
       setLoading(false);

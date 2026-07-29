@@ -10,6 +10,7 @@ import {
   Cell,
 } from "recharts";
 import styles from "./TopRunScorer.module.css";
+import { API_BASE } from "../../../config";
 
 const TopRunScorer = () => {
   const [chartData, setChartData] = useState([]);
@@ -17,7 +18,7 @@ const TopRunScorer = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const res = await fetch("/api/players/top-run-scorers");
+        const res = await fetch(`${API_BASE}/api/players/top-run-scorers`);
         const result = await res.json();
 
         const data = result.data.map((player) => ({

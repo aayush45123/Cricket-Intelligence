@@ -10,6 +10,7 @@ import {
   Cell,
 } from "recharts";
 import styles from "./HighestWicketTaker.module.css";
+import { API_BASE } from "../config";
 
 const HighestWicketTaker = () => {
   const [chartData, setChartData] = useState([]);
@@ -17,7 +18,7 @@ const HighestWicketTaker = () => {
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
-        const res = await fetch("/api/players/top-wicket-takers");
+        const res = await fetch(`${API_BASE}/api/players/top-wicket-takers`);
         const result = await res.json();
 
         const data = result.data.map((player) => ({
