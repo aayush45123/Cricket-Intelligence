@@ -3,7 +3,15 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { API_BASE } from "../../config";
 import styles from "./Tournaments.module.css";
-import { Award, Plus, Copy, Users, MapPin, LogIn, ArrowRight } from "lucide-react";
+import {
+  Award,
+  Plus,
+  Copy,
+  Users,
+  MapPin,
+  LogIn,
+  ArrowRight,
+} from "lucide-react";
 
 const Tournaments = () => {
   const { authFetch } = useAuth();
@@ -20,8 +28,27 @@ const Tournaments = () => {
   const [formData, setFormData] = useState({
     title: "",
     format: "T20",
+    tournamentType: "League",
+    organizerName: "",
     location: "",
     description: "",
+    registrationOpensAt: "",
+    registrationClosesAt: "",
+    maxTeams: "",
+    minTeamsRequired: "",
+    startDate: "",
+    endDate: "",
+    grounds: "2",
+    dailyStartTime: "09:00",
+    dailyEndTime: "18:00",
+    matchDurationMinutes: "120",
+    restGapMinutes: "60",
+    maxMatchesPerTeamPerDay: "2",
+    overs: "20",
+    powerplayOvers: "6",
+    superOver: true,
+    dlsEnabled: true,
+    tieRules: "Super Over",
   });
 
   const fetchTournaments = async () => {
@@ -50,12 +77,71 @@ const Tournaments = () => {
       const { ok, data } = await authFetch(`${API_BASE}/api/tournaments`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify({
+          title: formData.title,
+          format: formData.format,
+          tournamentType: formData.tournamentType,
+          organizerName: formData.organizerName,
+          location: formData.location,
+          description: formData.description,
+          registration: {
+            opensAt: formData.registrationOpensAt || null,
+            closesAt: formData.registrationClosesAt || null,
+            maxTeams: Number(formData.maxTeams) || 0,
+            minTeamsRequired: Number(formData.minTeamsRequired) || 0,
+          },
+          dates: {
+            startDate: formData.startDate || null,
+            endDate: formData.endDate || null,
+          },
+          schedule: {
+            startDate: formData.startDate || null,
+            endDate: formData.endDate || null,
+            grounds: Number(formData.grounds) || 1,
+            dailyStartTime: formData.dailyStartTime,
+            dailyEndTime: formData.dailyEndTime,
+            matchDurationMinutes: Number(formData.matchDurationMinutes) || 120,
+            restGapMinutes: Number(formData.restGapMinutes) || 60,
+            maxMatchesPerTeamPerDay:
+              Number(formData.maxMatchesPerTeamPerDay) || 2,
+          },
+          rules: {
+            overs: Number(formData.overs) || 20,
+            powerplayOvers: Number(formData.powerplayOvers) || 6,
+            superOver: Boolean(formData.superOver),
+            dlsEnabled: Boolean(formData.dlsEnabled),
+            tieRules: formData.tieRules,
+          },
+        }),
       });
 
       if (ok) {
         setShowModal(false);
-        setFormData({ title: "", format: "T20", location: "", description: "" });
+        setFormData({
+          title: "",
+          format: "T20",
+          tournamentType: "League",
+          organizerName: "",
+          location: "",
+          description: "",
+          registrationOpensAt: "",
+          registrationClosesAt: "",
+          maxTeams: "",
+          minTeamsRequired: "",
+          startDate: "",
+          endDate: "",
+          grounds: "2",
+          dailyStartTime: "09:00",
+          dailyEndTime: "18:00",
+          matchDurationMinutes: "120",
+          restGapMinutes: "60",
+          maxMatchesPerTeamPerDay: "2",
+          overs: "20",
+          powerplayOvers: "6",
+          superOver: true,
+          dlsEnabled: true,
+          tieRules: "Super Over",
+        });
         fetchTournaments();
       } else {
         alert(data?.message || "Failed to create tournament");
@@ -95,7 +181,9 @@ const Tournaments = () => {
     setJoinError("");
     const code = extractInviteCode(joinInput);
     if (!code) {
-      setJoinError("Please enter a valid invite link or code (e.g. TRN-ABCDE).");
+      setJoinError(
+        "Please enter a valid invite link or code (e.g. TRN-ABCDE).",
+      );
       return;
     }
     navigate(`/tournaments/join/${code}`);
@@ -109,10 +197,14 @@ const Tournaments = () => {
           <div className={styles.heroEyebrow}>Tournament Engine</div>
           <h1 className={styles.heroTitle}>Tournaments</h1>
           <p className={styles.heroSub}>
-            Create your tournament, generate shareable registration links, and register squads with verified Cricket Intelligence accounts.
+            Create your tournament, generate shareable registration links, and
+            register squads with verified Cricket Intelligence accounts.
           </p>
         </div>
-        <button className={styles.primaryBtn} onClick={() => setShowModal(true)}>
+        <button
+          className={styles.primaryBtn}
+          onClick={() => setShowModal(true)}
+        >
           <Plus size={16} /> Create Tournament
         </button>
       </section>
@@ -123,7 +215,9 @@ const Tournaments = () => {
           <LogIn size={18} color="var(--ci-brand)" />
           <div>
             <div className={styles.joinTitle}>Join a Tournament</div>
-            <div className={styles.joinSub}>Paste an invite link or enter an invite code to register your team</div>
+            <div className={styles.joinSub}>
+              Paste an invite link or enter an invite code to register your team
+            </div>
           </div>
         </div>
         <form className={styles.joinForm} onSubmit={handleJoin}>
@@ -132,7 +226,10 @@ const Tournaments = () => {
             type="text"
             placeholder="Paste invite link or enter code (e.g. TRN-AB1234)"
             value={joinInput}
-            onChange={(e) => { setJoinInput(e.target.value); setJoinError(""); }}
+            onChange={(e) => {
+              setJoinInput(e.target.value);
+              setJoinError("");
+            }}
           />
           <button type="submit" className={styles.joinBtn}>
             Join <ArrowRight size={15} />
@@ -154,7 +251,9 @@ const Tournaments = () => {
                   type="text"
                   placeholder="e.g. Premier Champions Trophy 2026"
                   value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, title: e.target.value })
+                  }
                   required
                 />
               </div>
@@ -164,7 +263,9 @@ const Tournaments = () => {
                 <select
                   className={styles.input}
                   value={formData.format}
-                  onChange={(e) => setFormData({ ...formData, format: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, format: e.target.value })
+                  }
                 >
                   <option value="T20">T20 (20 Overs)</option>
                   <option value="T10">T10 (10 Overs)</option>
@@ -174,13 +275,45 @@ const Tournaments = () => {
               </div>
 
               <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Tournament Type</label>
+                <select
+                  className={styles.input}
+                  value={formData.tournamentType}
+                  onChange={(e) =>
+                    setFormData({ ...formData, tournamentType: e.target.value })
+                  }
+                >
+                  <option value="League">League</option>
+                  <option value="Knockout">Knockout</option>
+                  <option value="League + Knockout">League + Knockout</option>
+                  <option value="Double Elimination">Double Elimination</option>
+                  <option value="Round Robin">Round Robin</option>
+                </select>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Organizer Name</label>
+                <input
+                  className={styles.input}
+                  type="text"
+                  placeholder="e.g. City Cricket Association"
+                  value={formData.organizerName}
+                  onChange={(e) =>
+                    setFormData({ ...formData, organizerName: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className={styles.formGroup}>
                 <label className={styles.formLabel}>Location / Venue</label>
                 <input
                   className={styles.input}
                   type="text"
                   placeholder="e.g. National Sports Complex"
                   value={formData.location}
-                  onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, location: e.target.value })
+                  }
                 />
               </div>
 
@@ -191,8 +324,258 @@ const Tournaments = () => {
                   type="text"
                   placeholder="e.g. Annual weekend knockout tournament"
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={(e) =>
+                    setFormData({ ...formData, description: e.target.value })
+                  }
                 />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Registration Opens</label>
+                <input
+                  className={styles.input}
+                  type="datetime-local"
+                  value={formData.registrationOpensAt}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      registrationOpensAt: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Registration Closes</label>
+                <input
+                  className={styles.input}
+                  type="datetime-local"
+                  value={formData.registrationClosesAt}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      registrationClosesAt: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>
+                  Minimum Teams Required
+                </label>
+                <input
+                  className={styles.input}
+                  type="number"
+                  min="2"
+                  value={formData.minTeamsRequired}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      minTeamsRequired: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Maximum Teams</label>
+                <input
+                  className={styles.input}
+                  type="number"
+                  min="2"
+                  value={formData.maxTeams}
+                  onChange={(e) =>
+                    setFormData({ ...formData, maxTeams: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>
+                  Tournament Start Date
+                </label>
+                <input
+                  className={styles.input}
+                  type="date"
+                  value={formData.startDate}
+                  onChange={(e) =>
+                    setFormData({ ...formData, startDate: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Tournament End Date</label>
+                <input
+                  className={styles.input}
+                  type="date"
+                  value={formData.endDate}
+                  onChange={(e) =>
+                    setFormData({ ...formData, endDate: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Number of Grounds</label>
+                <input
+                  className={styles.input}
+                  type="number"
+                  min="1"
+                  value={formData.grounds}
+                  onChange={(e) =>
+                    setFormData({ ...formData, grounds: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>
+                  Daily Playing Window Start
+                </label>
+                <input
+                  className={styles.input}
+                  type="time"
+                  value={formData.dailyStartTime}
+                  onChange={(e) =>
+                    setFormData({ ...formData, dailyStartTime: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>
+                  Daily Playing Window End
+                </label>
+                <input
+                  className={styles.input}
+                  type="time"
+                  value={formData.dailyEndTime}
+                  onChange={(e) =>
+                    setFormData({ ...formData, dailyEndTime: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>
+                  Match Duration (minutes)
+                </label>
+                <input
+                  className={styles.input}
+                  type="number"
+                  min="30"
+                  value={formData.matchDurationMinutes}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      matchDurationMinutes: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>
+                  Rest Gap Between Matches (minutes)
+                </label>
+                <input
+                  className={styles.input}
+                  type="number"
+                  min="0"
+                  value={formData.restGapMinutes}
+                  onChange={(e) =>
+                    setFormData({ ...formData, restGapMinutes: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>
+                  Max Matches Per Team Per Day
+                </label>
+                <input
+                  className={styles.input}
+                  type="number"
+                  min="1"
+                  value={formData.maxMatchesPerTeamPerDay}
+                  onChange={(e) =>
+                    setFormData({
+                      ...formData,
+                      maxMatchesPerTeamPerDay: e.target.value,
+                    })
+                  }
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Overs</label>
+                <input
+                  className={styles.input}
+                  type="number"
+                  min="1"
+                  value={formData.overs}
+                  onChange={(e) =>
+                    setFormData({ ...formData, overs: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Powerplay Overs</label>
+                <input
+                  className={styles.input}
+                  type="number"
+                  min="0"
+                  value={formData.powerplayOvers}
+                  onChange={(e) =>
+                    setFormData({ ...formData, powerplayOvers: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>Tie Rules</label>
+                <select
+                  className={styles.input}
+                  value={formData.tieRules}
+                  onChange={(e) =>
+                    setFormData({ ...formData, tieRules: e.target.value })
+                  }
+                >
+                  <option value="Super Over">Super Over</option>
+                  <option value="Most Boundaries">Most Boundaries</option>
+                  <option value="Shared Points">Shared Points</option>
+                </select>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>
+                  <input
+                    type="checkbox"
+                    checked={formData.superOver}
+                    onChange={(e) =>
+                      setFormData({ ...formData, superOver: e.target.checked })
+                    }
+                    style={{ marginRight: "8px" }}
+                  />
+                  Super Over Enabled
+                </label>
+              </div>
+
+              <div className={styles.formGroup}>
+                <label className={styles.formLabel}>
+                  <input
+                    type="checkbox"
+                    checked={formData.dlsEnabled}
+                    onChange={(e) =>
+                      setFormData({ ...formData, dlsEnabled: e.target.checked })
+                    }
+                    style={{ marginRight: "8px" }}
+                  />
+                  DLS Enabled
+                </label>
               </div>
 
               <div className={styles.modalActions}>
@@ -203,7 +586,11 @@ const Tournaments = () => {
                 >
                   Cancel
                 </button>
-                <button type="submit" className={styles.primaryBtn} disabled={creating}>
+                <button
+                  type="submit"
+                  className={styles.primaryBtn}
+                  disabled={creating}
+                >
                   {creating ? "Creating..." : "Create Tournament"}
                 </button>
               </div>
@@ -214,17 +601,31 @@ const Tournaments = () => {
 
       {/* List */}
       {loading ? (
-        <div style={{ textAlign: "center", padding: "60px", color: "var(--ci-text-muted)" }}>
+        <div
+          style={{
+            textAlign: "center",
+            padding: "60px",
+            color: "var(--ci-text-muted)",
+          }}
+        >
           Loading tournaments...
         </div>
       ) : tournaments.length === 0 ? (
         <div className={styles.empty}>
-          <Award size={44} color="var(--ci-brand)" style={{ marginBottom: "12px" }} />
+          <Award
+            size={44}
+            color="var(--ci-brand)"
+            style={{ marginBottom: "12px" }}
+          />
           <h3>No tournaments created yet</h3>
           <p style={{ color: "var(--ci-text-muted)", marginBottom: "20px" }}>
-            Create your first tournament and share the invite link so teams can register their verified player squads.
+            Create your first tournament and share the invite link so teams can
+            register their verified player squads.
           </p>
-          <button className={styles.primaryBtn} onClick={() => setShowModal(true)}>
+          <button
+            className={styles.primaryBtn}
+            onClick={() => setShowModal(true)}
+          >
             <Plus size={16} /> Create First Tournament
           </button>
         </div>
@@ -236,10 +637,14 @@ const Tournaments = () => {
                 <div>
                   <h3 className={styles.title}>{t.title}</h3>
                   <div className={styles.meta}>
+                    <span>{t.tournamentType || "League"}</span>
                     <span>{t.format}</span>
                     {t.location && (
                       <span>
-                        <MapPin size={12} style={{ display: "inline", marginRight: "2px" }} />
+                        <MapPin
+                          size={12}
+                          style={{ display: "inline", marginRight: "2px" }}
+                        />
                         {t.location}
                       </span>
                     )}
@@ -249,17 +654,39 @@ const Tournaments = () => {
               </div>
 
               <div className={styles.teamsCount}>
-                <Users size={14} style={{ display: "inline", marginRight: "6px" }} />
+                <Users
+                  size={14}
+                  style={{ display: "inline", marginRight: "6px" }}
+                />
                 {t.teams?.length || 0} Teams Registered
+              </div>
+
+              <div className={styles.teamsCount} style={{ marginTop: "8px" }}>
+                Fixtures: {t.fixtures?.length || 0} | Standings:{" "}
+                {t.standings?.length || 0}
               </div>
 
               <div className={styles.shareBox}>
                 <div>
-                  <span style={{ fontSize: "0.75rem", color: "var(--ci-text-muted)" }}>Code: </span>
+                  <span
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "var(--ci-text-muted)",
+                    }}
+                  >
+                    Code:{" "}
+                  </span>
                   <span className={styles.inviteCode}>{t.inviteCode}</span>
                 </div>
-                <button className={styles.copyBtn} onClick={() => copyInviteLink(t.inviteCode)}>
-                  <Copy size={12} style={{ display: "inline", marginRight: "4px" }} /> Share Link
+                <button
+                  className={styles.copyBtn}
+                  onClick={() => copyInviteLink(t.inviteCode)}
+                >
+                  <Copy
+                    size={12}
+                    style={{ display: "inline", marginRight: "4px" }}
+                  />{" "}
+                  Share Link
                 </button>
               </div>
             </div>
