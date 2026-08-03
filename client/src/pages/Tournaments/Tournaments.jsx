@@ -678,16 +678,28 @@ const Tournaments = () => {
                   </span>
                   <span className={styles.inviteCode}>{t.inviteCode}</span>
                 </div>
-                <button
-                  className={styles.copyBtn}
-                  onClick={() => copyInviteLink(t.inviteCode)}
-                >
-                  <Copy
-                    size={12}
-                    style={{ display: "inline", marginRight: "4px" }}
-                  />{" "}
-                  Share Link
-                </button>
+                <div style={{ display: "flex", gap: "8px" }}>
+                  <button
+                    className={styles.copyBtn}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      copyInviteLink(t.inviteCode);
+                    }}
+                  >
+                    <Copy
+                      size={12}
+                      style={{ display: "inline", marginRight: "4px" }}
+                    />{" "}
+                    Share Link
+                  </button>
+                  <button
+                    className={styles.primaryBtn}
+                    style={{ padding: "4px 10px", fontSize: "0.8rem" }}
+                    onClick={() => navigate(`/tournaments/${t._id}`)}
+                  >
+                    Open Hub <ArrowRight size={12} />
+                  </button>
+                </div>
               </div>
             </div>
           ))}

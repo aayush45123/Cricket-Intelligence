@@ -23,20 +23,54 @@ const scheduledTeamSchema = new mongoose.Schema(
   { _id: false },
 );
 
+const batterPerformanceSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    runs: { type: Number, default: 0 },
+    balls: { type: Number, default: 0 },
+    fours: { type: Number, default: 0 },
+    sixes: { type: Number, default: 0 },
+    strikeRate: { type: Number, default: 0 },
+    dismissal: { type: String, default: "not out" },
+  },
+  { _id: false },
+);
+
+const bowlerPerformanceSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    overs: { type: Number, default: 0 },
+    maidens: { type: Number, default: 0 },
+    runs: { type: Number, default: 0 },
+    wickets: { type: Number, default: 0 },
+    economy: { type: Number, default: 0 },
+  },
+  { _id: false },
+);
+
+const teamInningsSchema = new mongoose.Schema(
+  {
+    runs: { type: Number, default: 0 },
+    wickets: { type: Number, default: 0 },
+    overs: { type: Number, default: 0 },
+    battingCard: [batterPerformanceSchema],
+    bowlingCard: [bowlerPerformanceSchema],
+    extras: { type: Number, default: 0 },
+  },
+  { _id: false },
+);
+
 const fixtureResultSchema = new mongoose.Schema(
   {
     winner: { type: String, default: "" },
     margin: { type: String, default: "" },
-    teamAScore: {
-      runs: { type: Number, default: 0 },
-      wickets: { type: Number, default: 0 },
-      overs: { type: Number, default: 0 },
-    },
-    teamBScore: {
-      runs: { type: Number, default: 0 },
-      wickets: { type: Number, default: 0 },
-      overs: { type: Number, default: 0 },
-    },
+    tossWinner: { type: String, default: "" },
+    tossDecision: { type: String, default: "bat" },
+    playerOfTheMatch: { type: String, default: "" },
+    teamAScore: { type: teamInningsSchema, default: () => ({}) },
+    teamBScore: { type: teamInningsSchema, default: () => ({}) },
+    commentaryHighlights: [{ type: String }],
+    simulated: { type: Boolean, default: false },
   },
   { _id: false },
 );

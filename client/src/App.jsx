@@ -33,6 +33,7 @@ import MatchResult from "./pages/MatchResult/MatchResult";
 import UserAnalytics from "./pages/UserAnalytics/UserAnalytics";
 import Tournaments from "./pages/Tournaments/Tournaments";
 import JoinTournament from "./pages/Tournaments/JoinTournament";
+import TournamentDetail from "./pages/Tournaments/TournamentDetail";
 
 const Protected = ({ children }) => {
   const { isAuthenticated, loading } = useAuth();
@@ -133,6 +134,14 @@ const App = () => (
           element={
             <Protected>
               <Tournaments />
+            </Protected>
+          }
+        />
+        <Route
+          path="/tournaments/:tournamentId"
+          element={
+            <Protected>
+              <TournamentDetail />
             </Protected>
           }
         />

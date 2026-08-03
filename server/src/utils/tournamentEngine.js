@@ -515,20 +515,19 @@ export const buildStandings = (tournament, fixtures) => {
       points: 0,
       runsFor: 0,
       runsAgainst: 0,
+      oversForBalls: 0,
+      oversAgainstBalls: 0,
       netRunRate: 0,
       qualified: false,
       eliminated: false,
     });
   });
 
-  fixtures.forEach((fixture) => {
-    if (fixture.status !== "completed") {
-      return;
-    }
+  const totalOversPerMatch = Number(tournament?.rules?.overs) || 20;
 
-    if (!LEAGUE_STAGE_PATTERN.test(String(fixture.stage || ""))) {
-      return;
-    }
+  fixtures.forEach((fixture) => {
+    if (fixture.status !== "completed") return;
+    if (!LEAGUE_STAGE_PATTERN.test(String(fixture.stage || ""))) return;
 
     const teamAName = fixture.teams?.teamA?.name;
     const teamBName = fixture.teams?.teamB?.name;
@@ -536,11 +535,16 @@ export const buildStandings = (tournament, fixtures) => {
     const scoreA = result.teamAScore || {};
     const scoreB = result.teamBScore || {};
 
+    const ballsA = toOversBalls(scoreA.overs) || totalOversPerMatch * 6;
+    const ballsB = toOversBalls(scoreB.overs) || totalOversPerMatch * 6;
+
     if (teamAName && standingsMap.has(teamAName)) {
       const team = standingsMap.get(teamAName);
       team.played += 1;
       team.runsFor += Number(scoreA.runs || 0);
       team.runsAgainst += Number(scoreB.runs || 0);
+      team.oversForBalls += ballsA;
+      team.oversAgainstBalls += ballsB;
     }
 
     if (teamBName && standingsMap.has(teamBName)) {
@@ -548,6 +552,8 @@ export const buildStandings = (tournament, fixtures) => {
       team.played += 1;
       team.runsFor += Number(scoreB.runs || 0);
       team.runsAgainst += Number(scoreA.runs || 0);
+      team.oversForBalls += ballsB;
+      team.oversAgainstBalls += ballsA;
     }
 
     if (!result.winner || result.winner === "TIE") {
@@ -589,10 +595,9 @@ export const buildStandings = (tournament, fixtures) => {
   });
 
   const standings = Array.from(standingsMap.values()).map((team) => {
-    const runsForBalls = Math.max(1, team.played * 6 * 20);
-    const runsAgainstBalls = Math.max(1, team.played * 6 * 20);
-    const nrr =
-      team.runsFor / runsForBalls - team.runsAgainst / runsAgainstBalls;
+    const oversFor = team.oversForBalls > 0 ? team.oversForBalls / 6 : 1;
+    const oversAgainst = team.oversAgainstBalls > 0 ? team.oversAgainstBalls / 6 : 1;
+    const nrr = (team.runsFor / oversFor) - (team.runsAgainst / oversAgainst);
     return {
       ...team,
       netRunRate: Number.isFinite(nrr) ? Number(nrr.toFixed(3)) : 0,
@@ -601,10 +606,16 @@ export const buildStandings = (tournament, fixtures) => {
 
   standings.sort((left, right) => {
     if (right.points !== left.points) return right.points - left.points;
-    if (right.netRunRate !== left.netRunRate)
-      return right.netRunRate - left.netRunRate;
+    if (right.netRunRate !== left.netRunRate) return right.netRunRate - left.netRunRate;
     if (right.wins !== left.wins) return right.wins - left.wins;
     return left.teamName.localeCompare(right.teamName);
+  });
+
+  // Mark qualification status for top 4
+  standings.forEach((team, idx) => {
+    if (idx < 4 && team.played > 0) {
+      team.qualified = true;
+    }
   });
 
   return standings;
@@ -619,13 +630,33 @@ const hashToNumber = (value) => {
   return Number.parseInt(hex, 16);
 };
 
+const generateSquadPlayers = (teamObj, teamName) => {
+  if (teamObj && Array.isArray(teamObj.players) && teamObj.players.length >= 6) {
+    return teamObj.players.map((p) => p.name);
+  }
+  const defaultRoster = [
+    `${teamName} Captain`,
+    `${teamName} Opener A`,
+    `${teamName} Opener B`,
+    `${teamName} Batter 3`,
+    `${teamName} Allrounder 1`,
+    `${teamName} Allrounder 2`,
+    `${teamName} Wicketkeeper`,
+    `${teamName} Spinner 1`,
+    `${teamName} Pacer 1`,
+    `${teamName} Pacer 2`,
+    `${teamName} Pacer 3`,
+  ];
+  return defaultRoster;
+};
+
 export const simulateFixtureResult = (fixture, tournament) => {
-  const teamA = fixture?.teams?.teamA?.name;
-  const teamB = fixture?.teams?.teamB?.name;
+  const teamAName = fixture?.teams?.teamA?.name;
+  const teamBName = fixture?.teams?.teamB?.name;
 
   if (
-    !teamA ||
-    !teamB ||
+    !teamAName ||
+    !teamBName ||
     isPlaceholderName(fixture?.teams?.teamA) ||
     isPlaceholderName(fixture?.teams?.teamB)
   ) {
@@ -633,57 +664,147 @@ export const simulateFixtureResult = (fixture, tournament) => {
   }
 
   const format = String(tournament?.format || "T20").toUpperCase();
-  const baseRuns =
-    format === "T10"
-      ? 95
-      : format === "ODI"
-        ? 245
-        : format === "TEST"
-          ? 420
-          : 165;
+  const maxOvers = Number(tournament?.rules?.overs) || (format === "T10" ? 10 : format === "ODI" ? 50 : 20);
+
+  const teamAObj = (tournament?.teams || []).find((t) => t.teamName === teamAName);
+  const teamBObj = (tournament?.teams || []).find((t) => t.teamName === teamBName);
+
+  const squadA = generateSquadPlayers(teamAObj, teamAName);
+  const squadB = generateSquadPlayers(teamBObj, teamBName);
+
   const seed = hashToNumber(
-    `${tournament?.inviteCode || ""}:${fixture.fixtureId}:${teamA}:${teamB}`,
+    `${tournament?.inviteCode || ""}:${fixture.fixtureId}:${teamAName}:${teamBName}`,
   );
-  const swing = (seed % 41) - 20;
-  const teamARuns = Math.max(60, baseRuns + swing);
-  const teamBRuns = Math.max(60, baseRuns - swing);
-  const winner =
-    teamARuns === teamBRuns
-      ? seed % 2 === 0
-        ? teamA
-        : teamB
-      : teamARuns > teamBRuns
-        ? teamA
-        : teamB;
-  const margin = `${Math.abs(teamARuns - teamBRuns)} runs`;
+
+  const tossWinner = (seed % 2 === 0) ? teamAName : teamBName;
+  const tossDecision = (seed % 3 === 0) ? "bowl" : "bat";
+
+  const baseRuns = format === "T10" ? 105 : format === "ODI" ? 260 : 170;
+  const swing = (seed % 35) - 17;
+  
+  let teamARuns = Math.max(50, baseRuns + swing);
+  let teamBRuns = Math.max(50, baseRuns - swing + ((seed % 7) - 3));
+
+  if (teamARuns === teamBRuns) {
+    teamARuns += 1;
+  }
+
+  const winner = teamARuns > teamBRuns ? teamAName : teamBName;
+  const margin = teamARuns > teamBRuns 
+    ? `${teamARuns - teamBRuns} runs` 
+    : `${Math.min(9, 3 + (seed % 5))} wickets`;
+
+  // Build Innings Scorecard for Team A
+  const wicketsA = Math.min(10, 4 + (seed % 6));
+  const oversA = maxOvers;
+  const battingCardA = squadA.slice(0, 7).map((pName, idx) => {
+    const pSeed = (seed + idx * 13) % 45;
+    const runs = idx === 0 ? 35 + pSeed : idx === 1 ? 25 + (pSeed % 20) : idx === 2 ? 40 + (pSeed % 25) : 10 + (pSeed % 15);
+    const fours = Math.floor(runs / 10) + (pSeed % 3);
+    const sixes = Math.floor(runs / 18) + (pSeed % 2);
+    const balls = Math.max(fours + sixes + 5, Math.floor(runs * 0.75));
+    const sr = Number(((runs / (balls || 1)) * 100).toFixed(1));
+    return {
+      name: pName,
+      runs,
+      balls,
+      fours,
+      sixes,
+      strikeRate: sr,
+      dismissal: idx < wicketsA ? `c ${squadB[(idx + 4) % squadB.length]} b ${squadB[(idx + 7) % squadB.length]}` : "not out",
+    };
+  });
+
+  const bowlingCardB = squadB.slice(7, 11).map((bName, idx) => {
+    const bSeed = (seed + idx * 7) % 25;
+    const overs = Math.floor(maxOvers / 4);
+    const wickets = idx === 0 ? Math.min(4, Math.floor(wicketsA / 2)) : Math.floor(wicketsA / 3);
+    const runs = 20 + bSeed;
+    const econ = Number((runs / overs).toFixed(2));
+    return {
+      name: bName,
+      overs,
+      maidens: bSeed % 2 === 0 ? 1 : 0,
+      runs,
+      wickets,
+      economy: econ,
+    };
+  });
+
+  // Build Innings Scorecard for Team B
+  const wicketsB = winner === teamBName ? Math.min(9, 2 + (seed % 5)) : Math.min(10, 6 + (seed % 4));
+  const oversB = winner === teamBName ? Number((maxOvers - 0.4).toFixed(1)) : maxOvers;
+  const battingCardB = squadB.slice(0, 7).map((pName, idx) => {
+    const pSeed = (seed * 3 + idx * 11) % 42;
+    const runs = idx === 0 ? 28 + pSeed : idx === 1 ? 42 + (pSeed % 22) : idx === 2 ? 30 + (pSeed % 20) : 8 + (pSeed % 12);
+    const fours = Math.floor(runs / 10) + (pSeed % 2);
+    const sixes = Math.floor(runs / 20) + (pSeed % 2);
+    const balls = Math.max(fours + sixes + 4, Math.floor(runs * 0.78));
+    const sr = Number(((runs / (balls || 1)) * 100).toFixed(1));
+    return {
+      name: pName,
+      runs,
+      balls,
+      fours,
+      sixes,
+      strikeRate: sr,
+      dismissal: idx < wicketsB ? `b ${squadA[(idx + 8) % squadA.length]}` : "not out",
+    };
+  });
+
+  const bowlingCardA = squadA.slice(7, 11).map((bName, idx) => {
+    const bSeed = (seed * 2 + idx * 9) % 28;
+    const overs = Math.floor(maxOvers / 4);
+    const wickets = idx === 0 ? Math.min(4, Math.floor(wicketsB / 2)) : Math.floor(wicketsB / 3);
+    const runs = 18 + bSeed;
+    const econ = Number((runs / overs).toFixed(2));
+    return {
+      name: bName,
+      overs,
+      maidens: bSeed % 3 === 0 ? 1 : 0,
+      runs,
+      wickets,
+      economy: econ,
+    };
+  });
+
+  // Pick Player of the Match
+  const topBatA = battingCardA.reduce((prev, current) => (prev.runs > current.runs ? prev : current), battingCardA[0]);
+  const topBatB = battingCardB.reduce((prev, current) => (prev.runs > current.runs ? prev : current), battingCardB[0]);
+  const potm = winner === teamAName ? topBatA?.name : topBatB?.name;
+
+  const commentaryHighlights = [
+    `Toss: ${tossWinner} won the toss and elected to ${tossDecision} first.`,
+    `Innings 1: ${teamAName} posted ${teamARuns}/${wicketsA} in ${oversA} overs. Top scorer: ${topBatA?.name} (${topBatA?.runs} off ${topBatA?.balls}b).`,
+    `Innings 2: ${teamBName} scored ${teamBRuns}/${wicketsB} in ${oversB} overs. Top scorer: ${topBatB?.name} (${topBatB?.runs} off ${topBatB?.balls}b).`,
+    `Result: ${winner} won by ${margin}.`,
+    `Player of the Match: ${potm}.`,
+  ];
 
   return {
     winner,
     margin,
+    tossWinner,
+    tossDecision,
+    playerOfTheMatch: potm,
+    simulated: true,
     teamAScore: {
       runs: teamARuns,
-      wickets: Math.min(10, 7 + (seed % 4)),
-      overs:
-        format === "TEST"
-          ? 90
-          : format === "ODI"
-            ? 50
-            : format === "T10"
-              ? 10
-              : 20,
+      wickets: wicketsA,
+      overs: oversA,
+      battingCard: battingCardA,
+      bowlingCard: bowlingCardA,
+      extras: 6 + (seed % 5),
     },
     teamBScore: {
       runs: teamBRuns,
-      wickets: Math.min(10, 6 + ((seed >> 2) % 5)),
-      overs:
-        format === "TEST"
-          ? 86
-          : format === "ODI"
-            ? 49.4
-            : format === "T10"
-              ? 9.5
-              : 20,
+      wickets: wicketsB,
+      overs: oversB,
+      battingCard: battingCardB,
+      bowlingCard: bowlingCardB,
+      extras: 4 + (seed % 6),
     },
+    commentaryHighlights,
   };
 };
 
@@ -716,6 +837,187 @@ export const advanceBracket = (fixtures, fixtureId, winnerName) => {
   return updatedFixtures;
 };
 
+export const populatePlayoffSeeds = (tournament) => {
+  const standings = tournament.standings || [];
+  if (standings.length === 0) return tournament.fixtures;
+
+  const topTeams = standings.map((s) => s.teamName);
+  const updated = (tournament.fixtures || []).map((f) => ({
+    ...f,
+    teams: {
+      teamA: { ...f.teams.teamA },
+      teamB: { ...f.teams.teamB },
+    },
+  }));
+
+  updated.forEach((fixture) => {
+    if (!LEAGUE_STAGE_PATTERN.test(String(fixture.stage || ""))) {
+      // It's a playoff/knockout fixture
+      if (fixture.teams.teamA.placeholder && /Qualified Team 1/i.test(fixture.teams.teamA.name)) {
+        if (topTeams[0]) {
+          fixture.teams.teamA.name = topTeams[0];
+          fixture.teams.teamA.placeholder = false;
+        }
+      }
+      if (fixture.teams.teamB.placeholder && /Qualified Team 4/i.test(fixture.teams.teamB.name)) {
+        if (topTeams[3]) {
+          fixture.teams.teamB.name = topTeams[3];
+          fixture.teams.teamB.placeholder = false;
+        }
+      }
+      if (fixture.teams.teamA.placeholder && /Qualified Team 2/i.test(fixture.teams.teamA.name)) {
+        if (topTeams[1]) {
+          fixture.teams.teamA.name = topTeams[1];
+          fixture.teams.teamA.placeholder = false;
+        }
+      }
+      if (fixture.teams.teamB.placeholder && /Qualified Team 3/i.test(fixture.teams.teamB.name)) {
+        if (topTeams[2]) {
+          fixture.teams.teamB.name = topTeams[2];
+          fixture.teams.teamB.placeholder = false;
+        }
+      }
+    }
+  });
+
+  return updated;
+};
+
+export const calculateTournamentAnalytics = (tournament) => {
+  const fixtures = tournament?.fixtures || [];
+  const completed = fixtures.filter((f) => f.status === "completed");
+
+  const batterStatsMap = new Map();
+  const bowlerStatsMap = new Map();
+  const teamWinMap = new Map();
+  let tossBatWins = 0;
+  let tossBowlWins = 0;
+  let tossWinnerMatchWins = 0;
+
+  completed.forEach((fixture) => {
+    const res = fixture.result || {};
+    const winner = res.winner;
+    const tossWinner = res.tossWinner;
+    const tossDecision = res.tossDecision;
+
+    if (winner && tossWinner) {
+      if (winner === tossWinner) tossWinnerMatchWins += 1;
+      if (tossDecision === "bat" && winner === tossWinner) tossBatWins += 1;
+      if (tossDecision === "bowl" && winner === tossWinner) tossBowlWins += 1;
+    }
+
+    [res.teamAScore, res.teamBScore].forEach((score) => {
+      if (!score) return;
+      
+      // Batting Stats
+      (score.battingCard || []).forEach((b) => {
+        const existing = batterStatsMap.get(b.name) || {
+          name: b.name,
+          runs: 0,
+          balls: 0,
+          fours: 0,
+          sixes: 0,
+          innings: 0,
+          highestScore: 0,
+        };
+        existing.runs += Number(b.runs || 0);
+        existing.balls += Number(b.balls || 0);
+        existing.fours += Number(b.fours || 0);
+        existing.sixes += Number(b.sixes || 0);
+        existing.innings += 1;
+        existing.highestScore = Math.max(existing.highestScore, Number(b.runs || 0));
+        batterStatsMap.set(b.name, existing);
+      });
+
+      // Bowling Stats
+      (score.bowlingCard || []).forEach((bw) => {
+        const existing = bowlerStatsMap.get(bw.name) || {
+          name: bw.name,
+          wickets: 0,
+          overs: 0,
+          runs: 0,
+          maidens: 0,
+          innings: 0,
+        };
+        existing.wickets += Number(bw.wickets || 0);
+        existing.overs += Number(bw.overs || 0);
+        existing.runs += Number(bw.runs || 0);
+        existing.maidens += Number(bw.maidens || 0);
+        existing.innings += 1;
+        bowlerStatsMap.set(bw.name, existing);
+      });
+    });
+  });
+
+  // Calculate Batting Leaderboard (Orange Cap)
+  const orangeCapList = Array.from(batterStatsMap.values()).map((b) => ({
+    ...b,
+    strikeRate: b.balls > 0 ? Number(((b.runs / b.balls) * 100).toFixed(1)) : 0,
+    average: b.innings > 0 ? Number((b.runs / b.innings).toFixed(1)) : b.runs,
+  })).sort((a, b) => b.runs - a.runs);
+
+  // Calculate Bowling Leaderboard (Purple Cap)
+  const purpleCapList = Array.from(bowlerStatsMap.values()).map((bw) => ({
+    ...bw,
+    economy: bw.overs > 0 ? Number((bw.runs / bw.overs).toFixed(2)) : 0,
+  })).sort((a, b) => b.wickets - a.wickets || a.economy - b.economy);
+
+  // Boundaries Leaderboard
+  const mostSixes = [...orangeCapList].sort((a, b) => b.sixes - a.sixes)[0] || null;
+  const mostFours = [...orangeCapList].sort((a, b) => b.fours - a.fours)[0] || null;
+  const bestStrikeRate = [...orangeCapList].filter(b => b.runs >= 20).sort((a, b) => b.strikeRate - a.strikeRate)[0] || null;
+  const bestEconomy = [...purpleCapList].filter(b => b.overs >= 2).sort((a, b) => a.economy - b.economy)[0] || null;
+
+  // Impact Score List
+  const impactScores = Array.from(batterStatsMap.keys()).map((pName) => {
+    const bat = batterStatsMap.get(pName) || { runs: 0, fours: 0, sixes: 0 };
+    const bowl = bowlerStatsMap.get(pName) || { wickets: 0 };
+    const impact = bat.runs + (bowl.wickets * 25) + (bat.sixes * 2) + bat.fours;
+    return { name: pName, impactScore: impact, runs: bat.runs, wickets: bowl.wickets };
+  }).sort((a, b) => b.impactScore - a.impactScore);
+
+  // Auto Awards Evaluation
+  const champion = tournament?.champion || tournament?.standings?.[0]?.teamName || "TBD";
+  const runnerUp = tournament?.runnerUp || tournament?.standings?.[1]?.teamName || "TBD";
+  const playerOfTournament = impactScores[0]?.name || "TBD";
+  const emergingPlayer = orangeCapList[1]?.name || purpleCapList[1]?.name || "TBD";
+  const bestBatter = orangeCapList[0]?.name || "TBD";
+  const bestBowler = purpleCapList[0]?.name || "TBD";
+  const bestFielder = impactScores[2]?.name || "TBD";
+  const fairPlayAward = tournament?.standings?.[0]?.teamName || "TBD";
+
+  return {
+    totalMatchesCompleted: completed.length,
+    orangeCap: orangeCapList[0] || null,
+    purpleCap: purpleCapList[0] || null,
+    orangeCapList: orangeCapList.slice(0, 10),
+    purpleCapList: purpleCapList.slice(0, 10),
+    boundaryStats: {
+      mostSixes,
+      mostFours,
+      bestStrikeRate,
+      bestEconomy,
+    },
+    tossAnalytics: {
+      tossBatWins,
+      tossBowlWins,
+      tossWinnerMatchWins,
+      winRateTossWinner: completed.length > 0 ? Number(((tossWinnerMatchWins / completed.length) * 100).toFixed(1)) : 0,
+    },
+    impactScores: impactScores.slice(0, 10),
+    awards: {
+      champion,
+      runnerUp,
+      playerOfTournament,
+      emergingPlayer,
+      bestBatter,
+      bestBowler,
+      bestFielder,
+      fairPlayAward,
+    },
+  };
+};
+
 export const isTournamentCompleted = (tournament) => {
   const fixtures = tournament?.fixtures || [];
   return (
@@ -727,12 +1029,13 @@ export const isTournamentCompleted = (tournament) => {
 export const buildCompletionReport = (tournament) => {
   const standings = tournament?.standings || [];
   const fixtures = tournament?.fixtures || [];
-  const champion = tournament?.champion || standings[0]?.teamName || "";
+  const analytics = calculateTournamentAnalytics(tournament);
+
+  const champion = tournament?.champion || standings[0]?.teamName || "TBD";
   const totalMatches = fixtures.length;
-  const completedMatches = fixtures.filter(
-    (fixture) => fixture.status === "completed",
-  ).length;
-  const summary = `${tournament?.title || "Tournament"} completed with ${completedMatches} of ${totalMatches} matches finished. Champion: ${champion || "TBD"}.`;
+  const completedMatches = fixtures.filter((f) => f.status === "completed").length;
+
+  const summary = `${tournament?.title || "Tournament"} successfully concluded! Total ${completedMatches} of ${totalMatches} matches completed. Champion: ${champion}.`;
 
   return {
     generatedAt: new Date(),
@@ -740,6 +1043,8 @@ export const buildCompletionReport = (tournament) => {
     shareableLink: tournament?.inviteCode
       ? `/tournaments/join/${slugify(tournament.inviteCode)}`
       : "",
+    analytics,
+    standings,
   };
 };
 
@@ -759,11 +1064,9 @@ export const hydrateTournamentLifecycle = (tournament) => {
   }
 
   if (registration.status === "open") {
-    updated.status =
-      updated.status === "completed" ? updated.status : "registration_open";
+    updated.status = updated.status === "completed" ? updated.status : "registration_open";
   } else if (registration.closed && updated.fixtures?.length > 0) {
-    updated.status =
-      updated.status === "completed" ? updated.status : "scheduled";
+    updated.status = updated.status === "completed" ? updated.status : "scheduled";
   }
 
   if (
@@ -774,17 +1077,25 @@ export const hydrateTournamentLifecycle = (tournament) => {
       const fixtures = buildTournamentFixtures(updated);
       updated.fixtures = scheduleFixtures(updated, fixtures);
       updated.standings = buildStandings(updated, updated.fixtures);
-      updated.status = updated.fixtures.some(
-        (fixture) => fixture.status === "scheduled",
-      )
+      updated.status = updated.fixtures.some((fixture) => fixture.status === "scheduled")
         ? "scheduled"
         : updated.status;
     }
   }
 
+  // Check if all league matches are done to populate playoffs
+  const leagueFixtures = (updated.fixtures || []).filter(f => LEAGUE_STAGE_PATTERN.test(String(f.stage || "")));
+  if (leagueFixtures.length > 0 && leagueFixtures.every(f => f.status === "completed")) {
+    updated.fixtures = populatePlayoffSeeds(updated);
+  }
+
   if (isTournamentCompleted(updated)) {
     updated.status = "completed";
     updated.standings = buildStandings(updated, updated.fixtures);
+    const analytics = calculateTournamentAnalytics(updated);
+    updated.champion = updated.champion || analytics.awards.champion;
+    updated.runnerUp = updated.runnerUp || analytics.awards.runnerUp;
+    updated.awards = { ...updated.awards, ...analytics.awards };
     updated.report = buildCompletionReport(updated);
   }
 

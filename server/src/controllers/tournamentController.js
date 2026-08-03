@@ -5,6 +5,7 @@ import {
   buildCompletionReport,
   buildStandings,
   buildTournamentFixtures,
+  calculateTournamentAnalytics,
   getRegistrationState,
   hydrateTournamentLifecycle,
   isTournamentCompleted,
@@ -555,5 +556,101 @@ export const completeTournament = async (req, res) => {
     res
       .status(statusCode)
       .json({ message: err.message || "Failed to complete tournament" });
+  }
+};
+
+export const simulateTournamentFixture = async (req, res) => {
+  try {
+    const { tournamentId, fixtureId } = req.params;
+    const tournament = await loadTournament(tournamentId);
+    if (!tournament) {
+      return res.status(404).json({ message: "Tournament not found" });
+    }
+
+    ensureOwner(req, tournament);
+
+    const fixture = tournament.fixtures.find(
+      (entry) => entry.fixtureId === fixtureId,
+    );
+    if (!fixture) {
+      return res.status(404).json({ message: "Fixture not found" });
+    }
+
+    const simResult = simulateFixtureResult(fixture, tournament);
+    if (!simResult) {
+      return res.status(400).json({
+        message: "Cannot simulate fixture. Teams are not fully resolved yet.",
+      });
+    }
+
+    fixture.result = simResult;
+    fixture.status = "completed";
+    fixture.scheduledAt = fixture.scheduledAt || new Date();
+
+    tournament.fixtures = advanceBracket(
+      tournament.fixtures,
+      fixtureId,
+      simResult.winner,
+    );
+
+    const updatedFixture = tournament.fixtures.find(
+      (entry) => entry.fixtureId === fixtureId,
+    );
+    if (updatedFixture) {
+      updatedFixture.result = simResult;
+      updatedFixture.status = "completed";
+    }
+
+    await syncTournamentLifecycle(tournament);
+
+    res.json({
+      status: "success",
+      message: `Match simulated! Winner: ${simResult.winner} (${simResult.margin})`,
+      data: { tournament, fixture: updatedFixture || fixture },
+    });
+  } catch (err) {
+    const statusCode = err.statusCode || 500;
+    console.error("🔥 SIMULATE FIXTURE ERROR:", err);
+    res
+      .status(statusCode)
+      .json({ message: err.message || "Failed to simulate fixture" });
+  }
+};
+
+export const getTournamentAnalytics = async (req, res) => {
+  try {
+    const tournament = await loadTournament(req.params.tournamentId);
+    if (!tournament) {
+      return res.status(404).json({ message: "Tournament not found" });
+    }
+
+    const analytics = calculateTournamentAnalytics(tournament);
+
+    res.json({
+      status: "success",
+      data: { analytics },
+    });
+  } catch (err) {
+    console.error("🔥 GET TOURNAMENT ANALYTICS ERROR:", err);
+    res.status(500).json({ message: "Failed to compute tournament analytics" });
+  }
+};
+
+export const getTournamentReport = async (req, res) => {
+  try {
+    const tournament = await loadTournament(req.params.tournamentId);
+    if (!tournament) {
+      return res.status(404).json({ message: "Tournament not found" });
+    }
+
+    const report = buildCompletionReport(tournament);
+
+    res.json({
+      status: "success",
+      data: { tournament, report },
+    });
+  } catch (err) {
+    console.error("🔥 GET TOURNAMENT REPORT ERROR:", err);
+    res.status(500).json({ message: "Failed to fetch tournament report" });
   }
 };
