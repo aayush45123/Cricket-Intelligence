@@ -46,6 +46,7 @@ app.use("/api/tournaments", tournamentRoutes);
 
 app.use((_req, res) => res.status(404).json({ message: "Route not found" }));
 
-connectDB().then(() =>
-  app.listen(PORT, () => console.log(`Server on http://localhost:${PORT}`)),
-);
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  connectDB();
+});
