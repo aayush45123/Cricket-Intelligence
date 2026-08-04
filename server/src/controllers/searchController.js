@@ -1,4 +1,5 @@
 import Delivery from "../models/Deliveries.js";
+import UserDelivery from "../models/UserDelivery.js";
 
 /* ─────────────────────────────────────────────────────────────
    GET /api/search?q=&role=&team=&minSR=&maxSR=&minEco=&maxEco=&limit=
@@ -290,8 +291,12 @@ export const searchPlayers = async (req, res) => {
    ───────────────────────────────────────────────────────────── */
 export const getTeamsForFilter = async (req, res) => {
   try {
-    const teams = await Delivery.distinct("batting_team");
-    res.json({ status: "success", data: teams.filter(Boolean).sort() });
+    const [iplTeams, userTeams] = await Promise.all([
+      Delivery.distinct("batting_team"),
+      UserDelivery.distinct("batting_team"),
+    ]);
+    const teams = Array.from(new Set([...iplTeams, ...userTeams])).filter(Boolean).sort();
+    res.json({ status: "success", data: teams });
   } catch (err) {
     res
       .status(500)
@@ -310,12 +315,14 @@ export const quickSearch = async (req, res) => {
 
     const regex = new RegExp(q, "i");
 
-    const [batters, bowlers] = await Promise.all([
+    const [batters, bowlers, userBatters, userBowlers] = await Promise.all([
       Delivery.distinct("batter", { batter: regex }),
       Delivery.distinct("bowler", { bowler: regex }),
+      UserDelivery.distinct("batter", { batter: regex }),
+      UserDelivery.distinct("bowler", { bowler: regex }),
     ]);
 
-    const combined = [...new Set([...batters, ...bowlers])]
+    const combined = [...new Set([...batters, ...bowlers, ...userBatters, ...userBowlers])]
       .filter(Boolean)
       .sort()
       .slice(0, 8);

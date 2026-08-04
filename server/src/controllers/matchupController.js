@@ -1,4 +1,5 @@
 import Delivery from "../models/Deliveries.js";
+import UserDelivery from "../models/UserDelivery.js";
 
 const asNumber = (value) =>
   typeof value === "number" && Number.isFinite(value) ? value : 0;
@@ -10,8 +11,12 @@ const asText = (value) => (value == null ? "" : String(value));
    ───────────────────────────────────────────────────────────── */
 export const getAllBatters = async (req, res) => {
   try {
-    const batters = await Delivery.distinct("batter");
-    res.json({ status: "success", data: batters.filter(Boolean).sort() });
+    const [iplBatters, userBatters] = await Promise.all([
+      Delivery.distinct("batter"),
+      UserDelivery.distinct("batter"),
+    ]);
+    const all = Array.from(new Set([...iplBatters, ...userBatters])).filter(Boolean).sort();
+    res.json({ status: "success", data: all });
   } catch (err) {
     res
       .status(500)
@@ -25,8 +30,12 @@ export const getAllBatters = async (req, res) => {
    ───────────────────────────────────────────────────────────── */
 export const getAllBowlers = async (req, res) => {
   try {
-    const bowlers = await Delivery.distinct("bowler");
-    res.json({ status: "success", data: bowlers.filter(Boolean).sort() });
+    const [iplBowlers, userBowlers] = await Promise.all([
+      Delivery.distinct("bowler"),
+      UserDelivery.distinct("bowler"),
+    ]);
+    const all = Array.from(new Set([...iplBowlers, ...userBowlers])).filter(Boolean).sort();
+    res.json({ status: "success", data: all });
   } catch (err) {
     res
       .status(500)
@@ -43,9 +52,29 @@ export const getMatchup = async (req, res) => {
     const batter = decodeURIComponent(req.params.batter);
     const bowler = decodeURIComponent(req.params.bowler);
 
-    const deliveries = await Delivery.find({ batter, bowler })
-      .sort({ match_id: 1, innings: 1, ball_no: 1 })
-      .lean();
+    const [iplDels, userDels] = await Promise.all([
+      Delivery.find({ batter, bowler })
+        .sort({ match_id: 1, innings: 1, ball_no: 1 })
+        .lean(),
+      UserDelivery.find({ batter, bowler })
+        .sort({ matchId: 1, innings: 1, over: 1, ball: 1 })
+        .lean(),
+    ]);
+
+    const normalizedUserDels = userDels.map((d) => ({
+      ...d,
+      match_id: d.matchId?.toString() || "custom",
+      date: d.createdAt ? new Date(d.createdAt).toISOString().split("T")[0] : "",
+      season: "Custom",
+      venue: d.venue || "Custom Ground",
+      batting_team: d.batting_team || d.battingTeam || "",
+      bowling_team: d.bowling_team || d.bowlingTeam || "",
+      runs_batter: d.runs_batter ?? d.runsBatter ?? 0,
+      valid_ball: d.valid_ball ?? (["wide", "noball"].includes(d.extraType) ? 0 : 1),
+      bowler_wicket: d.bowler_wicket ?? (d.isWicket && d.wicketType !== "run out" ? 1 : 0),
+    }));
+
+    const deliveries = [...iplDels, ...normalizedUserDels];
 
     if (!deliveries.length) {
       return res.status(404).json({
