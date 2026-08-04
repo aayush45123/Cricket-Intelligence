@@ -748,19 +748,25 @@ export const getUserMatchAnalytics = async (req, res) => {
     let totalWickets = 0;
 
     userDeliveries.forEach((d) => {
-      const runsBatter = d.runsBatter || 0;
-      const extraRuns = d.extraRuns || 0;
-      const isExtra = d.extraType && d.extraType !== "none";
-      const isValidBall = !["wide", "noball"].includes(d.extraType);
+      const batterName = d.batter || d.striker;
+      const bowlerName = d.bowler;
+      const runsBatter = d.runs_batter ?? d.runsBatter ?? 0;
+      const extraRuns = d.runs_extras ?? d.extraRuns ?? 0;
+      const runsTotal = d.runs_total ?? (runsBatter + extraRuns);
+      const extraType = d.extra_type || d.extraType;
+      const isValidBall = d.valid_ball ?? (["wide", "noball"].includes(extraType) ? 0 : 1);
+      const isWicket = d.bowler_wicket === 1 || d.isWicket;
+      const dismissedPlayer = d.player_out || d.dismissedPlayer;
+      const wicketType = d.wicket_kind || d.wicketType;
 
-      totalRuns += runsBatter + extraRuns;
-      if (d.isWicket) totalWickets += 1;
+      totalRuns += runsTotal;
+      if (isWicket) totalWickets += 1;
 
       // Batting Stats
-      if (d.striker) {
-        if (!batterMap[d.striker]) {
-          batterMap[d.striker] = {
-            name: d.striker,
+      if (batterName) {
+        if (!batterMap[batterName]) {
+          batterMap[batterName] = {
+            name: batterName,
             runs: 0,
             balls: 0,
             fours: 0,
@@ -769,21 +775,21 @@ export const getUserMatchAnalytics = async (req, res) => {
             matchIds: new Set(),
           };
         }
-        batterMap[d.striker].runs += runsBatter;
-        if (isValidBall || d.extraType === "noball") batterMap[d.striker].balls += 1;
-        if (runsBatter === 4) batterMap[d.striker].fours += 1;
-        if (runsBatter === 6) batterMap[d.striker].sixes += 1;
-        if (d.matchId) batterMap[d.striker].matchIds.add(d.matchId.toString());
-        if (d.isWicket && d.dismissedPlayer === d.striker) {
-          batterMap[d.striker].outs += 1;
+        batterMap[batterName].runs += runsBatter;
+        if (isValidBall === 1 || extraType === "noball") batterMap[batterName].balls += 1;
+        if (runsBatter === 4) batterMap[batterName].fours += 1;
+        if (runsBatter === 6) batterMap[batterName].sixes += 1;
+        if (d.matchId) batterMap[batterName].matchIds.add(d.matchId.toString());
+        if (isWicket && dismissedPlayer === batterName) {
+          batterMap[batterName].outs += 1;
         }
       }
 
       // Bowling Stats
-      if (d.bowler) {
-        if (!bowlerMap[d.bowler]) {
-          bowlerMap[d.bowler] = {
-            name: d.bowler,
+      if (bowlerName) {
+        if (!bowlerMap[bowlerName]) {
+          bowlerMap[bowlerName] = {
+            name: bowlerName,
             wickets: 0,
             runsConceded: 0,
             validBalls: 0,
@@ -791,34 +797,34 @@ export const getUserMatchAnalytics = async (req, res) => {
           };
         }
         // Wicket count (excluding run outs for bowler stats)
-        if (d.isWicket && d.wicketType !== "run out") {
-          bowlerMap[d.bowler].wickets += 1;
+        if (isWicket && wicketType !== "run out") {
+          bowlerMap[bowlerName].wickets += 1;
         }
-        // Runs conceded: batter runs + wides/noballs (byes/legbyes don't count against bowler)
+        // Runs conceded: batter runs + wides/noballs
         let runsAgainstBowler = runsBatter;
-        if (["wide", "noball"].includes(d.extraType)) {
+        if (["wide", "noball"].includes(extraType)) {
           runsAgainstBowler += extraRuns;
         }
-        bowlerMap[d.bowler].runsConceded += runsAgainstBowler;
-        if (isValidBall) bowlerMap[d.bowler].validBalls += 1;
-        if (d.matchId) bowlerMap[d.bowler].matchIds.add(d.matchId.toString());
+        bowlerMap[bowlerName].runsConceded += runsAgainstBowler;
+        if (isValidBall === 1) bowlerMap[bowlerName].validBalls += 1;
+        if (d.matchId) bowlerMap[bowlerName].matchIds.add(d.matchId.toString());
       }
 
       // Batter vs Bowler Matchup
-      if (d.striker && d.bowler) {
-        const pairKey = `${d.striker} vs ${d.bowler}`;
+      if (batterName && bowlerName) {
+        const pairKey = `${batterName} vs ${bowlerName}`;
         if (!matchupMap[pairKey]) {
           matchupMap[pairKey] = {
-            batter: d.striker,
-            bowler: d.bowler,
+            batter: batterName,
+            bowler: bowlerName,
             runs: 0,
             balls: 0,
             outs: 0,
           };
         }
         matchupMap[pairKey].runs += runsBatter;
-        if (isValidBall) matchupMap[pairKey].balls += 1;
-        if (d.isWicket && d.dismissedPlayer === d.striker && d.wicketType !== "run out") {
+        if (isValidBall === 1) matchupMap[pairKey].balls += 1;
+        if (isWicket && dismissedPlayer === batterName && wicketType !== "run out") {
           matchupMap[pairKey].outs += 1;
         }
       }
