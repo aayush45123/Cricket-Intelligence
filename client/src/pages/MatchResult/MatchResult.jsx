@@ -84,13 +84,22 @@ const MatchResult = () => {
   return (
     <div className={styles.page}>
       <main className={styles.main}>
-        {/* Back */}
-        <button
-          className={styles.backBtn}
-          onClick={() => navigate("/my-matches")}
-        >
-          ← My Matches
-        </button>
+        {/* Back + Nav */}
+        <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
+          <button
+            className={styles.backBtn}
+            onClick={() => navigate("/my-matches")}
+          >
+            ← My Matches
+          </button>
+          <button
+            className={styles.backBtn}
+            style={{ background: "var(--ci-brand)", color: "#000", border: "none", fontWeight: 700, cursor: "pointer" }}
+            onClick={() => navigate(`/my-matches/${matchId}/deep-analytics`)}
+          >
+            ⚡ Deep Analytics
+          </button>
+        </div>
 
         {/* Hero result */}
         <section className={styles.hero}>

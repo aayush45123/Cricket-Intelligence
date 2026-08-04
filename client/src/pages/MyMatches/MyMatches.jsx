@@ -196,13 +196,22 @@ const MyMatches = () => {
                       </Link>
                     )}
                     {isDone && (
-                      <Link
-                        to={`/my-matches/${m._id}/result`}
-                        className={styles.actionBtn}
-                        style={{ color: "var(--ci-brand)" }}
-                      >
-                        View Analytics
-                      </Link>
+                      <>
+                        <Link
+                          to={`/my-matches/${m._id}/result`}
+                          className={styles.actionBtn}
+                          style={{ color: "var(--ci-brand)" }}
+                        >
+                          View Analytics
+                        </Link>
+                        <Link
+                          to={`/my-matches/${m._id}/deep-analytics`}
+                          className={styles.actionBtn}
+                          style={{ color: "var(--ci-accent)" }}
+                        >
+                          ⚡ Deep Analysis
+                        </Link>
+                      </>
                     )}
                     {m.shareToken && (
                       <button

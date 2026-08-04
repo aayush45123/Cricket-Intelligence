@@ -1,5 +1,6 @@
 import Delivery from "../models/Deliveries.js";
-
+import UserDelivery from "../models/UserDelivery.js";
+import UserMatch from "../models/UserMatch.js";
 
 const buildWorm = (deliveries) => {
   const overMap = {};
@@ -217,43 +218,77 @@ export const getDeepMatchAnalytics = async (req, res) => {
     const matchId = req.params.matchId;
 
     // Fetch all deliveries for this match, ordered
-    const deliveries = await Delivery.find({ match_id: matchId })
+    let deliveries = await Delivery.find({ match_id: matchId })
       .sort({ innings: 1, ball_no: 1 })
       .lean();
+
+    let userMatchDoc = null;
+
+    if (!deliveries.length) {
+      // Check UserDelivery for custom / user / tournament matches
+      deliveries = await UserDelivery.find({ matchId })
+        .sort({ innings: 1, over: 1, ball: 1 })
+        .lean();
+
+      if (deliveries.length > 0) {
+        userMatchDoc = await UserMatch.findById(matchId).lean();
+
+        deliveries = deliveries.map((d) => ({
+          ...d,
+          match_id: d.matchId,
+          over: d.over ?? 0,
+          ball: d.ball ?? 1,
+          ball_no: d.ball ?? 1,
+          runs_total: d.runs_total ?? ((d.runs_batter || 0) + (d.runs_extras || 0)),
+          runs_batter: d.runs_batter || 0,
+          runs_extras: d.runs_extras || 0,
+          runs_bowler: d.runs_bowler ?? (d.runs_batter || 0),
+          valid_ball: d.valid_ball ?? (["wide", "noball"].includes(d.extraType) ? 0 : 1),
+          bowler_wicket: d.bowler_wicket ?? (d.isWicket && d.wicketType !== "run out" ? 1 : 0),
+          batting_team: d.batting_team || d.battingTeam || (d.innings === 1 ? userMatchDoc?.innings1?.battingTeam : userMatchDoc?.innings2?.battingTeam) || "",
+          bowling_team: d.bowling_team || d.bowlingTeam || (d.innings === 1 ? userMatchDoc?.innings2?.battingTeam : userMatchDoc?.innings1?.battingTeam) || "",
+          batter: d.batter || d.striker || "",
+          bowler: d.bowler || "",
+          player_out: d.player_out || d.dismissedPlayer || null,
+          wicket_kind: d.wicket_kind || d.wicketType || null,
+          runs_target: d.runs_target || (userMatchDoc?.innings1?.runs ? userMatchDoc.innings1.runs + 1 : 0),
+        }));
+      }
+    }
 
     if (!deliveries.length) {
       return res
         .status(404)
-        .json({ message: "Match not found or no delivery data." });
+        .json({ message: "Match not found or no delivery data available." });
     }
 
     const inn1 = deliveries.filter((d) => d.innings === 1);
     const inn2 = deliveries.filter((d) => d.innings === 2);
 
     // Team names
-    const teamInnings1 = inn1[0]?.batting_team || "Team A";
-    const teamInnings2 = inn2[0]?.batting_team || "Team B";
+    const teamInnings1 = inn1[0]?.batting_team || userMatchDoc?.innings1?.battingTeam || userMatchDoc?.teamA || "Team A";
+    const teamInnings2 = inn2[0]?.batting_team || userMatchDoc?.innings2?.battingTeam || userMatchDoc?.teamB || "Team B";
 
-    // Target = runs_target field on innings 2 deliveries
-    const target = inn2[0]?.runs_target ?? 0;
+    // Target = runs_target field on innings 2 deliveries or inn1 total + 1
+    const inn1Total = inn1.reduce((s, d) => s + (d.runs_total ?? 0), 0);
+    const target = inn2[0]?.runs_target || (inn1Total > 0 ? inn1Total + 1 : 0);
 
     // Total valid balls in innings 1 (= total overs available for innings 2)
     const totalValidBalls = inn1.filter(
       (d) => (d.valid_ball ?? 0) === 1,
-    ).length;
+    ).length || (userMatchDoc?.totalOvers ? userMatchDoc.totalOvers * 6 : 120);
 
     // Summary totals
-    const inn1Total = inn1.reduce((s, d) => s + (d.runs_total ?? 0), 0);
     const inn2Total = inn2.reduce((s, d) => s + (d.runs_total ?? 0), 0);
     const inn1Wickets = inn1.filter((d) => (d.bowler_wicket ?? 0) === 1).length;
     const inn2Wickets = inn2.filter((d) => (d.bowler_wicket ?? 0) === 1).length;
     const inn1Overs = Math.max(...inn1.map((d) => d.over), 0) + 1;
     const inn2Overs = Math.max(...inn2.map((d) => d.over), 0) + 1;
 
-    const winner = deliveries[0]?.match_won_by || "TBD";
-    const venue = deliveries[0]?.venue || "";
-    const matchDate = deliveries[0]?.date || "";
-    const matchType = deliveries[0]?.match_type || "";
+    const winner = deliveries[0]?.match_won_by || userMatchDoc?.winner || "TBD";
+    const venue = deliveries[0]?.venue || userMatchDoc?.venue || "";
+    const matchDate = deliveries[0]?.date || userMatchDoc?.createdAt || "";
+    const matchType = deliveries[0]?.match_type || (userMatchDoc?.totalOvers ? `T${userMatchDoc.totalOvers}` : "Custom");
 
     res.json({
       status: "success",

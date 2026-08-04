@@ -31,6 +31,7 @@ import LiveScorer from "./pages/LiveScorer/LiveScorer";
 import InningsBreak from "./pages/InningsBreak/InningsBreak";
 import MatchResult from "./pages/MatchResult/MatchResult";
 import UserAnalytics from "./pages/UserAnalytics/UserAnalytics";
+import UserMatchDeepAnalytics from "./pages/UserMatchDeepAnalytics/UserMatchDeepAnalytics";
 import Tournaments from "./pages/Tournaments/Tournaments";
 import JoinTournament from "./pages/Tournaments/JoinTournament";
 import TournamentDetail from "./pages/Tournaments/TournamentDetail";
@@ -126,6 +127,14 @@ const App = () => (
           element={
             <Protected>
               <MatchResult />
+            </Protected>
+          }
+        />
+        <Route
+          path="/my-matches/:matchId/deep-analytics"
+          element={
+            <Protected>
+              <UserMatchDeepAnalytics />
             </Protected>
           }
         />

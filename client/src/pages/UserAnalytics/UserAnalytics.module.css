@@ -227,3 +227,46 @@
   padding: 60px;
   color: var(--ci-text-muted);
 }
+
+/* Overview Grid */
+.overviewGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Chart Card */
+.chartCard {
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  border-radius: 8px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.chartTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--ci-text-primary);
+}
+
+.emptyChart {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--ci-text-muted);
+  font-size: 0.85rem;
+  border: 1px dashed var(--ci-border);
+  border-radius: 4px;
+}
+
+@media (max-width: 768px) {
+  .overviewGrid {
+    grid-template-columns: 1fr;
+  }
+}
+
