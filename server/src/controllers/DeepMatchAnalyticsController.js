@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import Delivery from "../models/Deliveries.js";
 import UserDelivery from "../models/UserDelivery.js";
 import UserMatch from "../models/UserMatch.js";
@@ -217,22 +218,20 @@ export const getDeepMatchAnalytics = async (req, res) => {
   try {
     const matchId = req.params.matchId;
 
-    // Fetch all deliveries for this match, ordered
-    let deliveries = await Delivery.find({ match_id: matchId })
-      .sort({ innings: 1, ball_no: 1 })
-      .lean();
-
+    let deliveries = [];
     let userMatchDoc = null;
 
-    if (!deliveries.length) {
-      // Check UserDelivery for custom / user / tournament matches
+    const isMongoId = mongoose.Types.ObjectId.isValid(matchId);
+
+    if (isMongoId) {
+      // 1. User / Custom / Tournament Match (ObjectId)
       deliveries = await UserDelivery.find({ matchId })
         .sort({ innings: 1, over: 1, ball: 1 })
         .lean();
 
-      if (deliveries.length > 0) {
-        userMatchDoc = await UserMatch.findById(matchId).lean();
+      userMatchDoc = await UserMatch.findById(matchId).lean();
 
+      if (deliveries.length > 0) {
         deliveries = deliveries.map((d) => ({
           ...d,
           match_id: d.matchId,
@@ -243,7 +242,7 @@ export const getDeepMatchAnalytics = async (req, res) => {
           runs_batter: d.runs_batter || 0,
           runs_extras: d.runs_extras || 0,
           runs_bowler: d.runs_bowler ?? (d.runs_batter || 0),
-          valid_ball: d.valid_ball ?? (["wide", "noball"].includes(d.extraType) ? 0 : 1),
+          valid_ball: d.valid_ball ?? (["wide", "noball"].includes(d.extra_type || d.extraType) ? 0 : 1),
           bowler_wicket: d.bowler_wicket ?? (d.isWicket && d.wicketType !== "run out" ? 1 : 0),
           batting_team: d.batting_team || d.battingTeam || (d.innings === 1 ? userMatchDoc?.innings1?.battingTeam : userMatchDoc?.innings2?.battingTeam) || "",
           bowling_team: d.bowling_team || d.bowlingTeam || (d.innings === 1 ? userMatchDoc?.innings2?.battingTeam : userMatchDoc?.innings1?.battingTeam) || "",
@@ -254,6 +253,11 @@ export const getDeepMatchAnalytics = async (req, res) => {
           runs_target: d.runs_target || (userMatchDoc?.innings1?.runs ? userMatchDoc.innings1.runs + 1 : 0),
         }));
       }
+    } else {
+      // 2. IPL Sample Match (Numeric match_id)
+      deliveries = await Delivery.find({ match_id: matchId })
+        .sort({ innings: 1, ball_no: 1 })
+        .lean();
     }
 
     if (!deliveries.length) {
