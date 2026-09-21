@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import styles from "./Dashboard.module.css";
 import TossImpactChart from "../../components/charts/TossImpactChart/TossImpactChart";
 import MatchIntensityChart from "../../components/charts/MatchIntensityChart/MatchIntensityChart";
@@ -6,273 +6,192 @@ import TeamWins from "../../components/charts/TeamWins/TeamWins";
 import RunRateChart from "../../components/charts/RunRateChart/RunRateChart";
 import TopRunScorer from "../../components/charts/TopRunScorer/TopRunScorer";
 import HighestWicketTaker from "../../components/charts/HighestWicketTaker/HighestWicketTaker";
-import {
-  Trophy,
-  Zap,
-  Target,
-  TrendingUp,
-  BarChart3,
-  Shield,
-  Star,
-  Landmark,
-  ClipboardList,
-} from "lucide-react";
-import { API_BASE } from "../../config";
-
-const RECENT_SAMPLE_MATCHES = [
-  {
-    id: "ipl-1",
-    teamA: "Chennai Super Kings",
-    teamB: "Gujarat Titans",
-    venue: "Narendra Modi Stadium",
-    result: "CSK won by 5 wickets",
-  },
-  {
-    id: "ipl-2",
-    teamA: "Mumbai Indians",
-    teamB: "Royal Challengers Bengaluru",
-    venue: "Wankhede Stadium",
-    result: "MI won by 6 wickets",
-  },
-  {
-    id: "ipl-3",
-    teamA: "Kolkata Knight Riders",
-    teamB: "Sunrisers Hyderabad",
-    venue: "MA Chidambaram Stadium",
-    result: "KKR won by 8 wickets",
-  },
-];
 
 const Dashboard = () => {
   const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${API_BASE}/api/matches/analytics`);
-        const result = await response.json();
-        setData(result.data);
-      } catch (err) {
-        console.error("Failed to load dashboard data:", err);
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const response = await fetch("/api/matches/analytics");
+      if (!response.ok) {
+        throw new Error(`Server responded with status: ${response.status}`);
       }
-    };
-    fetchData();
+      const result = await response.json();
+      if (result && result.data) {
+        setData(result.data);
+      } else {
+        throw new Error("Invalid analytics data structure received");
+      }
+    } catch (err) {
+      console.error("Dashboard fetch error:", err);
+      setError(err.message || "Failed to load dashboard analytics");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  if (!data) {
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  if (loading) {
     return (
-      <div className={styles.loadingWrapper}>
-        <p className={styles.loadingText}>Loading Intelligence Dashboard...</p>
+      <div className={styles.page}>
+        <main className={styles.main}>
+          <div className={styles.skeletonHero}>
+            <div className={`${styles.skeletonLine} ${styles.skeletonTitle}`} />
+            <div className={`${styles.skeletonLine} ${styles.skeletonSubtitle}`} />
+          </div>
+
+          <div className={styles.statsGrid}>
+            {[1, 2, 3, 4].map((i) => (
+              <div key={i} className={`${styles.statCard} ${styles.skeletonCard}`}>
+                <div className={`${styles.skeletonLine} ${styles.skeletonLabel}`} />
+                <div className={`${styles.skeletonLine} ${styles.skeletonValue}`} />
+              </div>
+            ))}
+          </div>
+
+          <div className={styles.skeletonChartsGrid}>
+            {[1, 2, 3, 4, 5, 6].map((i) => (
+              <div key={i} className={styles.skeletonChartCard} />
+            ))}
+          </div>
+        </main>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.page}>
+        <main className={styles.main}>
+          <section className={styles.hero}>
+            <h1 className={styles.heroTitle}>Cricket Intelligence Dashboard</h1>
+            <p className={styles.heroSubtitle}>
+              Advanced match intelligence, player performance metrics, and tactical analytics.
+            </p>
+          </section>
+          <div className={styles.errorCard}>
+            <div className={styles.errorIcon}>⚠️</div>
+            <h3 className={styles.errorTitle}>Analytics Unavailable</h3>
+            <p className={styles.errorMessage}>{error}</p>
+            <button className={styles.retryBtn} onClick={fetchData}>
+              Retry Connection
+            </button>
+          </div>
+        </main>
       </div>
     );
   }
 
   return (
-    <div className={styles.dashboardPage}>
-      {/* ── Top Banner ────────────────────────────────────────── */}
-      <div className={styles.headerBanner}>
-        <div className={styles.titleArea}>
-          <h1 className={styles.mainTitle}>
-            Cricket Match Intelligence Dashboard
-          </h1>
-          <p className={styles.subTitle}>
-            Enterprise analytics, predictive insights, and deep historical IPL
-            trends.
+    <div className={styles.page}>
+      <main className={styles.main}>
+        <section className={styles.hero}>
+          <div className={styles.heroTag}>Match Intelligence Platform</div>
+          <h1 className={styles.heroTitle}>Cricket Intelligence Dashboard</h1>
+          <p className={styles.heroSubtitle}>
+            Explore aggregate tournament trends, match momentum indices, and player statistical profiles.
           </p>
-        </div>
-        <div className={styles.bannerBadge}>
-          <span>●</span> 15+ Seasons Analytical Engine Active
-        </div>
-      </div>
+        </section>
 
-      {/* ── 1. Match Summary Cards ─────────────────────────────── */}
-      <section>
-        <h2 className={styles.sectionTitle}>
-          <BarChart3 size={18} color="var(--ci-brand)" /> Match Summary Cards
-        </h2>
-        <div className={styles.summaryGrid}>
-          <div className={styles.summaryCard}>
-            <div className={styles.cardHeader}>
-              <span className={styles.cardLabel}>Total Matches</span>
-              <span className={styles.cardIcon}>
-                <Trophy size={16} color="var(--ci-brand)" />
+        {/* Section 1: KPI Overview Metrics */}
+        <section className={styles.analyticsSection}>
+          <h2 className={styles.sectionTitle}>Key Performance Indicators</h2>
+          <div className={styles.statsGrid}>
+            <div className={styles.statCard}>
+              <span className={styles.statLabel}>Total Matches Analyzed</span>
+              <span className={styles.statValue}>
+                {data?.totalMatches != null ? data.totalMatches.toLocaleString() : 0}
               </span>
+              <span className={styles.statMeta}>Historical & live fixture database</span>
             </div>
-            <div className={styles.cardValue}>{data?.totalMatches || 0}</div>
-            <div className={styles.cardMeta}>↑ IPL Historic Dataset</div>
+
+            <div className={styles.statCard}>
+              <span className={styles.statLabel}>Avg Run Rate — 1st Innings</span>
+              <span className={styles.statValue}>
+                {data?.averageRunRateTeamA != null ? data.averageRunRateTeamA.toFixed(2) : "—"}
+              </span>
+              <span className={styles.statMeta}>Runs per over (Setting target)</span>
+            </div>
+
+            <div className={styles.statCard}>
+              <span className={styles.statLabel}>Avg Run Rate — 2nd Innings</span>
+              <span className={styles.statValue}>
+                {data?.averageRunRateTeamB != null ? data.averageRunRateTeamB.toFixed(2) : "—"}
+              </span>
+              <span className={styles.statMeta}>Runs per over (Chasing target)</span>
+            </div>
+
+            <div className={styles.statCard}>
+              <span className={styles.statLabel}>Avg Pressure Index</span>
+              <span className={styles.statValue}>
+                {data?.averagePressureIndex != null ? data.averagePressureIndex.toFixed(2) : "—"}
+              </span>
+              <span className={styles.statMeta}>Scoring gap volatility index</span>
+            </div>
           </div>
+        </section>
 
-          <div className={styles.summaryCard}>
-            <div className={styles.cardHeader}>
-              <span className={styles.cardLabel}>
-                Avg Run Rate (1st Innings)
-              </span>
-              <span className={styles.cardIcon}>
-                <Zap size={16} color="var(--ci-brand)" />
-              </span>
-            </div>
-            <div className={styles.cardValue}>
-              {data?.averageRunRateTeamA?.toFixed(2) || "8.42"}
-            </div>
-            <div className={styles.cardMeta}>Batting First Benchmark</div>
-          </div>
+        {/* Section 2: Most Dominant Fixture */}
+        {data?.mostDominantMatch && (
+          <section className={styles.dominantSection}>
+            <h2 className={styles.sectionTitle}>Peak Dominance Fixture</h2>
+            <div className={styles.matchCard}>
+              <div className={styles.matchTeam}>
+                <span className={styles.teamName}>
+                  {data.mostDominantMatch.teams?.teamA?.name || "Team A"}
+                </span>
+                {data.mostDominantMatch.runRateTeamA != null && (
+                  <span className={styles.teamStats}>
+                    {data.mostDominantMatch.inn1Runs != null ? `${data.mostDominantMatch.inn1Runs} runs • ` : ""}
+                    {data.mostDominantMatch.runRateTeamA} RPO
+                  </span>
+                )}
+              </div>
 
-          <div className={styles.summaryCard}>
-            <div className={styles.cardHeader}>
-              <span className={styles.cardLabel}>
-                Avg Run Rate (2nd Innings)
-              </span>
-              <span className={styles.cardIcon}>
-                <Target size={16} color="var(--ci-accent)" />
-              </span>
-            </div>
-            <div className={styles.cardValue}>
-              {data?.averageRunRateTeamB?.toFixed(2) || "8.26"}
-            </div>
-            <div className={styles.cardMeta}>Chasing Benchmark</div>
-          </div>
+              <div className={styles.matchVsBadge}>
+                <span className={styles.matchVs}>VS</span>
+                {data.mostDominantMatch.winner && (
+                  <span className={styles.winnerBadge}>
+                    Winner: {data.mostDominantMatch.winner}
+                  </span>
+                )}
+              </div>
 
-          <div className={styles.summaryCard}>
-            <div className={styles.cardHeader}>
-              <span className={styles.cardLabel}>Avg Pressure Index</span>
-              <span className={styles.cardIcon}>
-                <TrendingUp size={16} color="var(--ci-amber)" />
-              </span>
+              <div className={styles.matchTeam}>
+                <span className={styles.teamName}>
+                  {data.mostDominantMatch.teams?.teamB?.name || "Team B"}
+                </span>
+                {data.mostDominantMatch.runRateTeamB != null && (
+                  <span className={styles.teamStats}>
+                    {data.mostDominantMatch.inn2Runs != null ? `${data.mostDominantMatch.inn2Runs} runs • ` : ""}
+                    {data.mostDominantMatch.runRateTeamB} RPO
+                  </span>
+                )}
+              </div>
             </div>
-            <div className={styles.cardValue}>
-              {data?.averagePressureIndex?.toFixed(2) || "64.8"}
-            </div>
-            <div className={styles.cardMeta}>High Intensity Rate</div>
-          </div>
+          </section>
+        )}
 
-          <div className={styles.summaryCard}>
-            <div className={styles.cardHeader}>
-              <span className={styles.cardLabel}>Most Dominant Match</span>
-              <span className={styles.cardIcon}>
-                <Trophy size={16} color="var(--ci-brand)" />
-              </span>
-            </div>
-            <div
-              className={styles.cardValue}
-              style={{ fontSize: "1.1rem", fontWeight: 700 }}
-            >
-              {data?.mostDominantMatch?.teams?.teamA?.name || "MI"} vs{" "}
-              {data?.mostDominantMatch?.teams?.teamB?.name || "CSK"}
-            </div>
-            <div className={styles.cardMeta}>Peak Win Margin</div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── 2. Win Trend / Run Rate Timeline ───────────────────── */}
-      <section className={styles.timelineSection}>
-        <h2 className={styles.sectionTitle}>
-          <TrendingUp size={18} color="var(--ci-brand)" /> Win Trend / Run Rate
-          Timeline
-        </h2>
-        <div className={styles.timelineGrid}>
-          <TeamWins />
-          <RunRateChart />
-        </div>
-      </section>
-
-      {/* ── 3. Team Comparison & Player Impact ─────────────────── */}
-      <section className={styles.splitGrid}>
-        <div className={styles.cardPanel}>
-          <h2 className={styles.sectionTitle}>
-            <Shield size={18} color="var(--ci-accent)" /> Team Comparison
-          </h2>
-          <div
-            style={{ display: "flex", flexDirection: "column", gap: "20px" }}
-          >
+        {/* Section 3: Deep Visual Analytics Charts */}
+        <section className={styles.chartsSection}>
+          <h2 className={styles.sectionTitle}>Deep Visual Analytics</h2>
+          <div className={styles.chartsGrid}>
             <TossImpactChart />
             <MatchIntensityChart />
-          </div>
-        </div>
-
-        <div className={styles.cardPanel}>
-          <h2 className={styles.sectionTitle}>
-            <Star size={18} color="var(--ci-amber)" /> Player Impact
-          </h2>
-          <div className={styles.playerImpactGrid}>
+            <TeamWins />
+            <RunRateChart />
             <TopRunScorer />
             <HighestWicketTaker />
           </div>
-        </div>
-      </section>
-
-      {/* ── 4. Venue Stats & Recent Matches ─────────────────────── */}
-      <section className={styles.splitGrid}>
-        <div className={styles.cardPanel}>
-          <h2 className={styles.sectionTitle}>
-            <Landmark size={18} color="var(--ci-brand)" /> Venue Stats
-          </h2>
-          <p
-            style={{
-              color: "var(--ci-text-secondary)",
-              fontSize: "0.9rem",
-              marginBottom: "16px",
-            }}
-          >
-            Pitch conditions, boundary dimensions, and win split metrics across
-            top Indian venues.
-          </p>
-          <div className={styles.recentMatchFeed}>
-            <div className={styles.recentMatchItem}>
-              <div>
-                <div className={styles.matchTeams}>
-                  Narendra Modi Stadium, Ahmedabad
-                </div>
-                <div className={styles.matchVenue}>
-                  Batting 1st Win Rate: 54% | Avg 1st Inn Score: 178
-                </div>
-              </div>
-              <span className={styles.matchResultTag}>Pace Friendly</span>
-            </div>
-            <div className={styles.recentMatchItem}>
-              <div>
-                <div className={styles.matchTeams}>
-                  Wankhede Stadium, Mumbai
-                </div>
-                <div className={styles.matchVenue}>
-                  Batting 2nd Win Rate: 58% | Avg 1st Inn Score: 184
-                </div>
-              </div>
-              <span className={styles.matchResultTag}>Chasing Ground</span>
-            </div>
-            <div className={styles.recentMatchItem}>
-              <div>
-                <div className={styles.matchTeams}>
-                  M. Chinnaswamy Stadium, Bengaluru
-                </div>
-                <div className={styles.matchVenue}>
-                  Avg Sixes per Match: 16.4 | High Scoring
-                </div>
-              </div>
-              <span className={styles.matchResultTag}>Batter Paradise</span>
-            </div>
-          </div>
-        </div>
-
-        <div className={styles.cardPanel}>
-          <h2 className={styles.sectionTitle}>
-            <ClipboardList size={18} color="var(--ci-accent)" /> Recent Matches
-          </h2>
-          <div className={styles.recentMatchFeed}>
-            {RECENT_SAMPLE_MATCHES.map((match) => (
-              <div key={match.id} className={styles.recentMatchItem}>
-                <div>
-                  <div className={styles.matchTeams}>
-                    {match.teamA} vs {match.teamB}
-                  </div>
-                  <div className={styles.matchVenue}>{match.venue}</div>
-                </div>
-                <span className={styles.matchResultTag}>{match.result}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+        </section>
+      </main>
     </div>
   );
 };

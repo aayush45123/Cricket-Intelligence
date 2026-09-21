@@ -1,499 +1,245 @@
-<div align="center">
+# 🏏 Cricket Intelligence System
+### Production-Grade Full-Stack Cricket Match Intelligence & Quantitative Sports Analytics Platform
 
-# 🏏 Cricket Intelligence
-
-### Advanced Cricket Analytics Platform built on the MERN Stack
-
-Transforming historical IPL match data into interactive dashboards, player intelligence, venue analytics, team strategy insights, and live match predictions.
-
-![Banner](assets/banner.png)
-
-[![React](https://img.shields.io/badge/React-18-61DAFB?style=flat-square&logo=react&logoColor=black)](https://react.dev/)
-[![Node.js](https://img.shields.io/badge/Node.js-18-339933?style=flat-square&logo=node.js&logoColor=white)](https://nodejs.org/)
-[![Express](https://img.shields.io/badge/Express-4-000000?style=flat-square&logo=express&logoColor=white)](https://expressjs.com/)
-[![MongoDB](https://img.shields.io/badge/MongoDB-Atlas-47A248?style=flat-square&logo=mongodb&logoColor=white)](https://www.mongodb.com/atlas)
-[![Vite](https://img.shields.io/badge/Vite-Build-646CFF?style=flat-square&logo=vite&logoColor=white)](https://vitejs.dev/)
-[![JWT](https://img.shields.io/badge/Auth-JWT-000000?style=flat-square&logo=jsonwebtokens&logoColor=white)](https://jwt.io/)
-[![Vercel](https://img.shields.io/badge/Frontend-Vercel-000000?style=flat-square&logo=vercel&logoColor=white)](https://vercel.com/)
-[![Render](https://img.shields.io/badge/Backend-Render-46E3B7?style=flat-square&logo=render&logoColor=white)](https://render.com/)
-[![License](https://img.shields.io/badge/License-MIT-yellow?style=flat-square)](#-license)
-
-[Live Demo](#) • [API Docs](#-rest-api) • [Report Bug](#) • [Request Feature](#)
-
-</div>
+[![Node.js](https://img.shields.io/badge/Node.js-18%2B-339933?logo=node.js&logoColor=white)](https://nodejs.org/)
+[![Express.js](https://img.shields.io/badge/Express.js-4.x-000000?logo=express&logoColor=white)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Mongoose-47A248?logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![React](https://img.shields.io/badge/React-18-61DAFB?logo=react&logoColor=black)](https://react.dev/)
+[![Vite](https://img.shields.io/badge/Vite-Build-646CFF?logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Security](https://img.shields.io/badge/Security-Helmet%20%7C%20CORS%20%7C%20RateLimit-blueviolet)](https://helmetjs.github.io/)
 
 ---
 
-## 📑 Table of Contents
+## 📌 Executive Summary
 
-1. [Overview](#-overview)
-2. [Screenshots](#-screenshots)
-3. [Key Features](#-key-features)
-4. [Analytics Modules](#-analytics-modules)
-5. [Architecture](#-architecture)
-6. [Technology Stack](#-technology-stack)
-7. [Project Structure](#-project-structure)
-8. [Data Pipeline](#-data-pipeline)
-9. [Getting Started](#-getting-started)
-10. [Environment Variables](#-environment-variables)
-11. [REST API](#-rest-api)
-12. [Database Schema](#-database-schema)
-13. [Deployment](#-deployment)
-14. [Technical Highlights](#-technical-highlights)
-15. [Future Roadmap](#-future-roadmap)
-16. [Contributing](#-contributing)
-17. [License](#-license)
-18. [Author](#-author)
+The **Cricket Intelligence System** is an end-to-end sports data analytics platform engineered for data engineers, tactical analysts, and cricket franchises. It unifies **278,000+ historical ball-by-ball IPL deliveries** with a **real-time live match scoring engine**, translating raw delivery telemetry into actionable performance indicators, match momentum trajectories, batter-vs-bowler matchups, and in-game win probability curves.
+
+Engineered with a **MERN stack** (MongoDB, Express.js, React 18, Node.js) and adhering to strict software craftsmanship principles, this platform illustrates core competencies relevant to enterprise data consultancies like **Deloitte IT Data & Analytics**:
+- **High-Throughput Aggregation Pipelines**: Multi-stage MongoDB aggregation pipelines with compound indexing across 60+ delivery attributes.
+- **Quantitative Formula Rigor**: Defensible metrics including dismissal-based batting averages, valid-ball adjusted economy rates, logistic win probability modeling, and normalized pressure indices.
+- **Enterprise Security & Reliability**: Hardened Express API with `helmet`, IP rate limiting, strict CORS whitelisting, centralized error handling, and robust Mongoose schema typing.
+- **Professional Command-Center UI**: Custom-tailored dark analytical design system built using CSS Custom Properties and CSS Modules without third-party utility clutter.
 
 ---
 
-## 📖 Overview
+## 🏗️ Architecture & System Topology
 
-**Cricket Intelligence** is a production-ready, full-stack analytics platform that goes beyond simple scorecards. It combines historical IPL datasets, MongoDB aggregation pipelines, RESTful APIs, and dynamic React dashboards to deliver meaningful, data-driven cricket insights for fans, analysts, and teams.
+```mermaid
+flowchart TB
+    subgraph Client ["Client Tier (React 18 + Vite)"]
+        UI["Dark Command Center UI"]
+        State["Client State & Route Controllers"]
+        Charts["Analytics Charts (Chart.js / Recharts)"]
+    end
 
-The platform lets users analyze matches, compare teams, evaluate player performance, explore venue trends, study batting/bowling analytics, review match intensity, and even simulate live match predictions — all through an intuitive, interactive interface.
+    subgraph Gateway ["API Gateway & Security Layer (Express.js)"]
+        Helmet["Helmet (HTTP Security Headers)"]
+        CORS["CORS Policy Engine"]
+        Limiter["Rate Limiter (300 req / 15 min)"]
+        Auth["JWT Verification & RBAC Middleware"]
+    end
 
-### 🎯 Objective
+    subgraph Service ["Analytics & Business Logic Tier"]
+        IPL_Ctrl["IPL Match Controller (Historical Scorecards)"]
+        Deep_Ctrl["Deep Match Analytics (Worm, Win Prob, Momentum)"]
+        Player_Ctrl["Player Analytics (Dismissals, Economy, Phase Breakdown)"]
+        Matchup_Ctrl["Matchup Engine (Batter vs Bowler Matrix)"]
+        Strategy_Ctrl["Team Tactical & Venue Strategy Engine"]
+        Live_Engine["Live Match Engine (Ball-by-Ball Real-time Scorer)"]
+    end
 
-Cricket Intelligence centralizes cricket data exploration so users can:
+    subgraph Persistence ["Data Persistence Tier (MongoDB Atlas / Local)"]
+        Deliveries_Col[("deliveries (278k+ IPL docs)")]
+        UserMatch_Col[("usermatches (Live Fixtures)")]
+        Users_Col[("users (Auth Credentials)")]
+    end
 
-- Analyze IPL matches in depth
-- Compare teams head-to-head
-- Evaluate individual player performances
-- Understand venue-specific trends
-- Study batting and bowling analytics
-- Visualize match intensity and momentum
-- Generate strategic, data-backed insights
-- Instantly search across the entire dataset
-
----
-
-## 📸 Screenshots
-
-| Dashboard | Analytics |
-|:---:|:---:|
-| ![Dashboard](assets/dashboard.png) | ![Analytics](assets/analytics.png) |
-
-| Batting Statistics | Bowling Statistics |
-|:---:|:---:|
-| ![Batting](assets/batting.png) | ![Bowling](assets/bowling.png) |
-
-| Player Insights | Venue Analytics |
-|:---:|:---:|
-| ![Players](assets/players.png) | ![Venue](assets/venue.png) |
-
-| Head-to-Head Matchup | Team Strategy |
-|:---:|:---:|
-| ![Matchup](assets/matchup.png) | ![Strategy](assets/strategy.png) |
-
-| Match Story | Smart Search |
-|:---:|:---:|
-| ![Match Story](assets/match-story.png) | ![Search](assets/search.png) |
-
-| Login | Register |
-|:---:|:---:|
-| ![Login](assets/login.png) | ![Register](assets/register.png) |
-
-| Live Match Prediction | Mobile View |
-|:---:|:---:|
-| ![Live Match](assets/live-match.png) | ![Mobile](assets/mobile.png) |
-
----
-
-## ✨ Key Features
-
-### 📊 Dashboard
-- Centralized analytics hub with summary cards
-- Total matches, teams, players, and venues at a glance
-- Match distribution overview
-- Dynamic, interactive visualizations
-- Quick navigation to all modules
-
-### 🏏 Match Analytics
-- Match results and winning margins
-- Toss analysis and its impact on outcomes
-- Match intensity scoring
-- Run-rate analysis (first & second innings)
-- Chase success probability and pressure index
-- Net run rate tracking
-
-### 👑 Player Analytics
-**Batting**
-- Highest run scorers
-- Batting average & strike rate
-- Boundary percentage
-- Consistency score
-- Runs per match and performance trends
-
-**Bowling**
-- Highest wicket takers
-- Economy rate & bowling average
-- Bowling strike rate
-- Dot-ball percentage
-- Wickets per match
-
-### 🏟 Venue Analytics
-- Matches hosted per venue
-- Winning team patterns by venue
-- Toss impact per venue
-- Average first & second innings scores
-- Highest team total and lowest defended score
-- Venue-wise win percentage
-
-### ⚔ Team Comparison
-- Head-to-head historical records
-- Total wins and win percentage
-- Highest / lowest scores
-- Recent form and match history
-
-### 🧠 Team Strategy
-- Batting and bowling strength profiling
-- Preferred venues and toss tendencies
-- Winning patterns (home vs. away)
-- Powerplay and death-overs performance
-
-### 📈 Match Story
-- Complete scorecards
-- Match timeline and key moments
-- Run progression charts
-- Pressure-phase breakdown
-
-### 🔍 Smart Search
-- Unified global search across players, teams, venues, and matches
-
-### 🔐 Authentication
-- Secure user registration and login
-- JWT-based authentication
-- Password encryption (bcrypt)
-- Protected routes across the application
-
-### ⚡ Live Match Engine
-- Create and configure a live match
-- Simulate match progression
-- Real-time win-probability prediction
-- Dynamic team analysis engine
-
----
-
-## 📊 Analytics Modules
-
-| Module | Description |
-|---|---|
-| Run Rate Analysis | Innings-wise scoring rate trends |
-| Match Intensity | Momentum shifts across a match |
-| Toss Impact | Correlation between toss outcome and result |
-| Winning Margin | Distribution of victory margins |
-| Top Performers | Leaderboards for batting & bowling |
-| Venue Statistics | Ground-specific performance trends |
-| Team Leaderboards | Overall team rankings |
-| Strike Rate / Economy Trends | Performance trend lines over time |
-
----
-
-## 🏗 Architecture
-
-```
-                 React (Vite) Frontend
-                          │
-                          ▼
-                  Express REST API
-                          │
-        ┌─────────────────┼─────────────────┐
-        ▼                 ▼                 ▼
- MongoDB Atlas    JWT Authentication   Analytics Engine
-        │
-        ▼
- Historical IPL Dataset (CSV → Python ETL)
-        │
-        ▼
- Interactive Charts & Dashboards
-```
-
-![Architecture Diagram](assets/architecture.png)
-
----
-
-## 🛠 Technology Stack
-
-| Layer | Technology |
-|---|---|
-| **Frontend** | React.js, Vite, React Router, CSS3, Chart.js / Recharts |
-| **Backend** | Node.js, Express.js, REST APIs |
-| **Database** | MongoDB Atlas, Mongoose |
-| **Authentication** | JWT, bcrypt |
-| **Data Processing** | Python, Pandas (CSV → MongoDB ETL) |
-| **Deployment** | Vercel (Frontend), Render (Backend), MongoDB Atlas (Database) |
-
----
-
-## 📂 Project Structure
-
-```text
-Cricket-Intelligence
-│
-├── client
-│   ├── public
-│   ├── src
-│   │   ├── assets
-│   │   ├── components
-│   │   ├── charts
-│   │   ├── pages
-│   │   ├── context
-│   │   ├── hooks
-│   │   ├── utils
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   ├── package.json
-│   └── vite.config.js
-│
-├── server
-│   ├── src
-│   │   ├── config
-│   │   ├── controllers
-│   │   ├── middleware
-│   │   ├── models
-│   │   ├── routes
-│   │   ├── utils
-│   │   └── server.js
-│   ├── package.json
-│   └── .env
-│
-├── data-import
-│   ├── IPL.csv
-│   └── import_dataset.py
-│
-├── assets
-└── README.md
+    UI --> Gateway
+    Gateway --> Helmet --> CORS --> Limiter --> Auth
+    Auth --> Service
+    Service --> Persistence
 ```
 
 ---
 
-## 🔄 Data Pipeline
+## 📊 Dual-Layer Data Architecture
 
-```
-IPL CSV Dataset
-      │
-      ▼
-Python Data Import (Pandas)
-      │
-      ▼
-MongoDB Atlas
-      │
-      ▼
-Express REST APIs
-      │
-      ▼
-React Dashboard
-      │
-      ▼
-Interactive Analytics
-```
+The platform operates across two synergistic data layers:
 
-![Data Pipeline](assets/api-flow.png)
+1. **Historical Telemetry Layer (`deliveries` collection)**:
+   - Contains **278,000+ ball-by-ball IPL records** spanning multiple tournament seasons.
+   - Captures granular data: pitch venue, match dates, toss decisions, innings, over, ball number, batter, bowler, batter runs, extra types (wides, no-balls, leg-byes), dismissal modes, and fielder involvements.
+   - Indexed on `{ match_id: 1, innings: 1, ball_no: 1 }`, `{ batter: 1 }`, and `{ bowler: 1 }` for sub-10ms aggregation execution.
+
+2. **User & Live Match Engine Layer (`usermatches` & `users` collections)**:
+   - Supports custom tournament management and real-time live scoring.
+   - Employs an event-driven ball-by-ball state machine maintaining live striker, non-striker, over progression, strike rotation, bowler over restrictions, and match conclusion logic.
 
 ---
 
-## ⚙ Getting Started
+## 📐 Quantitative Formulations & Analytics Rigor
+
+Every analytical metric in this system is computed with statistical precision to ensure interview readiness and analytical defensibility:
+
+### 1. Batting Average vs Strike Rate
+* **Batting Average**:
+  $$\text{Batting Average} = \frac{\sum \text{Runs Scored}}{\sum \text{Dismissals}}$$
+  *Implementation Note*: Traditional rookie errors divide total runs by ball count. Our engine checks dismissal occurrences (`player_out === batter`). If dismissals = 0, the system outputs the total runs with a descriptive not-out flag.
+* **Strike Rate (SR)**:
+  $$\text{Strike Rate} = \left(\frac{\sum \text{Runs Batter}}{\sum \text{Valid Balls Faced}}\right) \times 100$$
+  *Implementation Note*: Excludes wides from balls faced in strict compliance with official ICC/IPL playing conditions.
+
+### 2. Bowling Economy & Bowling Average
+* **Economy Rate (Econ)**:
+  $$\text{Economy Rate} = \left(\frac{\sum \text{Runs Conceded by Bowler}}{\sum \text{Valid Balls Bowled}}\right) \times 6$$
+  *Implementation Note*: Excludes leg-byes and byes from the bowler's runs conceded, while accurately tallying wides and no-balls as bowler penalties.
+* **Bowling Average**:
+  $$\text{Bowling Average} = \frac{\sum \text{Runs Conceded}}{\sum \text{Wickets Taken}}$$
+
+### 3. Match Pressure Index (PI)
+$$\text{Pressure Index} = \frac{\text{Wickets Fallen} \times 10}{\text{Overs Bowled} + 1}$$
+* *Analytical Rationale*: Quantifies the fielding team's chokehold on the batting side. The $+1$ denominator smoothing prevents division by zero in the opening over while normalizing the rate of wicket degradation over innings duration.
+
+### 4. Match Intensity Classification
+Measures the competitiveness of a match based on the absolute run difference ($\Delta R$) between the teams:
+- **Very Close**: $\Delta R \le 10$ runs (High-leverage finish)
+- **Competitive**: $10 < \Delta R \le 30$ runs (Balanced fixture)
+- **One Sided**: $\Delta R > 30$ runs (Dominant performance)
+
+### 5. In-Game Win Probability Model (Live Chasing Curve)
+For the chasing team in Innings 2, win probability is computed ball-by-ball via a weighted logistic response function:
+$$P(\text{Win}) = \frac{1}{1 + e^{-k \cdot (R_{\text{ratio}} - 1)}} \times \left(\frac{W_{\text{left}}}{10}\right)^{\alpha}$$
+Where:
+- $R_{\text{ratio}} = \frac{\text{Current Run Rate}}{\text{Required Run Rate}}$
+- $W_{\text{left}}$ represents wickets in hand ($10 - \text{wickets fallen}$).
+- Boundary conditions: $P(\text{Win}) = 100\%$ when Target is breached; $P(\text{Win}) = 0\%$ when balls expire or 10 wickets fall.
+
+---
+
+## 🛠️ Technology Stack
+
+| Layer | Technologies | Key Libraries & Rationale |
+|---|---|---|
+| **Frontend** | React 18, Vite | React Router DOM, Chart.js, Recharts, Lucide Icons |
+| **Styling** | Vanilla CSS / CSS Modules | Strict custom properties design system, dark command-center aesthetic, glassmorphism, responsive CSS Grid |
+| **Backend** | Node.js (ESM), Express.js | Helmet (CSP/HSTS headers), CORS whitelisting, Express Rate Limit, JWT |
+| **Database** | MongoDB 6+ | Mongoose 8+, multi-stage `$facet` & `$group` aggregation pipelines |
+| **Data Ingestion**| Python / Node Stream | Streaming CSV parser for 278K+ record batch import |
+
+---
+
+## 🔌 API Reference Catalog
+
+### 1. Historical IPL Analytics (`/api/matches`)
+- `GET /api/matches`: Lists historical matches sorted chronologically with match summaries.
+- `GET /api/matches/:matchId`: Full match scorecard, fall of wickets, bowler figures, and innings telemetry.
+- `GET /api/matches/analytics`: Global tournament-wide KPIs (total matches, average run rates per innings, dominant matches).
+- `GET /api/matches/:matchId/deep`: Deep match intelligence: Over-by-over Worm chart, In-game Win Probability curve, Momentum Tracker, and Key Match Turning Points (Wicket clusters, Big overs).
+
+### 2. Player Intelligence (`/api/players`)
+- `GET /api/players/batting`: Top run-scorers, batting averages, strike rates, fours, sixes.
+- `GET /api/players/bowling`: Top wicket-takers, economy rates, average, strike rates.
+- `GET /api/players/:playerName`: Complete biographical and career performance card (phase-wise breakdown: Powerplay, Middle, Death overs).
+
+### 3. Matchups & Strategy (`/api/matchups`, `/api/strategy`, `/api/compare`)
+- `GET /api/matchups?batter=...&bowler=...`: Head-to-head batter vs bowler matrix (balls, runs, dismissals, strike rate, dot ball percentage).
+- `GET /api/strategy/:teamName`: Franchise tactical dossier (win percentage when batting first vs second, top venues, phase strengths).
+- `GET /api/venues`: Venue statistics (average first-innings score, toss impact on match outcome).
+- `GET /api/compare/players?p1=...&p2=...`: Multi-attribute comparative analysis between two batsmen or bowlers.
+
+### 4. Match Engine & Auth (`/api/auth`, `/api/live`)
+- `POST /api/auth/register`: User signup with bcrypt password hashing and JWT issuance.
+- `POST /api/auth/login`: User login returning HTTP-only bearer token.
+- `POST /api/live/create`: Initialize custom fixture with custom teams, players, and total overs.
+- `POST /api/live/:matchId/ball`: Record single delivery event (runs, extras, wicket type) with real-time state mutation.
+
+---
+
+## 🔒 Security & Quality Engineering
+
+1. **Security Headers**: `helmet` enforces strict HTTP headers (Content Security Policy, X-Frame-Options, DNS Prefetch Control, Referrer Policy).
+2. **Denial of Service Prevention**: `express-rate-limit` throttles IP requests to 300 requests per 15-minute window.
+3. **Payload Sanitization**: Request bodies restricted to 10kb to avert buffer overflow exploits.
+4. **Environment Isolation**: Multi-stage `.gitignore` protecting secret variables (`.env`, `*.env`) and raw ingestion datasets.
+5. **Memory-Safe Aggregations**: Aggregation queries leverage `.lean()` and projected `$project` stages to reduce Node.js heap memory footprints.
+
+---
+
+## 🚀 Setup & Installation Guide
 
 ### Prerequisites
-- Node.js (v18+)
-- npm or yarn
-- MongoDB Atlas account
-- Python 3 (for the data-import pipeline)
+- **Node.js**: v18.0.0 or higher
+- **MongoDB**: Community Server v6+ or MongoDB Atlas URI
+- **Git**
 
-### Clone the Repository
-
+### 1. Clone Repository
 ```bash
 git clone https://github.com/aayush45123/Cricket-Intelligence.git
-cd Cricket-Intelligence
+cd cricket-intelligence
 ```
 
-### Frontend Setup
-
-```bash
-cd client
-npm install
-npm run dev
-```
-
-### Backend Setup
-
-```bash
-cd server
-npm install
-npm start
-```
-
-### Data Import (Optional — for fresh dataset)
-
-```bash
-cd data-import
-pip install pandas pymongo
-python import_dataset.py
-```
-
----
-
-## 🔑 Environment Variables
-
-Create a `.env` file inside the `server` directory:
-
+### 2. Configure Environment Variables
+Create a `.env` file in the `server` directory:
 ```env
 PORT=5000
-MONGO_URI=YOUR_MONGODB_URI
-JWT_SECRET=YOUR_SECRET
-JWT_EXPIRES_IN=7d
+MONGO_URI=mongodb://127.0.0.1:27017/cricket_intelligence
+JWT_SECRET=your_super_secret_jwt_key_here
+CLIENT_URL=http://localhost:5173
+```
+
+### 3. Install Dependencies
+```bash
+# Install Server Dependencies
+cd server
+npm install
+
+# Install Client Dependencies
+cd ../client
+npm install
+```
+
+### 4. Data Ingestion (Optional for Historical IPL Data)
+If populating historical ball-by-ball IPL data:
+```bash
+cd ../data-import
+# Run MongoDB import for deliveries collection
+mongoimport --db cricket_intelligence --collection deliveries --type csv --headerline --file IPL.csv
+```
+
+### 5. Launch Development Servers
+**Terminal 1 (Backend API)**:
+```bash
+cd server
+npm run dev
+# Server listening at http://localhost:5000
+```
+
+**Terminal 2 (Frontend Client)**:
+```bash
+cd client
+npm run dev
+# Application accessible at http://localhost:5173
 ```
 
 ---
 
-## 📡 REST API
+## 💼 Interview Showcase Highlights (For Deloitte IT Data & Analytics)
 
-### Authentication
-```
-POST   /api/auth/register
-POST   /api/auth/login
-GET    /api/auth/me
-```
+When discussing this project during technical and managerial interviews, focus on these engineering decisions:
 
-### Matches
-```
-GET    /api/matches
-GET    /api/matches/analytics
-GET    /api/matches/:id
-```
+1. **Handling Incomplete / Dirty Data in Sports Telemetry**:
+   * *Problem*: In cricket ball-by-ball logs, wides do not count towards balls faced by the batsman, and leg-byes do not count against the bowler's economy.
+   * *Solution*: Designed compound aggregation pipelines filtering `valid_ball === 1` for balls faced while maintaining `runs_total` for match momentum.
 
-### Players
-```
-GET    /api/players
-GET    /api/players/batting
-GET    /api/players/bowling
-GET    /api/players/highest-runs
-GET    /api/players/highest-wickets
-GET    /api/players/batting-analytics
-GET    /api/players/bowling-analytics
-```
+2. **Scalability of Aggregation Pipelines on 278,000+ Documents**:
+   * *Problem*: Computing career stats across millions of deliveries on demand can cause query timeouts.
+   * *Solution*: Implemented compound indexes on `(batter, valid_ball)` and utilized `$facet` stages to calculate runs, dismissals, and boundary breakdowns in a single database round-trip.
 
-### Venues
-```
-GET    /api/venues
-GET    /api/venues/analytics
-```
-
-### Matchups
-```
-GET    /api/matchups
-```
-
-### Strategy
-```
-GET    /api/strategy
-```
-
-### Search
-```
-GET    /api/search
-```
-
-### Live Match
-```
-POST   /api/live
-POST   /api/live/predict
-```
-
----
-
-## 🗄 Database Schema
-
-![Database Schema](assets/database-schema.png)
-
-Core collections include:
-
-| Collection | Purpose |
-|---|---|
-| `users` | Stores registered user credentials and profiles |
-| `matches` | Match-level data — teams, venue, toss, result, scores |
-| `players` | Player profiles and aggregated career statistics |
-| `deliveries` | Ball-by-ball data used to power detailed analytics |
-| `venues` | Venue metadata and computed venue statistics |
-
----
-
-## 🌐 Deployment
-
-| Component | Platform |
-|---|---|
-| Frontend | [Vercel](https://vercel.com/) |
-| Backend | [Render](https://render.com/) |
-| Database | [MongoDB Atlas](https://www.mongodb.com/atlas) |
-
----
-
-## 🔥 Technical Highlights
-
-- MERN stack architecture with clear separation of concerns
-- Modular MVC backend design
-- RESTful API design principles
-- Optimized MongoDB aggregation pipelines for analytics-heavy queries
-- Interactive, responsive data visualizations with Chart.js
-- Dynamic team and player comparison engine
-- JWT-secured authentication with protected routes
-- CSV-to-MongoDB ETL pipeline for IPL data ingestion (Python + Pandas)
-- Fully responsive UI across desktop and mobile
-- Scalable, component-based React architecture
-- 280+ Git commits reflecting iterative, incremental development
-- Deployed in production on Vercel and Render
-
----
-
-## 🌟 Future Roadmap
-
-- [ ] AI-powered match prediction model
-- [ ] Win probability engine
-- [ ] Fantasy team generator
-- [ ] Player recommendation system
-- [ ] IPL season-over-season comparison
-- [ ] Real-time live score integration
-- [ ] WebSocket-based live updates
-- [ ] AI-generated match commentary
-- [ ] PDF report export
-- [ ] Advanced filtering options
-- [ ] Performance heatmaps
-- [ ] Dark / light theme toggle
-- [ ] Multi-league support
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome and appreciated!
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+3. **Real-time State Machine for Live Scoring**:
+   * *Problem*: Cricket match scoring involves interdependent edge cases (over changes, free hits, strike rotation on odd runs, fall of wickets).
+   * *Solution*: Built a deterministic controller layer enforcing strict validation before updating match documents in MongoDB.
 
 ---
 
 ## 📄 License
-
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
-
----
-
-## 👨‍💻 Author
-
-**Aayush Bharda**
-
-[![GitHub](https://img.shields.io/badge/GitHub-aayush45123-181717?style=flat-square&logo=github)](https://github.com/aayush45123)
-
----
-
-<div align="center">
-
-### ⭐ Support
-
-If you found this project helpful, please consider giving it a star — it motivates me to keep building open-source projects.
-
-</div>
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.

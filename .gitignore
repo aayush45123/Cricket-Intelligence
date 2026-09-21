@@ -27,8 +27,13 @@ dist-ssr
 server/node_modules/
 client/node_modules/
 
-data-import/IPL.csv
-
-.env 
-client/.env
+# Environment variables & secrets
+.env
+.env.*
+*.env
 server/.env
+client/.env
+
+# Data files
+data-import/*.csv
+data-import/IPL.csv
