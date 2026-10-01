@@ -1,31 +1,3 @@
-// import express from "express";
-// import {
-//   getAllBatters,
-//   getAllBowlers,
-//   getMatchup,
-//   getTopBoylersForBatter,
-//   getBattersVsBowler,
-// } from "../controllers/matchupController.js";
-
-// const router = express.Router();
-
-// // Lookup lists for dropdowns
-// router.get("/batters",              getAllBatters);
-// router.get("/bowlers",              getAllBowlers);
-
-// // Head-to-head deep analytics
-// // e.g. GET /api/matchups/V Kohli/JJ Bumrah
-// router.get("/:batter/:bowler",      getMatchup);
-
-// // Contextual rankings
-// // "Who has troubled this batter most?"
-// router.get("/top/:batter",          getTopBoylersForBatter);
-
-// // "Which batters has this bowler dominated?"
-// router.get("/dominated/:bowler",    getBattersVsBowler);
-
-// export default router;
-
 import express from "express";
 import {
   getAllBatters,
@@ -41,20 +13,23 @@ import {
 
 const router = express.Router();
 
-/* ── Static lookup routes (MUST be before param routes) ─────── */
+/* ── Static lookup routes (MUST be before any param routes) ─── */
 router.get("/batters", getAllBatters);
 router.get("/bowlers", getAllBowlers);
 router.get("/search/players", getAllPlayers); // all players for compare dropdown
 
-/* ── Player comparison ──────────────────────────────────────── */
-// NOTE: 3-segment path — no conflict with 2-segment /:batter/:bowler
+/* ── 3-segment routes (must be before 2-segment /:batter/:bowler) ─ */
+// Player general comparison
 router.get("/compare/:playerA/:playerB", comparePlayers);
 
-/* ── Head-to-head (2-segment param route) ───────────────────── */
-router.get("/:batter/:bowler", getMatchup);
+// Contextual rankings — these are STATIC prefix routes, so they MUST be
+// registered before the catch-all /:batter/:bowler to avoid shadowing.
+// FIX (BUG-005): Moved above /:batter/:bowler
+router.get("/top-bowlers-for/:batter", getTopBoylersForBatter);
+router.get("/dominated-by/:bowler", getBattersVsBowler);
 
-/* ── Contextual rankings ────────────────────────────────────── */
-router.get("/top/:batter", getTopBoylersForBatter);
-router.get("/dominated/:bowler", getBattersVsBowler);
+/* ── 2-segment catch-all param route (head-to-head) ────────── */
+// NOTE: This must remain LAST among param routes
+router.get("/:batter/:bowler", getMatchup);
 
 export default router;

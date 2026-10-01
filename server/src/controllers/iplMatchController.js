@@ -1,17 +1,22 @@
 import Delivery from "../models/Deliveries.js";
 import { generateMatchAnalytics } from "../utils/matchAnalytics.js";
 
-/* ─────────────────────────────────────────────────────────────
-   GET /api/matches
-   All distinct matches — grouped from deliveries
-   ───────────────────────────────────────────────────────────── */
 export const getAllMatches = async (req, res) => {
   try {
-    const matches = await Delivery.aggregate([
+    const { season, page = 1, limit = 50 } = req.query;
+    const pageNum = Math.max(1, parseInt(page) || 1);
+    const limitNum = Math.min(200, Math.max(1, parseInt(limit) || 50));
+    const skip = (pageNum - 1) * limitNum;
+
+    const seasonFilter = buildSeasonFilter(season);
+
+    const pipeline = [
+      ...(Object.keys(seasonFilter).length ? [{ $match: seasonFilter }] : []),
       {
         $group: {
           _id: "$match_id",
           date: { $first: "$date" },
+          season: { $first: "$season" },
           teamA: { $first: "$batting_team" },
           teamB: { $first: "$bowling_team" },
           venue: { $first: "$venue" },
@@ -26,6 +31,7 @@ export const getAllMatches = async (req, res) => {
           _id: 0,
           matchId: "$_id",
           date: 1,
+          season: 1,
           teamA: 1,
           teamB: 1,
           venue: 1,
@@ -36,24 +42,22 @@ export const getAllMatches = async (req, res) => {
         },
       },
       { $sort: { date: -1 } },
-    ]);
+    ];
 
-    res.json({ status: "success", total: matches.length, data: matches });
+    res.json({ status: "success", data: matches });
   } catch (error) {
-    console.error("getAllMatches error:", error.message);
-    res.status(500).json({ message: "Error fetching matches", error: error.message });
+    console.error(error);
+    res
+      .status(500)
+      .json({ message: "Error fetching matches", error: error.message });
   }
 };
 
-/* ─────────────────────────────────────────────────────────────
-   GET /api/matches/:matchId
-   Full scorecard + analytics for one match
-   ───────────────────────────────────────────────────────────── */
 export const getMatchById = async (req, res) => {
   try {
     const { matchId } = req.params;
 
-    /* Handle both Number and String storage in DB */
+    // ✅ Handle both string and number storage in DB
     const matchIdNum = Number(matchId);
     const matchQuery = isNaN(matchIdNum)
       ? { match_id: matchId }
@@ -61,6 +65,7 @@ export const getMatchById = async (req, res) => {
 
     const sampleDoc = await Delivery.findOne(matchQuery).lean();
     if (!sampleDoc) {
+      console.log(`No delivery found for match_id: ${matchId}`);
       return res.status(404).json({ message: "Match not found" });
     }
 
@@ -89,36 +94,31 @@ export const getMatchById = async (req, res) => {
       { $sort: { "_id.innings": 1 } },
     ]);
 
-    if (!matchStats.length) {
+    if (!matchStats.length || matchStats[0].teams.length < 2) {
       return res.status(404).json({ message: "Insufficient match data" });
     }
 
     const ballsToOvers = (balls) =>
       Number((Math.floor(balls / 6) + (balls % 6) / 10).toFixed(1));
 
-    /* innings 1 is the team that batted first */
-    const inn1Stats = matchStats.find((s) => s._id.innings === 1);
-    const inn2Stats = matchStats.find((s) => s._id.innings === 2);
+    const teamA = matchData.teams[0];
+    const teamB = matchData.teams[1];
 
-    if (!inn1Stats || !inn2Stats) {
-      return res.status(404).json({ message: "Incomplete innings data" });
-    }
+    const meta = await Delivery.findOne(matchQuery);
 
-    const teamAName = inn1Stats._id.team;
-    const teamBName = inn2Stats._id.team;
-
-    /* Detailed batting stats per player */
+    // Fetch detailed batting stats by batter
     const batterStats = await Delivery.aggregate([
       { $match: matchQuery },
       {
         $group: {
           _id: { batter: "$batter", batting_team: "$batting_team", innings: "$innings" },
           runs: { $sum: "$runs_batter" },
-          balls: { $sum: { $cond: [{ $eq: ["$valid_ball", 1] }, 1, 0] } },
-          fours: { $sum: { $cond: [{ $eq: ["$runs_batter", 4] }, 1, 0] } },
-          sixes: { $sum: { $cond: [{ $eq: ["$runs_batter", 6] }, 1, 0] } },
+          balls: { $sum: 1 },
           dismissals: {
-            $push: { wicket_kind: "$wicket_kind", bowler: "$bowler" },
+            $push: {
+              wicket_kind: "$wicket_kind",
+              bowler: "$bowler",
+            },
           },
         },
       },
@@ -142,7 +142,12 @@ export const getMatchById = async (req, res) => {
                 $filter: {
                   input: "$dismissals",
                   as: "d",
-                  cond: { $ne: ["$$d.wicket_kind", null] },
+                  cond: {
+                    $and: [
+                      { $ne: ["$$d.wicket_kind", null] },
+                      { $eq: ["$$d.player_out", "$_id.batter"] },
+                    ],
+                  },
                 },
               },
               0,
@@ -153,7 +158,7 @@ export const getMatchById = async (req, res) => {
       { $sort: { "_id.innings": 1, runs: -1 } },
     ]);
 
-    /* Detailed bowling stats per bowler */
+    // Fetch detailed bowling stats by bowler
     const bowlerStats = await Delivery.aggregate([
       { $match: matchQuery },
       {
@@ -161,14 +166,9 @@ export const getMatchById = async (req, res) => {
           _id: { bowler: "$bowler", bowling_team: "$bowling_team", innings: "$innings" },
           runs: { $sum: "$runs_bowler" },
           wickets: { $sum: "$bowler_wicket" },
-          balls: { $sum: { $cond: [{ $eq: ["$valid_ball", 1] }, 1, 0] } },
-          dots: {
+          balls: {
             $sum: {
-              $cond: [
-                { $and: [{ $eq: ["$valid_ball", 1] }, { $eq: ["$runs_bowler", 0] }] },
-                1,
-                0,
-              ],
+              $cond: [{ $eq: ["$valid_ball", 1] }, 1, 0],
             },
           },
         },
@@ -192,7 +192,7 @@ export const getMatchById = async (req, res) => {
       { $sort: { "_id.innings": 1, wickets: -1 } },
     ]);
 
-    /* Extras per team */
+    // Fetch extras
     const extrasData = await Delivery.aggregate([
       { $match: matchQuery },
       {
@@ -257,13 +257,15 @@ export const getMatchById = async (req, res) => {
           bowlers: mapBowlers(teamAName, 2),
         },
       },
-      result: { winner: sampleDoc.match_won_by },
+      result: {
+        winner: meta.match_won_by,
+      },
     };
 
     const analytics = generateMatchAnalytics(matchObject);
 
     res.json({
-      status: "success",
+      success: true,
       data: {
         matchId,
         venue: sampleDoc.venue,
@@ -278,17 +280,20 @@ export const getMatchById = async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("getMatchById error:", error.message);
-    res.status(500).json({ message: "Error fetching match analytics", error: error.message });
+    console.error(error);
+    res.status(500).json({
+      message: "Error fetching match analytics",
+      error: error.message,
+    });
   }
 };
 
-/* ─────────────────────────────────────────────────────────────
-   GET /api/matches/analytics/toss-impact
-   ───────────────────────────────────────────────────────────── */
 export const getTossImpactAnalytics = async (req, res) => {
   try {
+    const seasonFilter = buildSeasonFilter(req.query.season);
+
     const matches = await Delivery.aggregate([
+      ...(Object.keys(seasonFilter).length ? [{ $match: seasonFilter }] : []),
       {
         $group: {
           _id: "$match_id",
@@ -301,42 +306,45 @@ export const getTossImpactAnalytics = async (req, res) => {
 
     let batFirstWins = 0;
     let bowlFirstWins = 0;
-    let tossWinnerMatchWins = 0;
-    const total = matches.length;
 
     matches.forEach((match) => {
       if (!match.tossWinner || !match.winner) return;
-      if (match.tossWinner === match.winner) {
-        tossWinnerMatchWins++;
-        if (match.tossDecision === "bat") batFirstWins++;
-        else bowlFirstWins++;
+
+      const tossWinnerName = match.tossWinner;
+      const matchWinner = match.winner;
+      const decision = match.tossDecision || "bat";
+
+      if (tossWinnerName === matchWinner) {
+        if (decision === "bat") {
+          batFirstWins++;
+        } else {
+          bowlFirstWins++;
+        }
       }
     });
 
     res.json({
-      status: "success",
+      success: true,
       data: {
         totalMatches: total,
         batFirstWins,
         bowlFirstWins,
-        tossWinnerMatchWins,
-        tossWinMatchPct: total > 0
-          ? parseFloat(((tossWinnerMatchWins / total) * 100).toFixed(1))
-          : 0,
       },
     });
   } catch (error) {
-    console.error("getTossImpactAnalytics error:", error.message);
-    res.status(500).json({ message: "Error calculating toss impact", error: error.message });
+    res.status(500).json({
+      message: "Error calculating toss impact",
+      error: error.message,
+    });
   }
 };
 
-/* ─────────────────────────────────────────────────────────────
-   GET /api/matches/analytics/match-intensity
-   ───────────────────────────────────────────────────────────── */
 export const getMatchIntensityAnalytics = async (req, res) => {
   try {
+    const seasonFilter = buildSeasonFilter(req.query.season);
+
     const matches = await Delivery.aggregate([
+      ...(Object.keys(seasonFilter).length ? [{ $match: seasonFilter }] : []),
       {
         $group: {
           _id: { match: "$match_id", battingTeam: "$batting_team" },
@@ -359,25 +367,32 @@ export const getMatchIntensityAnalytics = async (req, res) => {
 
     matches.forEach((match) => {
       if (!match.teams || match.teams.length < 2) return;
-      const runDiff = Math.abs(
-        (match.teams[0]?.runs || 0) - (match.teams[1]?.runs || 0),
-      );
-      if (runDiff <= 10) veryCloseCount++;
-      else if (runDiff <= 30) competitiveCount++;
-      else oneSidedCount++;
+
+      const team1Runs = match.teams[0]?.runs || 0;
+      const team2Runs = match.teams[1]?.runs || 0;
+      const runDiff = Math.abs(team1Runs - team2Runs);
+
+      if (runDiff <= 10) {
+        veryCloseCount++;
+      } else if (runDiff <= 30) {
+        competitiveCount++;
+      } else {
+        oneSidedCount++;
+      }
     });
 
     res.json({
       status: "success",
       data: {
-        total: matches.length,
         veryCloseCount,
         competitiveCount,
         oneSidedCount,
       },
     });
   } catch (error) {
-    console.error("getMatchIntensityAnalytics error:", error.message);
-    res.status(500).json({ message: "Error fetching match intensity analytics", error: error.message });
+    res.status(500).json({
+      message: "Error fetching match intensity analytics",
+      error: error.message,
+    });
   }
 };

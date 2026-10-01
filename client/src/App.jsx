@@ -23,6 +23,7 @@ import MatchupDetail from "./pages/MatchupDetail/MatchupDetail";
 import PlayerCompareDetail from "./pages/PlayerComparisionDetail/PlayerCompareDetail";
 import TeamStrategy from "./pages/TeamStrategy/TeamStrategy";
 import TeamStrategyDetail from "./pages/TeamStrategyDetail/TeamStrategyDetail";
+import TeamHeadToHead from "./pages/TeamHeadToHead/TeamHeadToHead";
 import SearchPage from "./pages/SearchPage/SearchPage";
 import AuthPage from "./pages/AuthPage/AuthPage";
 import MyMatches from "./pages/MyMatches/MyMatches";
@@ -77,6 +78,8 @@ const App = () => (
         />
         <Route path="/strategy" element={<TeamStrategy />} />
         <Route path="/strategy/:team" element={<TeamStrategyDetail />} />
+        <Route path="/head-to-head" element={<TeamHeadToHead />} />
+        <Route path="/h2h" element={<TeamHeadToHead />} />
         <Route path="/search" element={<SearchPage />} />
 
         <Route path="/login" element={<AuthPage />} />

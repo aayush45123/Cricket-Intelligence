@@ -1,3 +1,4 @@
+import cors from "cors";
 import express from "express";
 import dotenv from "dotenv";
 import path from "path";
@@ -14,69 +15,42 @@ import venueRoutes from "./routes/venueRoutes.js";
 import matchupRoutes from "./routes/matchupRoutes.js";
 import teamStrategyRoutes from "./routes/teamStrategyRoutes.js";
 import searchRoutes from "./routes/searchRoutes.js";
-import authRoutes from "./routes/authRoutes.js";
-import liveMatchRoutes from "./routes/liveMatchRoutes.js";
-import compareRoutes from "./routes/compareRoutes.js";
+import authRoutes from "./routes/authRoutes.js"; // NEW
+import liveMatchRoutes from "./routes/liveMatchRoutes.js"; // NEW
+import tournamentRoutes from "./routes/tournamentRoutes.js"; // NEW
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Load env from server/.env regardless of where the process is started.
 dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-/* ── Security middleware ──────────────────────────────────── */
-app.use(helmet());
+app.use(express.json());
 
-app.use(
-  cors({
-    origin: process.env.CLIENT_URL || "http://localhost:5173",
-    methods: ["GET", "POST", "PATCH", "PUT", "DELETE"],
-    credentials: true,
-  }),
-);
+/* Health */
+app.get("/", (_req, res) => res.send("Cricket Intelligence API"));
 
-/* Rate limiting — 300 requests per 15 min per IP */
-const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000,
-  max: 300,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { message: "Too many requests. Please try again later." },
-});
-app.use("/api", limiter);
-
-app.use(express.json({ limit: "10kb" }));
-
-/* ── Health ───────────────────────────────────────────────── */
-app.get("/", (_req, res) => res.json({ status: "Cricket Intelligence API" }));
-
-/* ── IPL analytics routes ─────────────────────────────────── */
+/* IPL analytics (existing — unchanged) */
 app.use("/api/matches", iplMatchRoutes);
 app.use("/api/matches", matchRoutes);
 app.use("/api/players", playerRoutes);
 app.use("/api/venues", venueRoutes);
 app.use("/api/matchups", matchupRoutes);
 app.use("/api/strategy", teamStrategyRoutes);
+app.use("/api/teams", teamRoutes);
 app.use("/api/search", searchRoutes);
 app.use("/api/compare", compareRoutes);
 
-/* ── User match engine ────────────────────────────────────── */
+/* User match engine (new) */
 app.use("/api/auth", authRoutes);
 app.use("/api/live", liveMatchRoutes);
 
-/* ── 404 handler ──────────────────────────────────────────── */
 app.use((_req, res) => res.status(404).json({ message: "Route not found" }));
 
-/* ── Global error handler ─────────────────────────────────── */
-app.use((err, _req, res, _next) => {
-  console.error(err.stack);
-  res.status(err.status || 500).json({
-    message: err.message || "Internal server error",
-  });
+app.listen(PORT, () => {
+  console.log(`🚀 Server running on http://localhost:${PORT}`);
+  connectDB();
 });
-
-connectDB().then(() =>
-  app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`)),
-);

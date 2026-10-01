@@ -59,6 +59,11 @@ const ANALYTICS_MENU = [
         label: "Team Strategy",
         desc: "Phase analytics & batting order",
       },
+      {
+        to: "/head-to-head",
+        label: "Team Head-to-Head",
+        desc: "H2H records, win %, venues",
+      },
     ],
   },
 ];

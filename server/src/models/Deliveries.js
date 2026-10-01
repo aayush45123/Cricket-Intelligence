@@ -91,8 +91,39 @@ const deliverySchema = new mongoose.Schema(
   },
   {
     timestamps: false,
-  },
+  }
 );
+
+/* ─────────────────────────────────────────────────────────────
+   Performance Indexes
+   
+   Existing (created manually via mongosh):
+     batter_1, bowler_1, match_id_1
+   
+   Additional indexes declared here so they can be created via
+   mongoose.syncIndexes() or a migration script.
+   
+   NOTE: Do not call createIndexes() automatically in production
+   on large collections — schedule during low-traffic windows.
+   ───────────────────────────────────────────────────────────── */
+
+// Single-field indexes for common filter patterns
+deliverySchema.index({ batting_team: 1 }, { background: true });
+deliverySchema.index({ bowling_team: 1 }, { background: true });
+deliverySchema.index({ venue: 1 }, { background: true });
+deliverySchema.index({ season: 1 }, { background: true });
+
+// Compound indexes for season-filtered queries
+deliverySchema.index({ batter: 1, season: 1 }, { background: true });
+deliverySchema.index({ bowler: 1, season: 1 }, { background: true });
+deliverySchema.index({ batting_team: 1, season: 1 }, { background: true });
+deliverySchema.index({ bowling_team: 1, season: 1 }, { background: true });
+
+// Compound index for match deep analytics
+deliverySchema.index({ match_id: 1, innings: 1 }, { background: true });
+
+// Compound for H2H queries
+deliverySchema.index({ batting_team: 1, bowling_team: 1, season: 1 }, { background: true });
 
 const Delivery = mongoose.model("Delivery", deliverySchema);
 

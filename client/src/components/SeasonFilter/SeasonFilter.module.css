@@ -1,0 +1,59 @@
+.filterContainer {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: var(--ci-bg-secondary);
+  border: 1px solid var(--ci-border);
+  padding: 0.35rem 0.75rem;
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+  transition: all 0.2s ease;
+}
+
+.filterContainer:hover,
+.filterContainer:focus-within {
+  border-color: var(--ci-brand);
+  box-shadow: 0 0 0 3px var(--ci-brand-glow);
+}
+
+.iconWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ci-brand);
+}
+
+.selectWrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  position: relative;
+}
+
+.label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ci-text-muted);
+}
+
+.select {
+  appearance: none;
+  background: transparent;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--ci-text-primary);
+  padding-right: 1.25rem;
+  cursor: pointer;
+}
+
+.chevron {
+  position: absolute;
+  right: 0;
+  pointer-events: none;
+  color: var(--ci-text-muted);
+}
