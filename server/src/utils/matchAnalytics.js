@@ -35,9 +35,9 @@ export const generateMatchAnalytics = (match) => {
   const teamARunRate = innA.overs > 0 ? innA.runs / innA.overs : 0;
   const teamBRunRate = innB.overs > 0 ? innB.runs / innB.overs : 0;
 
-  /* Pressure Index: wicket-taking rate, scaled to 0-100 per 20 overs */
-  const PIForTeamA = (innA.wickets * 10) / (innA.overs + 1);
-  const PIForTeamB = (innB.wickets * 10) / (innB.overs + 1);
+  /* Pressure Index: wickets taken per over (measures bowling pressure) */
+  const PIForTeamA = innA.overs > 0 ? innA.wickets / innA.overs : 0;
+  const PIForTeamB = innB.overs > 0 ? innB.wickets / innB.overs : 0;
 
   const runDifference = Math.abs(innA.runs - innB.runs);
 
@@ -72,12 +72,14 @@ export const generateMatchAnalytics = (match) => {
     winQuality = "Dominant Win";
   }
 
-  /* Run rate advantage (positive = winner scored faster) */
+  /* Single match run rate differences */
+  const netRunRateForTeamA = teamARunRate - teamBRunRate;
+  const netRunRateForTeamB = teamBRunRate - teamARunRate;
   const runRateAdvantage = winnerRunRate - loserRunRate;
 
   let insights;
   if (matchIntensity === "Very Close") {
-    insights = `${winner} secured a thrilling victory in a neck-and-neck contest. Both teams maintained similar scoring rates making the match unpredictable till the end.`;
+    insights = `${winner} secured a thrilling last-moment victory in a neck-and-neck contest. Both teams maintained similar scoring rates making the match unpredictable till the end.`;
   } else if (matchIntensity === "Competitive") {
     insights = `${winner} won a competitive match where both teams showed strong performances. Key moments created the difference.`;
   } else {
@@ -97,6 +99,8 @@ export const generateMatchAnalytics = (match) => {
     pressureIndexForTeamB: Number(PIForTeamB.toFixed(2)),
     winnerStrength: Number(winnerStrength.toFixed(2)),
     winQuality,
+    netRunRateForTeamA: Number(netRunRateForTeamA.toFixed(2)),
+    netRunRateForTeamB: Number(netRunRateForTeamB.toFixed(2)),
     /* Run rate advantage for winner vs loser (NOT tournament-level NRR) */
     runRateAdvantage: Number(runRateAdvantage.toFixed(2)),
     insights,

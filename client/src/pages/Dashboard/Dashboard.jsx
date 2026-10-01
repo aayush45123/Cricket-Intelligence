@@ -6,6 +6,7 @@ import TeamWins from "../../components/charts/TeamWins/TeamWins";
 import RunRateChart from "../../components/charts/RunRateChart/RunRateChart";
 import TopRunScorer from "../../components/charts/TopRunScorer/TopRunScorer";
 import HighestWicketTaker from "../../components/charts/HighestWicketTaker/HighestWicketTaker";
+import { API_BASE } from "../../config";
 
 const Dashboard = () => {
   const [data, setData] = useState(null);
@@ -16,7 +17,7 @@ const Dashboard = () => {
     setLoading(true);
     setError(null);
     try {
-      const response = await fetch("/api/matches/analytics");
+      const response = await fetch(`${API_BASE}/api/matches/analytics`);
       if (!response.ok) {
         throw new Error(`Server responded with status: ${response.status}`);
       }
